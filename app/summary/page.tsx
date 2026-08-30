@@ -679,99 +679,11 @@ const filteredData = data.filter((row) => {
   const aVan = String(a[0]).trim();
   const bVan = String(b[0]).trim();
 
-  const aInfo = a[1];
-  const bInfo = b[1];
-
-  // ================================
-  // 1. Permission ON دائماً في الأخير
-  // ================================
-
-  const aPermission =
-    permissions[aVan] === true;
-
-  const bPermission =
-    permissions[bVan] === true;
-
-  if (aPermission && !bPermission)
-    return 1;
-
-  if (!aPermission && bPermission)
-    return -1;
-
-
-  // ================================
-  // 2. تحديد Status
-  // ================================
-
-  const aStatus =
-    getStatus(
-      aInfo.remaining,
-      aInfo.exceptions
-    );
-
-  const bStatus =
-    getStatus(
-      bInfo.remaining,
-      bInfo.exceptions
-    );
-
-
-  // ================================
-  // 3. Ex & All Collected أولاً
-  // ================================
-
-  const aIsExAllCollected =
-    aStatus === "Ex & All Collected";
-
-  const bIsExAllCollected =
-    bStatus === "Ex & All Collected";
-
-  if (
-    aIsExAllCollected &&
-    !bIsExAllCollected
-  )
-    return -1;
-
-  if (
-    !aIsExAllCollected &&
-    bIsExAllCollected
-  )
-    return 1;
-
-
-  // ================================
-  // 4. All Collected بعدها
-  // ================================
-
-  const aIsAllCollected =
-    aStatus === "All Collected";
-
-  const bIsAllCollected =
-    bStatus === "All Collected";
-
-  if (
-    aIsAllCollected &&
-    !bIsAllCollected
-  )
-    return -1;
-
-  if (
-    !aIsAllCollected &&
-    bIsAllCollected
-  )
-    return 1;
-
-
-  // ================================
-  // 5. باقي الحالات
-  // ================================
-
   const aIsHFR =
-    aVan.toUpperCase().includes("HFR");
+    aVan.includes("HFR");
 
   const bIsHFR =
-    bVan.toUpperCase().includes("HFR");
-
+    bVan.includes("HFR");
 
   // HFR دائماً في الأخير
   if (aIsHFR && !bIsHFR)
@@ -780,8 +692,7 @@ const filteredData = data.filter((row) => {
   if (!aIsHFR && bIsHFR)
     return -1;
 
-
-  // ترتيب أبجدي / رقمي
+  // ترتيب أبجدي/رقمي داخل كل مجموعة
   return aVan.localeCompare(
     bVan,
     undefined,
