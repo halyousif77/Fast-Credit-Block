@@ -635,7 +635,7 @@ return (
           </th>
 
           <th className="w-[13%] p-2 text-center">
-            Permission
+            Perm
           </th>
 
         </tr>
@@ -786,14 +786,10 @@ return (
                 {/* ID */}
 
                 <td className="p-2 text-center overflow-hidden">
-
-                  <div className="truncate">
-
-                    {[...info.ids].join(" / ")}
-
-                  </div>
-
-                </td>
+  <div className="whitespace-normal break-words leading-tight">
+    {[...info.ids].join(" / ")}
+  </div>
+</td>
 
 
                 {/* VAN CODE */}
