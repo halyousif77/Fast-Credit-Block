@@ -676,25 +676,89 @@ const filteredData = data.filter((row) => {
 
 .sort((a: any, b: any) => {
 
-  const aVan = String(a[0]).trim();
-  const bVan = String(b[0]).trim();
+  const [aVan, aInfo] = a;
+  const [bVan, bInfo] = b;
+
+  // Permission checked => always at the end
+  const aPermission = permissions[aVan] ?? false;
+  const bPermission = permissions[bVan] ?? false;
+
+  if (aPermission && !bPermission) {
+    return 1;
+  }
+
+  if (!aPermission && bPermission) {
+    return -1;
+  }
+
+  // Get status priority
+  const getSortPriority = (
+    info: any
+  ) => {
+
+    const remaining = info.remaining;
+    const exceptions = info.exceptions;
+
+    // 1. Ex & All Collected
+    if (
+      remaining === 0 &&
+      exceptions > 0
+    ) {
+      return 1;
+    }
+
+    // 2. All Collected
+    if (
+      remaining === 0 &&
+      exceptions === 0
+    ) {
+      return 2;
+    }
+
+    // 3. باقي الحالات
+    return 3;
+  };
+
+  // Only apply status priority to vans
+  // without Permission
+  if (!aPermission && !bPermission) {
+
+    const aPriority =
+      getSortPriority(aInfo);
+
+    const bPriority =
+      getSortPriority(bInfo);
+
+    if (aPriority !== bPriority) {
+      return aPriority - bPriority;
+    }
+  }
+
+  // HFR goes to the end
+  // within the same group
+  const aVanCode =
+    String(aVan).trim();
+
+  const bVanCode =
+    String(bVan).trim();
 
   const aIsHFR =
-    aVan.includes("HFR");
+    aVanCode.includes("HFR");
 
   const bIsHFR =
-    bVan.includes("HFR");
+    bVanCode.includes("HFR");
 
-  // HFR دائماً في الأخير
-  if (aIsHFR && !bIsHFR)
+  if (aIsHFR && !bIsHFR) {
     return 1;
+  }
 
-  if (!aIsHFR && bIsHFR)
+  if (!aIsHFR && bIsHFR) {
     return -1;
+  }
 
-  // ترتيب أبجدي/رقمي داخل كل مجموعة
-  return aVan.localeCompare(
-    bVan,
+  // Alphabetical / numeric sorting
+  return aVanCode.localeCompare(
+    bVanCode,
     undefined,
     {
       numeric: true,
@@ -703,6 +767,7 @@ const filteredData = data.filter((row) => {
   );
 
 });
+  
   const getStatus = (
   remaining: number,
   ex: number
