@@ -1496,18 +1496,31 @@ onClick={async () => {
     type="checkbox"
     className="w-4 h-4 accent-blue-600 cursor-pointer"
     disabled={!isLoggedIn}
+    
     checked={
-      permissions[van] ?? false
-    }
-    onChange={async (e) => {
+  checkedPermissions[van] ??
+  permissions[van] ??
+  false
+}
 
-  const isChecked = e.target.checked;
+onChange={async (e) => {
 
+  const isChecked =
+    e.target.checked;
+
+  // تحديث الواجهة مباشرة
   setCheckedPermissions((prev: any) => ({
-  ...prev,
-  [van]: isChecked,
-}));
-  await supabase
+    ...prev,
+    [van]: isChecked,
+  }));
+
+  // تحديث permissions أيضاً
+  setPermissions((prev: any) => ({
+    ...prev,
+    [van]: isChecked,
+  }));
+
+  const { error } = await supabase
     .from("van_permissions")
     .upsert(
       {
@@ -1519,13 +1532,30 @@ onClick={async () => {
       }
     );
 
+  if (error) {
+    console.error(
+      "Permission update error:",
+      error
+    );
+
+    // إذا فشل الحفظ نرجع الحالة القديمة
+    setCheckedPermissions((prev: any) => ({
+      ...prev,
+      [van]: !isChecked,
+    }));
+
+    setPermissions((prev: any) => ({
+      ...prev,
+      [van]: !isChecked,
+    }));
+
+    return;
+  }
+
   if (isChecked) {
 
+    try {
 
-
-  try {
-
-    const response =
       await fetch("/api/send-push", {
         method: "POST",
         headers: {
@@ -1537,14 +1567,16 @@ onClick={async () => {
         }),
       });
 
+    } catch (error) {
 
-  } catch (error) {
+      console.error(
+        "Push notification error:",
+        error
+      );
 
-    
-
+    }
   }
 
-}
 }}
   />
 </td>
