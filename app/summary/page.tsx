@@ -398,7 +398,7 @@ const [username, setUsername] = useState("");
 
 const [password, setPassword] = useState("");
 const [currentUser, setCurrentUser] = useState("");
-
+const [checkedPermissions, setCheckedPermissions] = useState<any>({});
   useEffect(() => {
 
   const loadData = async () => {
@@ -1503,7 +1503,7 @@ onClick={async () => {
 
   const isChecked = e.target.checked;
 
-  setPermissions((prev: any) => ({
+  setCheckedPermissions((prev: any) => ({
   ...prev,
   [van]: isChecked,
 }));
