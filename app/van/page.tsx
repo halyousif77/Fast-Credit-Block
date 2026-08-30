@@ -19,8 +19,13 @@ const [isSendingWhatsApp,
   useState(false);
   const [isYasser, setIsYasser] =
   useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+const [isMobile, setIsMobile] =
+  useState(false);
+
+const [searchTerm, setSearchTerm] =
+  useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 const [isCheckingUser, setIsCheckingUser] = useState(true);
 
 const [selectedRegions, setSelectedRegions] =
@@ -39,7 +44,28 @@ const [selectedVans, setSelectedVans] =
   useState<any>({});
 
   
+useEffect(() => {
 
+  const checkMobile = () => {
+    setIsMobile(window.innerWidth < 768);
+  };
+
+  checkMobile();
+
+  window.addEventListener(
+    "resize",
+    checkMobile
+  );
+
+  return () => {
+    window.removeEventListener(
+      "resize",
+      checkMobile
+    );
+  };
+
+}, []);
+  
 useEffect(() => {
 
   let cancelled = false;
@@ -722,25 +748,26 @@ return (
                     "
                   >
 
-                    {info.remaining > 0 && (
+                   {info.remaining > 0 && !isMobile && (
 
-                      <button
-                        onClick={() =>
-                          sendWhatsApp(
-                            String(van)
-                          )
-                        }
-                        className="
-                          absolute
-                          left-0
-                          text-green-600
-                          hover:text-green-700
-                        "
-                      >
-                        <FaWhatsapp size={20} />
-                      </button>
+  <button
+    onClick={() =>
+      sendWhatsApp(
+        String(van)
+      )
+    }
+    className="
+      absolute
+      left-0
+      text-green-600
+      hover:text-green-700
+    "
+  >
+    <FaWhatsapp size={20} />
+  </button>
 
-                    )}
+)}
+              
 
                     <span
                       className={`
