@@ -738,25 +738,29 @@ return (
 
                <td className="p-2 text-center">
 
-  <div className="flex items-center justify-center gap-1">
+  <div className="flex items-center justify-center">
 
-    {!isMobile && info.remaining > 0 && (
+    {/* WhatsApp */}
+    <div className="w-5 flex-shrink-0 flex justify-center">
+      {!isMobile && info.remaining > 0 && (
+        <button
+          onClick={() =>
+            sendWhatsApp(String(van))
+          }
+          className="
+            text-green-600
+            hover:text-green-700
+          "
+        >
+          <FaWhatsapp size={18} />
+        </button>
+      )}
+    </div>
 
-      <button
-        onClick={() =>
-          sendWhatsApp(String(van))
-        }
-        className="
-          shrink-0
-          text-green-600
-          hover:text-green-700
-        "
-      >
-        <FaWhatsapp size={18} />
-      </button>
+    {/* مسافة صغيرة ثابتة */}
+    <div className="w-1 flex-shrink-0" />
 
-    )}
-
+    {/* Badge */}
     <span
       className={`
         inline-flex
@@ -770,6 +774,7 @@ return (
         border
         border-black/10
         whitespace-nowrap
+
         ${
           info.remaining === 0 &&
           info.exceptions === 0
