@@ -631,21 +631,23 @@ text-white
 
 <tr>
 
-
 <th className="p-3">
-Status
+  Status
 </th>
 
 <th className="p-3">
-ID
+  ID
 </th>
 
 <th className="p-3">
-Van Code
+  Van Code
+</th>
+
+<th className="p-3">
+  Permission
 </th>
 
 </tr>
-
 
 </thead>
 
@@ -749,7 +751,92 @@ ${
     {van}
   </Link>
 </td>
+<td className="p-3 text-center">
 
+  <input
+    type="checkbox"
+    className={`
+      w-4
+      h-4
+      accent-blue-600
+      ${
+        !isLoggedIn || isYasser
+          ? "opacity-40 cursor-not-allowed"
+          : "cursor-pointer"
+      }
+    `}
+    disabled={!isLoggedIn || isYasser}
+    checked={permissions[van] ?? false}
+    onChange={async (e) => {
+
+      if (!isLoggedIn || isYasser) {
+        return;
+      }
+
+      const isChecked =
+        e.target.checked;
+
+      // تحديث الواجهة مباشرة
+      setPermissions((prev: any) => ({
+        ...prev,
+        [van]: isChecked,
+      }));
+
+      const { error } =
+        await supabase
+          .from("van_permissions")
+          .upsert(
+            {
+              van_code: van,
+              is_unblocked: isChecked,
+            },
+            {
+              onConflict: "van_code",
+            }
+          );
+
+      if (error) {
+
+        // في حال فشل الحفظ نرجع الحالة السابقة
+        setPermissions((prev: any) => ({
+          ...prev,
+          [van]: !isChecked,
+        }));
+
+        return;
+      }
+
+      // إرسال Push فقط عند التفعيل
+      if (isChecked) {
+
+        try {
+
+          await fetch("/api/send-push", {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+            body: JSON.stringify({
+              van_code: van,
+            }),
+          });
+
+        } catch (error) {
+
+          console.error(
+            "Push notification failed:",
+            error
+          );
+
+        }
+
+      }
+
+    }}
+  />
+
+</td>
 </tr>
 
 ))
