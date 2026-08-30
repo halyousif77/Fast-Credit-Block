@@ -736,79 +736,59 @@ return (
 
                 {/* STATUS */}
 
-                <td className="p-2 text-center">
+               <td className="p-2 text-center">
 
-                  <div
-                    className="
-                      relative
-                      flex
-                      items-center
-                      justify-center
-                      w-full
-                    "
-                  >
+  <div className="flex items-center justify-center gap-1">
 
-                   {info.remaining > 0 && !isMobile && (
+    {!isMobile && info.remaining > 0 && (
 
-  <button
-    onClick={() =>
-      sendWhatsApp(
-        String(van)
-      )
-    }
-    className="
-      absolute
-      left-0
-      text-green-600
-      hover:text-green-700
-    "
-  >
-    <FaWhatsapp size={20} />
-  </button>
+      <button
+        onClick={() =>
+          sendWhatsApp(String(van))
+        }
+        className="
+          shrink-0
+          text-green-600
+          hover:text-green-700
+        "
+      >
+        <FaWhatsapp size={18} />
+      </button>
 
-)}
-              
+    )}
 
-                    <span
-                      className={`
-                        inline-flex
-                        items-center
-                        justify-center
-                        min-w-0
-                        max-w-full
-                        px-2
-                        py-1
-                        rounded-full
-                        text-[10px]
-                        font-bold
-                        border
-                        border-black/10
-                        whitespace-nowrap
+    <span
+      className={`
+        inline-flex
+        items-center
+        justify-center
+        px-2
+        py-1
+        rounded-full
+        text-[10px]
+        font-bold
+        border
+        border-black/10
+        whitespace-nowrap
+        ${
+          info.remaining === 0 &&
+          info.exceptions === 0
+            ? "bg-green-100 text-green-700"
+            : info.remaining > 0
+            ? "bg-pink-100 text-pink-700"
+            : "bg-orange-100 text-orange-700"
+        }
+      `}
+    >
+      {getStatus(
+        info.remaining,
+        info.exceptions
+      )}
+    </span>
 
-                        ${
-                          info.remaining === 0 &&
-                          info.exceptions === 0
+  </div>
 
-                            ? "bg-green-100 text-green-700"
-
-                            : info.remaining > 0
-
-                            ? "bg-pink-100 text-pink-700"
-
-                            : "bg-orange-100 text-orange-700"
-                        }
-                      `}
-                    >
-                      {getStatus(
-                        info.remaining,
-                        info.exceptions
-                      )}
-                    </span>
-
-                  </div>
-
-                </td>
-
+</td>
 
                 {/* ID */}
 
