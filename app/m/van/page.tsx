@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase";
 import { storage } from "@/utils/storage";
 import { useI18n } from "@/lib/i18n";
 import { useRegionFilter } from "@/lib/regionFilter";
+import { isOutstandingRow } from "@/lib/creditData";
 
 type VanSummary = {
   vanCode: string;
@@ -25,15 +26,14 @@ function getStatusStyle(remaining: number, ex: number) {
 export default function MobileVanSummaryPage() {
   const { t, dir } = useI18n();
   const Chevron = dir === "rtl" ? ChevronLeft : ChevronRight;
-  const { loading: filterLoading, filteredRows } = useRegionFilter();
+  const { loading, filteredRows } = useRegionFilter();
 
   const [search, setSearch] = useState("");
   const [permissions, setPermissions] = useState<Record<string, boolean>>({});
   const [exceptions, setExceptions] = useState<any[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [collectedInvoices, setCollectedInvoices] = useState<string[]>([]);
   const [creditRules, setCreditRules] = useState<any[]>([]);
-  const [data, setData] = useState<any[]>([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -42,88 +42,137 @@ export default function MobileVanSummaryPage() {
       const user = await storage.getItem("currentUser");
       if (cancelled) return;
       setIsLoggedIn(!!user);
-      if (!user) return;
 
-      const [exRes, collectionRes] = await Promise.all([
+      const { data: perms } = await supabase.from("van_permissions").select("*");
+      if (cancelled) return;
+      const map: Record<string, boolean> = {};
+      (perms || []).forEach((p: any) => {
+        map[p.van_code] = !!p.is_unblocked;
+      });
+      setPermissions(map);
+
+      const [exRes, colRes, rulesRes] = await Promise.all([
         fetch("/api/exceptions"),
         fetch("/api/collection-data"),
+        supabase.from("credit_block_rules").select("*"),
       ]);
-      const exJson = await exRes.json();
-      const collectionJson = await collectionRes.json();
+      const json = await exRes.json();
+      const colJson = await colRes.json();
+      if (cancelled) return;
+      setCollectedInvoices(colJson?.invoices || []);
+      setCreditRules(rulesRes.data || []);
       if (cancelled) return;
 
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      setExceptions((Array.isArray(exJson) ? exJson : []).filter((item: any) => {
+      const valid = (Array.isArray(json) ? json : []).filter((item: any) => {
         if (item.permanent) return true;
         const till = new Date(item.till_date);
         till.setHours(0, 0, 0, 0);
         return till >= today;
-      }));
-      setCollectedInvoices(Array.isArray(collectionJson.invoices) ? collectionJson.invoices : []);
-
-      const [{ data: rules }, { data: perms }] = await Promise.all([
-        supabase.from("credit_block_rules").select("*"),
-        supabase.from("van_permissions").select("*"),
-      ]);
-      if (cancelled) return;
-      setCreditRules(rules || []);
-      const map: Record<string, boolean> = {};
-      (perms || []).forEach((p: any) => { map[p.van_code] = !!p.is_unblocked; });
-      setPermissions(map);
+      });
+      setExceptions(valid);
     })();
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const vans = useMemo(() => {
-    if (!isLoggedIn) return [];
+    const map: Record<string, { ids: Set<string>; remaining: number; exceptions: number }> = {};
 
-    const normalize = (v: any) => String(v || "")
-      .replace(/^ATS\s+/i, "")
-      .replace(/\s+/g, " ")
-      .trim()
-      .toUpperCase();
-    const normalizeInvoice = (v: any) => String(v || "").replace(/\s/g, "").toUpperCase();
-    const collected = new Set(collectedInvoices.map(normalizeInvoice));
-    const exceptionSet = new Set(exceptions.map((e: any) => normalizeInvoice(e.invoice)));
+    const normalize = (v: any) =>
+      String(v || "")
+        .replace(/^ATS\s+/i, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toUpperCase();
 
-    // Use the same eligibility rule as desktop Summary, but start from the
-    // mobile region-filtered rows so saved mobile filters still apply.
-    const eligibleRows = filteredRows.filter((row) => {
+    filteredRows.forEach((r) => {
+      // Keep the exact desktop Summary invoice rule: non-central, non-legal,
+      // and Credit_Days must reach the configured block_at_day for its payment term.
+      if (!isOutstandingRow(r)) return;
+
       const rule = creditRules.find(
-        (r) => normalize(r.payment_term) === normalize(row.paymentTerm)
+        (x) => normalize(x.payment_term) === normalize(r.paymentTerm)
       );
       const showInvoice = rule
-        ? row.creditDays >= Number(rule.block_at_day)
-        : row.creditDays >= 1;
-      return String(row.centralInvoice || "").trim().toUpperCase() === "NOT CENTRAL"
-        && !String(row.invoiceStatus || "").toLowerCase().includes("legal")
-        && showInvoice;
+        ? r.creditDays >= Number(rule.block_at_day)
+        : r.creditDays >= 1;
+      if (!showInvoice) return;
+
+      const code = r.vanCode || "—";
+      if (!map[code]) {
+        map[code] = { ids: new Set(), remaining: 0, exceptions: 0 };
+      }
+      if (r.employeeAtsCode) map[code].ids.add(r.employeeAtsCode);
+
+      const invoiceKey = String(r.invoice || "").replace(/\s/g, "").toUpperCase();
+      const isException = exceptions.some(
+        (e) => String(e.invoice || "").replace(/\s/g, "").toUpperCase() === invoiceKey
+      );
+      const isCollected = collectedInvoices.some(
+        (i) => String(i || "").replace(/\s/g, "").toUpperCase() === invoiceKey
+      );
+
+      if (isException) {
+        map[code].exceptions += 1;
+      } else if (!isCollected) {
+        map[code].remaining += 1;
+      }
     });
 
-    const map: Record<string, { ids: Set<string>; remaining: number; exceptions: number }> = {};
-    eligibleRows.forEach((row) => {
-      const code = row.vanCode || "—";
-      if (!map[code]) map[code] = { ids: new Set(), remaining: 0, exceptions: 0 };
-      if (row.employeeAtsCode) map[code].ids.add(row.employeeAtsCode);
+    const list: VanSummary[] = Object.entries(map).map(([vanCode, info]) => ({
+      vanCode,
+      employeeIds: Array.from(info.ids).join(" / "),
+      remaining: info.remaining,
+      exceptions: info.exceptions,
+    }));
 
-      const invoiceKey = normalizeInvoice(row.invoice);
-      if (exceptionSet.has(invoiceKey)) map[code].exceptions += 1;
-      else if (!collected.has(invoiceKey)) map[code].remaining += 1;
-    });
+    return list
+      .filter((v) => {
+        const q = search.trim().toLowerCase();
+        if (!q) return true;
+        return (
+          v.vanCode.toLowerCase().includes(q) ||
+          v.employeeIds.toLowerCase().includes(q)
+        );
+      })
+      .sort((a, b) => {
+        const aPermission = permissions[a.vanCode] ?? false;
+        const bPermission = permissions[b.vanCode] ?? false;
 
-    const q = search.trim().toLowerCase();
-    return Object.entries(map)
-      .map(([vanCode, info]) => ({
-        vanCode,
-        employeeIds: Array.from(info.ids).join(" / "),
-        remaining: info.remaining,
-        exceptions: info.exceptions,
-      }))
-      .filter((v) => !q || v.vanCode.toLowerCase().includes(q) || v.employeeIds.toLowerCase().includes(q))
-      .sort((a, b) => a.vanCode.localeCompare(b.vanCode, undefined, { numeric: true }));
-  }, [filteredRows, creditRules, exceptions, collectedInvoices, isLoggedIn, search]);
+        // Same ordering as the desktop Summary:
+        // 1) permission/unblocked vans at the end
+        // 2) Ex & All Collected
+        // 3) All Collected
+        // 4) remaining / remaining + exceptions
+        // 5) HFR at the end within the same group
+        if (aPermission && !bPermission) return 1;
+        if (!aPermission && bPermission) return -1;
+
+        const priority = (v: VanSummary) => {
+          if (v.remaining === 0 && v.exceptions > 0) return 1;
+          if (v.remaining === 0 && v.exceptions === 0) return 2;
+          return 3;
+        };
+
+        const pa = priority(a);
+        const pb = priority(b);
+        if (pa !== pb) return pa - pb;
+
+        const aIsHFR = a.vanCode.toUpperCase().includes("HFR");
+        const bIsHFR = b.vanCode.toUpperCase().includes("HFR");
+        if (aIsHFR && !bIsHFR) return 1;
+        if (!aIsHFR && bIsHFR) return -1;
+
+        return a.vanCode.localeCompare(b.vanCode, undefined, {
+          numeric: true,
+          sensitivity: "base",
+        });
+      });
+  }, [filteredRows, exceptions, collectedInvoices, creditRules, search, permissions]);
 
   const getStatusLabel = (remaining: number, ex: number) => {
     if (remaining > 0 && ex > 0) return `${remaining} ${t("remaining")} · Ex`;
@@ -167,11 +216,11 @@ export default function MobileVanSummaryPage() {
         />
       </div>
 
-      {filterLoading && (
+      {loading && (
         <p className="text-center text-sm text-slate-400 py-10">{t("loading")}</p>
       )}
 
-      {!filterLoading && vans.length === 0 && (
+      {!loading && vans.length === 0 && (
         <p className="text-center text-sm text-slate-400 py-10">{t("noData")}</p>
       )}
 
