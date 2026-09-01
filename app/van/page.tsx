@@ -19,13 +19,8 @@ const [isSendingWhatsApp,
   useState(false);
   const [isYasser, setIsYasser] =
   useState(false);
-
-const [isMobile, setIsMobile] =
-  useState(false);
-
-const [searchTerm, setSearchTerm] =
-  useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+const [isLoggedIn, setIsLoggedIn] = useState(false);
 const [isCheckingUser, setIsCheckingUser] = useState(true);
 
 const [selectedRegions, setSelectedRegions] =
@@ -44,28 +39,7 @@ const [selectedVans, setSelectedVans] =
   useState<any>({});
 
   
-useEffect(() => {
 
-  const checkMobile = () => {
-    setIsMobile(window.innerWidth < 768);
-  };
-
-  checkMobile();
-
-  window.addEventListener(
-    "resize",
-    checkMobile
-  );
-
-  return () => {
-    window.removeEventListener(
-      "resize",
-      checkMobile
-    );
-  };
-
-}, []);
-  
 useEffect(() => {
 
   let cancelled = false;
@@ -641,339 +615,153 @@ return (
   </div>
 )}
 {isLoggedIn && (
-  <div className="w-full max-w-full overflow-hidden">
+<table
+  className="
+w-full
+text-sm
+"
+>
 
-  <table className="w-full max-w-full table-fixed text-xs">
-      <thead className="bg-[#071d5c] text-white">
+<thead
+  className="
+bg-[#071d5c]
+text-white
+"
+>
 
-        <tr>
+<tr>
 
-          <th className="w-[42%] p-2 text-center">
-            Status
-          </th>
 
-          <th className="w-[20%] p-2 text-center">
-            ID
-          </th>
+<th className="p-3">
+Status
+</th>
 
-          <th className="w-[25%] p-2 text-center">
-            Van Code
-          </th>
+<th className="p-3">
+ID
+</th>
 
-          <th className="w-[13%] p-2 text-center">
-            Perm
-          </th>
+<th className="p-3">
+Van Code
+</th>
 
-        </tr>
+</tr>
 
-      </thead>
 
-      <tbody>
+</thead>
 
-        {filteredVans
-          .sort((a: any, b: any) => {
+<tbody>
 
-            const vanA =
-              String(a[0])
-                .toUpperCase()
-                .trim();
+{
+filteredVans
+  .sort((a: any, b: any) => {
+    const vanA = String(a[0]).toUpperCase().trim();
+    const vanB = String(b[0]).toUpperCase().trim();
 
-            const vanB =
-              String(b[0])
-                .toUpperCase()
-                .trim();
+    const isHFRA = vanA.startsWith("HFR");
+    const isHFRB = vanB.startsWith("HFR");
 
-            const isHFRA =
-              vanA.startsWith("HFR");
+    if (isHFRA && !isHFRB) return 1;
+    if (!isHFRA && isHFRB) return -1;
 
-            const isHFRB =
-              vanB.startsWith("HFR");
+    return vanA.localeCompare(
+      vanB,
+      undefined,
+      { numeric: true }
+    );
+  })
+.map(([van,info]:any)=>(
 
-            if (
-              isHFRA &&
-              !isHFRB
-            )
-              return 1;
-
-            if (
-              !isHFRA &&
-              isHFRB
-            )
-              return -1;
-
-            return vanA.localeCompare(
-              vanB,
-              undefined,
-              { numeric: true }
-            );
-
-          })
-
-          .map(([van, info]: any) => {
-
-            const status =
-              getStatus(
-                info.remaining,
-                info.exceptions
-              );
-
-            return (
-
-              <tr
-                key={van}
-                className={`
-                  border-b
-                  ${
-                    permissions[van]
-                      ? "bg-green-100"
-                      : status === "All Collected" ||
-                        status === "Ex & All Collected"
-                      ? "bg-yellow-50"
-                      : ""
-                  }
-                `}
-              >
-
-                {/* STATUS */}
-
-               <td className="p-2 text-center">
-
-  <div className="flex items-center justify-center">
-
-    {/* WhatsApp */}
-    <div className="w-5 flex-shrink-0 flex justify-center">
-      {!isMobile && info.remaining > 0 && (
-        <button
-          onClick={() =>
-            sendWhatsApp(String(van))
-          }
-          className="
-            text-green-600
-            hover:text-green-700
-          "
-        >
-          <FaWhatsapp size={18} />
-        </button>
-      )}
-    </div>
-
-    {/* مسافة صغيرة ثابتة */}
-    <div className="w-1 flex-shrink-0" />
-
-    {/* Badge */}
-    <span
-      className={`
-        inline-flex
-        items-center
-        justify-center
-        px-2
-        py-1
-        rounded-full
-        text-[10px]
-        font-bold
-        border
-        border-black/10
-        whitespace-nowrap
-
-        ${
-          info.remaining === 0 &&
-          info.exceptions === 0
-            ? "bg-green-100 text-green-700"
-            : info.remaining > 0
-            ? "bg-pink-100 text-pink-700"
-            : "bg-orange-100 text-orange-700"
-        }
-      `}
-    >
-      {getStatus(
+<tr
+key={van}
+className={`
+border-b
+${
+  permissions[van]
+    ? "bg-green-100"
+    : getStatus(
         info.remaining,
         info.exceptions
-      )}
+      ) === "All Collected" ||
+      getStatus(
+        info.remaining,
+        info.exceptions
+      ) === "Ex & All Collected"
+    ? "bg-yellow-50"
+    : ""
+}
+`}
+>
+
+
+<td className="p-3 text-center">
+  <div className="relative inline-flex items-center justify-center w-[190px]">
+
+    {info.remaining > 0 && (
+      <button
+        onClick={() => sendWhatsApp(String(van))}
+        className="absolute left-0 text-green-600 hover:text-green-700"
+      >
+        <FaWhatsapp size={20} />
+      </button>
+    )}
+
+    <span
+  className={`
+    inline-flex
+    items-center
+    justify-center
+    min-w-[150px]
+    px-3
+    py-1
+    rounded-full
+    text-xs
+    font-bold
+    border border-black/10
+    ${
+      info.remaining === 0 && info.exceptions === 0
+        ? "bg-green-100 text-green-700"
+        : info.remaining > 0
+        ? "bg-pink-100 text-pink-700"
+        : "bg-orange-100 text-orange-700"
+    }
+  `}
+>
+      {getStatus(info.remaining, info.exceptions)}
     </span>
 
   </div>
-
+</td>
+<td className="p-3 text-center">
+{[...info.ids].join(" / ")}
 </td>
 
-                {/* ID */}
-
-                <td className="p-2 text-center overflow-hidden">
-  <div className="whitespace-normal break-words leading-tight">
-    {[...info.ids].join(" / ")}
-  </div>
+<td
+  className="
+    p-3
+    text-center
+    font-bold
+  "
+>
+  <Link
+    href={`/van/${encodeURIComponent(String(van))}`}
+    className="text-blue-600 underline"
+  >
+    {van}
+  </Link>
 </td>
 
+</tr>
 
-                {/* VAN CODE */}
+))
 
-                <td
-                  className="
-                    p-2
-                    text-center
-                    font-bold
-                    overflow-hidden
-                  "
-                >
+}
 
-                  <Link
-                    href={`/van/${encodeURIComponent(
-                      String(van)
-                    )}`}
-                    className="
-                      text-blue-600
-                      underline
-                      break-all
-                    "
-                  >
-                    {van}
-                  </Link>
+</tbody>
 
-                </td>
-
-
-                {/* PERMISSION */}
-
-                <td className="p-2 text-center">
-
-                  <input
-                    type="checkbox"
-
-                    className={`
-                      w-4
-                      h-4
-                      accent-blue-600
-
-                      ${
-                        !isLoggedIn || isYasser
-                          ? "opacity-40 cursor-not-allowed"
-                          : "cursor-pointer"
-                      }
-                    `}
-
-                    disabled={
-                      !isLoggedIn ||
-                      isYasser
-                    }
-
-                    checked={
-                      permissions[van] ??
-                      false
-                    }
-
-                    onChange={async (e) => {
-
-                      if (
-                        !isLoggedIn ||
-                        isYasser
-                      ) {
-                        return;
-                      }
-
-                      const isChecked =
-                        e.target.checked;
-
-                      // تحديث الواجهة مباشرة
-
-                      setPermissions(
-                        (prev: any) => ({
-                          ...prev,
-                          [van]:
-                            isChecked,
-                        })
-                      );
-
-                      const {
-                        error,
-                      } =
-                        await supabase
-                          .from(
-                            "van_permissions"
-                          )
-                          .upsert(
-                            {
-                              van_code:
-                                van,
-
-                              is_unblocked:
-                                isChecked,
-                            },
-                            {
-                              onConflict:
-                                "van_code",
-                            }
-                          );
-
-                      if (error) {
-
-                        // في حال فشل الحفظ
-                        // نرجع الحالة السابقة
-
-                        setPermissions(
-                          (prev: any) => ({
-                            ...prev,
-                            [van]:
-                              !isChecked,
-                          })
-                        );
-
-                        return;
-                      }
-
-                      // إرسال Push فقط عند التفعيل
-
-                      if (isChecked) {
-
-                        try {
-
-                          await fetch(
-                            "/api/send-push",
-                            {
-                              method:
-                                "POST",
-
-                              headers: {
-                                "Content-Type":
-                                  "application/json",
-                              },
-
-                              body:
-                                JSON.stringify({
-                                  van_code:
-                                    van,
-                                }),
-                            }
-                          );
-
-                        } catch (error) {
-
-                          console.error(
-                            "Push notification failed:",
-                            error
-                          );
-
-                        }
-
-                      }
-
-                    }}
-                  />
-
-                </td>
-
-              </tr>
-
-            );
-
-          })}
-
-      </tbody>
-
-    </table>
-
-  </div>
+</table>
 )}
+</div>
 
-    </div>
 
   </>
 );

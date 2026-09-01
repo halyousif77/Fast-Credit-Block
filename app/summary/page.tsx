@@ -398,7 +398,7 @@ const [username, setUsername] = useState("");
 
 const [password, setPassword] = useState("");
 const [currentUser, setCurrentUser] = useState("");
-const [checkedPermissions, setCheckedPermissions] = useState<any>({});
+
   useEffect(() => {
 
   const loadData = async () => {
@@ -676,89 +676,25 @@ const filteredData = data.filter((row) => {
 
 .sort((a: any, b: any) => {
 
-  const [aVan, aInfo] = a;
-  const [bVan, bInfo] = b;
-
-  // Permission checked => always at the end
-  const aPermission = permissions[aVan] ?? false;
-  const bPermission = permissions[bVan] ?? false;
-
-  if (aPermission && !bPermission) {
-    return 1;
-  }
-
-  if (!aPermission && bPermission) {
-    return -1;
-  }
-
-  // Get status priority
-  const getSortPriority = (
-    info: any
-  ) => {
-
-    const remaining = info.remaining;
-    const exceptions = info.exceptions;
-
-    // 1. Ex & All Collected
-    if (
-      remaining === 0 &&
-      exceptions > 0
-    ) {
-      return 1;
-    }
-
-    // 2. All Collected
-    if (
-      remaining === 0 &&
-      exceptions === 0
-    ) {
-      return 2;
-    }
-
-    // 3. باقي الحالات
-    return 3;
-  };
-
-  // Only apply status priority to vans
-  // without Permission
-  if (!aPermission && !bPermission) {
-
-    const aPriority =
-      getSortPriority(aInfo);
-
-    const bPriority =
-      getSortPriority(bInfo);
-
-    if (aPriority !== bPriority) {
-      return aPriority - bPriority;
-    }
-  }
-
-  // HFR goes to the end
-  // within the same group
-  const aVanCode =
-    String(aVan).trim();
-
-  const bVanCode =
-    String(bVan).trim();
+  const aVan = String(a[0]).trim();
+  const bVan = String(b[0]).trim();
 
   const aIsHFR =
-    aVanCode.includes("HFR");
+    aVan.includes("HFR");
 
   const bIsHFR =
-    bVanCode.includes("HFR");
+    bVan.includes("HFR");
 
-  if (aIsHFR && !bIsHFR) {
+  // HFR دائماً في الأخير
+  if (aIsHFR && !bIsHFR)
     return 1;
-  }
 
-  if (!aIsHFR && bIsHFR) {
+  if (!aIsHFR && bIsHFR)
     return -1;
-  }
 
-  // Alphabetical / numeric sorting
-  return aVanCode.localeCompare(
-    bVanCode,
+  // ترتيب أبجدي/رقمي داخل كل مجموعة
+  return aVan.localeCompare(
+    bVan,
     undefined,
     {
       numeric: true,
@@ -767,7 +703,6 @@ const filteredData = data.filter((row) => {
   );
 
 });
-  
   const getStatus = (
   remaining: number,
   ex: number
@@ -1496,31 +1431,18 @@ onClick={async () => {
     type="checkbox"
     className="w-4 h-4 accent-blue-600 cursor-pointer"
     disabled={!isLoggedIn}
-    
     checked={
-  checkedPermissions[van] ??
-  permissions[van] ??
-  false
-}
+      permissions[van] ?? false
+    }
+    onChange={async (e) => {
 
-onChange={async (e) => {
+  const isChecked = e.target.checked;
 
-  const isChecked =
-    e.target.checked;
-
-  // تحديث الواجهة مباشرة
-  setCheckedPermissions((prev: any) => ({
-    ...prev,
-    [van]: isChecked,
-  }));
-
-  // تحديث permissions أيضاً
   setPermissions((prev: any) => ({
-    ...prev,
-    [van]: isChecked,
-  }));
-
-  const { error } = await supabase
+  ...prev,
+  [van]: isChecked,
+}));
+  await supabase
     .from("van_permissions")
     .upsert(
       {
@@ -1532,30 +1454,13 @@ onChange={async (e) => {
       }
     );
 
-  if (error) {
-    console.error(
-      "Permission update error:",
-      error
-    );
-
-    // إذا فشل الحفظ نرجع الحالة القديمة
-    setCheckedPermissions((prev: any) => ({
-      ...prev,
-      [van]: !isChecked,
-    }));
-
-    setPermissions((prev: any) => ({
-      ...prev,
-      [van]: !isChecked,
-    }));
-
-    return;
-  }
-
   if (isChecked) {
 
-    try {
 
+
+  try {
+
+    const response =
       await fetch("/api/send-push", {
         method: "POST",
         headers: {
@@ -1567,16 +1472,14 @@ onChange={async (e) => {
         }),
       });
 
-    } catch (error) {
 
-      console.error(
-        "Push notification error:",
-        error
-      );
+  } catch (error) {
 
-    }
+    
+
   }
 
+}
 }}
   />
 </td>
