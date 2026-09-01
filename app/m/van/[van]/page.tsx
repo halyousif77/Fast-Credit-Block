@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Search, ShieldCheck, ShieldOff } from "lucide-react";
+import { ArrowLeft, ArrowRight, Search, ShieldCheck, ShieldOff, ChevronDown, ChevronUp } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useI18n } from "@/lib/i18n";
-import { fetchCreditRows } from "@/lib/creditData";
+import { storage } from "@/utils/storage";
 
 export default function MobileVanDetailPage() {
   const params = useParams();
@@ -16,12 +16,14 @@ export default function MobileVanDetailPage() {
   const vanCode = decodeURIComponent(String(params.van || ""));
 
   const [loading, setLoading] = useState(true);
-  const [rows, setRows] = useState<any[]>([]);
+  const [data, setData] = useState<any[]>([]);
   const [exceptions, setExceptions] = useState<any[]>([]);
   const [collectedInvoices, setCollectedInvoices] = useState<string[]>([]);
   const [creditRules, setCreditRules] = useState<any[]>([]);
   const [isUnblocked, setIsUnblocked] = useState(false);
   const [search, setSearch] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showExceptions, setShowExceptions] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -29,38 +31,46 @@ export default function MobileVanDetailPage() {
     (async () => {
       setLoading(true);
 
-      const [data, exRes, colRes, rulesRes] = await Promise.all([
-        fetchCreditRows(),
+      const currentUser = await storage.getItem("currentUser");
+      if (cancelled) return;
+      setIsLoggedIn(!!currentUser);
+
+      if (!currentUser) {
+        setLoading(false);
+        return;
+      }
+
+      const [creditRes, exRes, collectionRes] = await Promise.all([
+        fetch("/api/credit-data"),
         fetch("/api/exceptions"),
         fetch("/api/collection-data"),
-        supabase.from("credit_block_rules").select("*"),
       ]);
+
+      const creditJson = await creditRes.json();
+      const exJson = await exRes.json();
+      const collectionJson = await collectionRes.json();
+
       if (cancelled) return;
+
+      setData(creditJson.data || []);
+      setCollectedInvoices(collectionJson.invoices || []);
 
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      const exJson = await exRes.json();
-      const valid = (Array.isArray(exJson) ? exJson : []).filter((item: any) => {
+
+      const validExceptions = (Array.isArray(exJson) ? exJson : []).filter((item: any) => {
         if (item.permanent) return true;
         const till = new Date(item.till_date);
         till.setHours(0, 0, 0, 0);
         return till >= today;
       });
-      const colJson = await colRes.json();
+      setExceptions(validExceptions);
 
-      const vanRows = data.filter((r) => r.vanCode === vanCode);
-      const vanInvoices = new Set(
-        vanRows.map((r) => String(r.invoice || "").replace(/\s/g, "").toUpperCase())
-      );
-
-      setRows(vanRows);
-      setExceptions(
-        valid.filter((e: any) =>
-          vanInvoices.has(String(e.invoice || "").replace(/\s/g, "").toUpperCase())
-        )
-      );
-      setCollectedInvoices(colJson?.invoices || []);
-      setCreditRules(rulesRes.data || []);
+      const { data: rules } = await supabase
+        .from("credit_block_rules")
+        .select("*");
+      if (cancelled) return;
+      setCreditRules(rules || []);
 
       const { data: perm } = await supabase
         .from("van_permissions")
@@ -78,40 +88,76 @@ export default function MobileVanDetailPage() {
     };
   }, [vanCode]);
 
-  const normalize = (v: any) =>
-    String(v || "").replace(/^ATS\s+/i, "").replace(/\s+/g, " ").trim().toUpperCase();
-
-  const isExceptionInvoice = (invoice: any) =>
-    exceptions.some(
-      (e) => String(e.invoice || "").replace(/\s/g, "").toUpperCase() ===
-        String(invoice || "").replace(/\s/g, "").toUpperCase()
-    );
-
   const filtered = useMemo(() => {
-    const result = rows.filter((r) => {
-      const rule = creditRules.find((x) => normalize(x.payment_term) === normalize(r.paymentTerm));
-      const invoiceKey = String(r.invoice || "").replace(/\s/g, "").toUpperCase();
-      const collected = collectedInvoices.some(
-        (i) => String(i || "").replace(/\s/g, "").toUpperCase() === invoiceKey
-      );
-      return (
-        String(r.centralInvoice || "").trim().toUpperCase() === "NOT CENTRAL" &&
-        !String(r.invoiceStatus || "").toLowerCase().includes("legal") &&
-        !!rule &&
-        r.creditDays >= (Number(rule.block_at_day) || 0) &&
-        !isExceptionInvoice(r.invoice) &&
-        !collected
-      );
-    });
+    if (!isLoggedIn) return [];
+
+    const normalize = (v: any) =>
+      String(v || "")
+        .replace(/^ATS\s+/i, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toUpperCase();
+
+    return data
+      .filter((row) => String(row["Van Code."] || "").trim() === vanCode.trim())
+      .filter((row) => {
+        const paymentTerm = String(row["Payment Term"] || "").trim();
+
+        const rule = creditRules.find(
+          (r) => normalize(r.payment_term) === normalize(paymentTerm)
+        );
+
+        const creditDays = Number(row["Credit_Days"]) || 0;
+
+        const showInvoice = rule
+          ? creditDays >= Number(rule.block_at_day)
+          : creditDays >= 1;
+
+        return (
+          String(row["Central Invoice"] || "").trim().toUpperCase() === "NOT CENTRAL" &&
+          !String(row["Invoice status (Due/ Overdue)"] || "")
+            .toLowerCase()
+            .includes("legal") &&
+          showInvoice
+        );
+      })
+      .filter((row) => {
+        const invoiceKey = String(row["Invoice #"] || "")
+          .replace(/\s/g, "")
+          .toUpperCase();
+
+        const isException = exceptions.some(
+          (e: any) =>
+            String(e.invoice || "").replace(/\s/g, "").toUpperCase() === invoiceKey
+        );
+
+        const isCollected = collectedInvoices.some(
+          (i: any) =>
+            String(i || "").replace(/\s/g, "").toUpperCase() === invoiceKey
+        );
+
+        return !isException && !isCollected;
+      });
+  }, [
+    data,
+    exceptions,
+    collectedInvoices,
+    creditRules,
+    vanCode,
+    isLoggedIn,
+  ]);
+
+  const searched = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return result;
-    return result.filter(
+    if (!q) return filtered;
+
+    return filtered.filter(
       (r) =>
-        String(r.invoice || "").toLowerCase().includes(q) ||
-        String(r.customerName || "").toLowerCase().includes(q) ||
-        String(r.customerCode || "").toLowerCase().includes(q)
+        String(r["Invoice #"] || "").toLowerCase().includes(q) ||
+        String(r["Customer Name"] || "").toLowerCase().includes(q) ||
+        String(r["Customer Code"] || "").toLowerCase().includes(q)
     );
-  }, [rows, search, exceptions, collectedInvoices, creditRules]);
+  }, [filtered, search]);
 
   return (
     <div className="space-y-3">
@@ -156,68 +202,66 @@ export default function MobileVanDetailPage() {
         />
       </div>
 
+      <button
+        type="button"
+        onClick={() => setShowExceptions((v) => !v)}
+        className="w-full bg-white rounded-2xl shadow-sm border border-slate-100 p-3.5 flex items-center justify-between text-sm font-semibold"
+      >
+        <span>{t("exceptions")} ({vanExceptions.length})</span>
+        {showExceptions ? <ChevronUp size={17} /> : <ChevronDown size={17} />}
+      </button>
+
+      {showExceptions && (
+        <div className="space-y-2">
+          {vanExceptions.length === 0 ? (
+            <p className="text-center text-sm text-slate-400 py-5">{t("noData")}</p>
+          ) : (
+            vanExceptions.map((r, i) => (
+              <div key={`${r.invoice}-exception-${i}`} className="bg-orange-50 rounded-2xl border border-orange-100 p-3.5">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="font-semibold text-sm">{r.invoice}</p>
+                  <p className="text-sm font-bold">{Number(r.amount || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
+                </div>
+                <p className="text-xs text-slate-600 truncate">{r.customerName} · {r.customerCode}</p>
+                {r.exception?.reason && <p className="text-xs text-orange-700 mt-1">{r.exception.reason}</p>}
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
       {loading && (
         <p className="text-center text-sm text-slate-400 py-10">
           {t("loading")}
         </p>
       )}
 
-      {!loading && filtered.length === 0 && (
+      {!loading && searched.length === 0 && (
         <p className="text-center text-sm text-slate-400 py-10">
           {t("noData")}
         </p>
       )}
 
-      {exceptions.length > 0 && (
-        <div className="bg-orange-50 border border-orange-200 rounded-2xl p-3.5">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-bold text-orange-800">Exceptions</p>
-            <span className="text-xs font-semibold text-orange-700">
-              {exceptions.length}
-            </span>
-          </div>
-
-          <div className="space-y-2">
-            {exceptions.map((e, i) => (
-              <div
-                key={`${e.invoice}-${i}`}
-                className="bg-white rounded-xl border border-orange-100 p-3"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <p className="font-semibold text-sm">{e.invoice || "—"}</p>
-                  <span className="text-[11px] font-medium text-orange-700">
-                    {e.permanent ? "Permanent" : e.till_date || ""}
-                  </span>
-                </div>
-                {e.reason && (
-                  <p className="text-xs text-slate-500 mt-1">{e.reason}</p>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       <div className="space-y-2">
-        {filtered.map((r, i) => (
+        {searched.map((r, i) => (
           <div
-            key={`${r.invoice}-${i}`}
+            key={`${r["Invoice #"]}-${i}`}
             className="bg-white rounded-2xl shadow-sm border border-slate-100 p-3.5"
           >
             <div className="flex items-center justify-between mb-1">
-              <p className="font-semibold text-sm">{r.invoice}</p>
+              <p className="font-semibold text-sm">{r["Invoice #"]}</p>
               <p className="text-sm font-bold" style={{ color: "#071d5c" }}>
-                {r.amount.toLocaleString(undefined, {
+                {Number(r["Credit Invoice Amount"] || 0).toLocaleString(undefined, {
                   maximumFractionDigits: 0,
                 })}
               </p>
             </div>
             <p className="text-xs text-slate-500 truncate">
-              {r.customerName} · {r.customerCode}
+              {r["Customer Name"]} · {r["Customer Code"]}
             </p>
-            {r.trxDate && (
+            {r["Transaction Date"] && (
               <p className="text-[11px] text-slate-400 mt-1">
-                {String(r.trxDate).split("T")[0]}
+                {String(r["Transaction Date"]).split("T")[0]}
               </p>
             )}
           </div>
