@@ -197,8 +197,31 @@ export default function MobileVanDetailPage() {
                 >
                   <div className="flex items-center justify-between gap-2">
                     <p className="font-semibold text-sm">{e.invoice || "—"}</p>
-                    <span className="text-[11px] font-medium text-orange-700">
-                      {e.permanent ? "Permanent" : e.till_date || ""}
+                    <span className="text-[11px] font-medium text-orange-700 text-end">
+                      {e.permanent ? (
+                        "Permanent"
+                      ) : (() => {
+                        const till = new Date(e.till_date);
+                        till.setHours(0, 0, 0, 0);
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        const daysLeft = Math.max(
+                          0,
+                          Math.round((till.getTime() - today.getTime()) / 86400000)
+                        );
+                        return (
+                          <>
+                            <span className="block">
+                              {daysLeft === 0
+                                ? "Expires today"
+                                : `${daysLeft} day${daysLeft === 1 ? "" : "s"} left`}
+                            </span>
+                            <span className="block text-[10px] text-orange-600 mt-0.5">
+                              {e.till_date || ""}
+                            </span>
+                          </>
+                        );
+                      })()}
                     </span>
                   </div>
                   {e.customer_name && (
