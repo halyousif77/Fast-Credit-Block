@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -6,8 +6,6 @@ import { Search, Truck, ChevronLeft, ChevronRight, ShieldCheck, ShieldOff } from
 import { supabase } from "@/lib/supabase";
 import { storage } from "@/utils/storage";
 import { useI18n } from "@/lib/i18n";
-import { useRegionFilter } from "@/lib/regionFilter";
-import { isOutstandingRow } from "@/lib/creditData";
 
 type VanSummary = {
   vanCode: string;
@@ -26,42 +24,75 @@ function getStatusStyle(remaining: number, ex: number) {
 export default function MobileVanSummaryPage() {
   const { t, dir } = useI18n();
   const Chevron = dir === "rtl" ? ChevronLeft : ChevronRight;
-  const { loading, filteredRows } = useRegionFilter();
 
   const [search, setSearch] = useState("");
   const [permissions, setPermissions] = useState<Record<string, boolean>>({});
   const [exceptions, setExceptions] = useState<any[]>([]);
+  const [collectedInvoices, setCollectedInvoices] = useState<string[]>([]);
+  const [creditRules, setCreditRules] = useState<any[]>([]);
+  const [data, setData] = useState<any[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
+      setLoading(true);
+
       const user = await storage.getItem("currentUser");
       if (cancelled) return;
       setIsLoggedIn(!!user);
 
-      const { data: perms } = await supabase.from("van_permissions").select("*");
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      const [creditRes, exRes, collectionRes] = await Promise.all([
+        fetch("/api/credit-data"),
+        fetch("/api/exceptions"),
+        fetch("/api/collection-data"),
+      ]);
+
+      const creditJson = await creditRes.json();
+      const exJson = await exRes.json();
+      const collectionJson = await collectionRes.json();
+
       if (cancelled) return;
+
+      setData(creditJson.data || []);
+      setCollectedInvoices(collectionJson.invoices || []);
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const validExceptions = (Array.isArray(exJson) ? exJson : []).filter((item: any) => {
+        if (item.permanent) return true;
+        const till = new Date(item.till_date);
+        till.setHours(0, 0, 0, 0);
+        return till >= today;
+      });
+      setExceptions(validExceptions);
+
+      const { data: rules } = await supabase
+        .from("credit_block_rules")
+        .select("*");
+      if (cancelled) return;
+      setCreditRules(rules || []);
+
+      const { data: perms } = await supabase
+        .from("van_permissions")
+        .select("*");
+      if (cancelled) return;
+
       const map: Record<string, boolean> = {};
       (perms || []).forEach((p: any) => {
         map[p.van_code] = !!p.is_unblocked;
       });
       setPermissions(map);
 
-      const res = await fetch("/api/exceptions");
-      const json = await res.json();
-      if (cancelled) return;
-
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const valid = (Array.isArray(json) ? json : []).filter((item: any) => {
-        if (item.permanent) return true;
-        const till = new Date(item.till_date);
-        till.setHours(0, 0, 0, 0);
-        return till >= today;
-      });
-      setExceptions(valid);
+      setLoading(false);
     })();
 
     return () => {
@@ -70,26 +101,67 @@ export default function MobileVanSummaryPage() {
   }, []);
 
   const vans = useMemo(() => {
+    if (!isLoggedIn) return [];
+
+    const normalize = (v: any) =>
+      String(v || "")
+        .replace(/^ATS\s+/i, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toUpperCase();
+
+    const filteredData = data.filter((row) => {
+      const paymentTerm = String(row["Payment Term"] || "").trim();
+
+      const rule = creditRules.find(
+        (r) => normalize(r.payment_term) === normalize(paymentTerm)
+      );
+
+      const creditDays = Number(row["Credit_Days"]) || 0;
+
+      const showInvoice = rule
+        ? creditDays >= Number(rule.block_at_day)
+        : creditDays >= 1;
+
+      const isNotCentral =
+        String(row["Central Invoice"] || "").trim().toUpperCase() === "NOT CENTRAL";
+
+      const invoiceStatus = String(
+        row["Invoice status (Due/ Overdue)"] || ""
+      ).toLowerCase();
+
+      return isNotCentral && !invoiceStatus.includes("legal") && showInvoice;
+    });
+
     const map: Record<string, { ids: Set<string>; remaining: number; exceptions: number }> = {};
 
-    filteredRows.forEach((r) => {
-      if (!isOutstandingRow(r)) return;
-      if (r.creditDays < 1) return;
+    filteredData.forEach((row) => {
+      const code = String(row["Van Code."] || "—");
 
-      const code = r.vanCode || "—";
       if (!map[code]) {
         map[code] = { ids: new Set(), remaining: 0, exceptions: 0 };
       }
-      if (r.employeeAtsCode) map[code].ids.add(r.employeeAtsCode);
 
-      const invoiceKey = String(r.invoice || "").replace(/\s/g, "").toUpperCase();
+      const employee = String(row["Employee ATS Code."] || "").trim();
+      if (employee) map[code].ids.add(employee);
+
+      const invoiceKey = String(row["Invoice #"] || "")
+        .replace(/\s/g, "")
+        .toUpperCase();
+
       const isException = exceptions.some(
-        (e) => String(e.invoice || "").replace(/\s/g, "").toUpperCase() === invoiceKey
+        (e: any) =>
+          String(e.invoice || "").replace(/\s/g, "").toUpperCase() === invoiceKey
+      );
+
+      const isCollected = collectedInvoices.some(
+        (i: any) =>
+          String(i || "").replace(/\s/g, "").toUpperCase() === invoiceKey
       );
 
       if (isException) {
         map[code].exceptions += 1;
-      } else {
+      } else if (!isCollected) {
         map[code].remaining += 1;
       }
     });
@@ -110,8 +182,10 @@ export default function MobileVanSummaryPage() {
           v.employeeIds.toLowerCase().includes(q)
         );
       })
-      .sort((a, b) => a.vanCode.localeCompare(b.vanCode, undefined, { numeric: true }));
-  }, [filteredRows, exceptions, search]);
+      .sort((a, b) =>
+        a.vanCode.localeCompare(b.vanCode, undefined, { numeric: true })
+      );
+  }, [data, creditRules, exceptions, collectedInvoices, isLoggedIn, search]);
 
   const getStatusLabel = (remaining: number, ex: number) => {
     if (remaining > 0 && ex > 0) return `${remaining} ${t("remaining")} · Ex`;
@@ -122,9 +196,13 @@ export default function MobileVanSummaryPage() {
 
   const togglePermission = async (vanCode: string, checked: boolean) => {
     setPermissions((prev) => ({ ...prev, [vanCode]: checked }));
+
     await supabase
       .from("van_permissions")
-      .upsert({ van_code: vanCode, is_unblocked: checked }, { onConflict: "van_code" });
+      .upsert(
+        { van_code: vanCode, is_unblocked: checked },
+        { onConflict: "van_code" }
+      );
 
     if (checked) {
       try {
@@ -166,6 +244,7 @@ export default function MobileVanSummaryPage() {
       <div className="space-y-2">
         {vans.map((v) => {
           const unblocked = !!permissions[v.vanCode];
+
           return (
             <div
               key={v.vanCode}

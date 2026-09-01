@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, Search, ShieldCheck, ShieldOff } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useI18n } from "@/lib/i18n";
-import { fetchCreditRows } from "@/lib/creditData";
+import { storage } from "@/utils/storage";
 
 export default function MobileVanDetailPage() {
   const params = useParams();
@@ -16,9 +16,13 @@ export default function MobileVanDetailPage() {
   const vanCode = decodeURIComponent(String(params.van || ""));
 
   const [loading, setLoading] = useState(true);
-  const [rows, setRows] = useState<any[]>([]);
+  const [data, setData] = useState<any[]>([]);
+  const [exceptions, setExceptions] = useState<any[]>([]);
+  const [collectedInvoices, setCollectedInvoices] = useState<string[]>([]);
+  const [creditRules, setCreditRules] = useState<any[]>([]);
   const [isUnblocked, setIsUnblocked] = useState(false);
   const [search, setSearch] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -26,10 +30,46 @@ export default function MobileVanDetailPage() {
     (async () => {
       setLoading(true);
 
-      const data = await fetchCreditRows();
+      const currentUser = await storage.getItem("currentUser");
+      if (cancelled) return;
+      setIsLoggedIn(!!currentUser);
+
+      if (!currentUser) {
+        setLoading(false);
+        return;
+      }
+
+      const [creditRes, exRes, collectionRes] = await Promise.all([
+        fetch("/api/credit-data"),
+        fetch("/api/exceptions"),
+        fetch("/api/collection-data"),
+      ]);
+
+      const creditJson = await creditRes.json();
+      const exJson = await exRes.json();
+      const collectionJson = await collectionRes.json();
+
       if (cancelled) return;
 
-      setRows(data.filter((r) => r.vanCode === vanCode));
+      setData(creditJson.data || []);
+      setCollectedInvoices(collectionJson.invoices || []);
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const validExceptions = (Array.isArray(exJson) ? exJson : []).filter((item: any) => {
+        if (item.permanent) return true;
+        const till = new Date(item.till_date);
+        till.setHours(0, 0, 0, 0);
+        return till >= today;
+      });
+      setExceptions(validExceptions);
+
+      const { data: rules } = await supabase
+        .from("credit_block_rules")
+        .select("*");
+      if (cancelled) return;
+      setCreditRules(rules || []);
 
       const { data: perm } = await supabase
         .from("van_permissions")
@@ -48,15 +88,75 @@ export default function MobileVanDetailPage() {
   }, [vanCode]);
 
   const filtered = useMemo(() => {
+    if (!isLoggedIn) return [];
+
+    const normalize = (v: any) =>
+      String(v || "")
+        .replace(/^ATS\s+/i, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toUpperCase();
+
+    return data
+      .filter((row) => String(row["Van Code."] || "").trim() === vanCode.trim())
+      .filter((row) => {
+        const paymentTerm = String(row["Payment Term"] || "").trim();
+
+        const rule = creditRules.find(
+          (r) => normalize(r.payment_term) === normalize(paymentTerm)
+        );
+
+        const creditDays = Number(row["Credit_Days"]) || 0;
+
+        const showInvoice = rule
+          ? creditDays >= Number(rule.block_at_day)
+          : creditDays >= 1;
+
+        return (
+          String(row["Central Invoice"] || "").trim().toUpperCase() === "NOT CENTRAL" &&
+          !String(row["Invoice status (Due/ Overdue)"] || "")
+            .toLowerCase()
+            .includes("legal") &&
+          showInvoice
+        );
+      })
+      .filter((row) => {
+        const invoiceKey = String(row["Invoice #"] || "")
+          .replace(/\s/g, "")
+          .toUpperCase();
+
+        const isException = exceptions.some(
+          (e: any) =>
+            String(e.invoice || "").replace(/\s/g, "").toUpperCase() === invoiceKey
+        );
+
+        const isCollected = collectedInvoices.some(
+          (i: any) =>
+            String(i || "").replace(/\s/g, "").toUpperCase() === invoiceKey
+        );
+
+        return !isException && !isCollected;
+      });
+  }, [
+    data,
+    exceptions,
+    collectedInvoices,
+    creditRules,
+    vanCode,
+    isLoggedIn,
+  ]);
+
+  const searched = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return rows;
-    return rows.filter(
+    if (!q) return filtered;
+
+    return filtered.filter(
       (r) =>
-        String(r.invoice || "").toLowerCase().includes(q) ||
-        String(r.customerName || "").toLowerCase().includes(q) ||
-        String(r.customerCode || "").toLowerCase().includes(q)
+        String(r["Invoice #"] || "").toLowerCase().includes(q) ||
+        String(r["Customer Name"] || "").toLowerCase().includes(q) ||
+        String(r["Customer Code"] || "").toLowerCase().includes(q)
     );
-  }, [rows, search]);
+  }, [filtered, search]);
 
   return (
     <div className="space-y-3">
@@ -107,32 +207,32 @@ export default function MobileVanDetailPage() {
         </p>
       )}
 
-      {!loading && filtered.length === 0 && (
+      {!loading && searched.length === 0 && (
         <p className="text-center text-sm text-slate-400 py-10">
           {t("noData")}
         </p>
       )}
 
       <div className="space-y-2">
-        {filtered.map((r, i) => (
+        {searched.map((r, i) => (
           <div
-            key={`${r.invoice}-${i}`}
+            key={`${r["Invoice #"]}-${i}`}
             className="bg-white rounded-2xl shadow-sm border border-slate-100 p-3.5"
           >
             <div className="flex items-center justify-between mb-1">
-              <p className="font-semibold text-sm">{r.invoice}</p>
+              <p className="font-semibold text-sm">{r["Invoice #"]}</p>
               <p className="text-sm font-bold" style={{ color: "#071d5c" }}>
-                {r.amount.toLocaleString(undefined, {
+                {Number(r["Credit Invoice Amount"] || 0).toLocaleString(undefined, {
                   maximumFractionDigits: 0,
                 })}
               </p>
             </div>
             <p className="text-xs text-slate-500 truncate">
-              {r.customerName} · {r.customerCode}
+              {r["Customer Name"]} · {r["Customer Code"]}
             </p>
-            {r.trxDate && (
+            {r["Transaction Date"] && (
               <p className="text-[11px] text-slate-400 mt-1">
-                {String(r.trxDate).split("T")[0]}
+                {String(r["Transaction Date"]).split("T")[0]}
               </p>
             )}
           </div>
