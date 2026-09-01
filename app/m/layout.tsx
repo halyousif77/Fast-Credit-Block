@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Home, Truck, AlertTriangle, Grid2x2, Settings as SettingsIcon } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { storage } from "@/utils/storage";
-import { RegionFilterProvider, useRegionFilter } from "@/lib/regionFilter";
+import { RegionFilterProvider } from "@/lib/regionFilter";
 
 const NAVY_FROM = "#071d5c";
 const NAVY_TO = "#0b2a7a";
@@ -16,31 +16,10 @@ export default function MobileLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <RegionFilterProvider>
-      <MobileShell>{children}</MobileShell>
-    </RegionFilterProvider>
-  );
-}
-
-function MobileShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { t, dir } = useI18n();
-  const { loading } = useRegionFilter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLoading, setShowLoading] = useState(true);
-
-  // Never leave the mobile UI locked forever if an API/network request hangs.
-  useEffect(() => {
-    if (!loading) {
-      setShowLoading(false);
-      return;
-    }
-
-    setShowLoading(true);
-    const failsafe = window.setTimeout(() => setShowLoading(false), 12000);
-    return () => window.clearTimeout(failsafe);
-  }, [loading]);
 
   useEffect(() => {
     const check = async () => {
@@ -61,6 +40,7 @@ function MobileShell({ children }: { children: React.ReactNode }) {
   ];
 
   return (
+    <RegionFilterProvider>
     <div
       dir={dir}
       className="min-h-screen flex flex-col overflow-x-hidden w-full"
@@ -118,20 +98,7 @@ function MobileShell({ children }: { children: React.ReactNode }) {
           })}
         </div>
       </nav>
-      {showLoading && (
-        <div className="fixed inset-0 z-[100] bg-[#f4f7fc]/95 backdrop-blur-sm flex items-center justify-center px-6">
-          <div className="w-full max-w-xs rounded-3xl bg-white shadow-xl border border-slate-100 p-6 text-center">
-            <div className="mx-auto mb-4 h-12 w-12 rounded-2xl flex items-center justify-center bg-[#071d5c]">
-              <div className="h-6 w-6 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-            </div>
-            <p className="font-bold text-[#071d5c]">Loading data</p>
-            <p className="mt-1 text-xs text-slate-500">Please wait while the latest data is loaded</p>
-            <div className="mt-5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-              <div className="h-full w-1/2 rounded-full bg-[#071d5c] animate-pulse" />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
+    </RegionFilterProvider>
   );
 }
