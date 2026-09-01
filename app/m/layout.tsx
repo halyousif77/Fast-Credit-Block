@@ -6,8 +6,7 @@ import { useEffect, useState } from "react";
 import { Home, Truck, AlertTriangle, Grid2x2, Settings as SettingsIcon } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { storage } from "@/utils/storage";
-import { RegionFilterProvider } from "@/lib/regionFilter";
-import { supabase } from "@/lib/supabase";
+import { RegionFilterProvider, useRegionFilter } from "@/lib/regionFilter";
 
 const NAVY_FROM = "#071d5c";
 const NAVY_TO = "#0b2a7a";
@@ -21,25 +20,12 @@ export default function MobileLayout({
   const router = useRouter();
   const { t, dir } = useI18n();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loggedInName, setLoggedInName] = useState("");
+  const { loading: dataLoading } = useRegionFilter();
 
   useEffect(() => {
     const check = async () => {
       const user = await storage.getItem("currentUser");
       setIsLoggedIn(!!user);
-
-      if (!user) {
-        setLoggedInName("");
-        return;
-      }
-
-      const { data } = await supabase
-        .from("app_users")
-        .select("full_name")
-        .eq("username", user)
-        .maybeSingle();
-
-      setLoggedInName(data?.full_name || user);
     };
     check();
     window.addEventListener("user-changed", check);
@@ -78,10 +64,40 @@ export default function MobileLayout({
             Credit Dashboard
           </span>
           <span className="text-[11px] px-2 py-1 rounded-full bg-white/15">
-            {isLoggedIn ? `${t("loggedInAs")} ${loggedInName}` : t("notLoggedIn")}
+            {isLoggedIn ? t("loggedInAs") : t("notLoggedIn")}
           </span>
         </div>
       </div>
+
+      {/* Global data-loading overlay: blocks all mobile interaction until initial data is ready */}
+      {dataLoading && (
+        <div
+          className="fixed inset-0 z-[100] bg-slate-900/20 backdrop-blur-[2px] flex items-center justify-center px-6"
+          aria-live="polite"
+          aria-busy="true"
+        >
+          <div className="w-full max-w-sm bg-white rounded-3xl shadow-2xl border border-slate-100 p-5">
+            <div className="flex items-center gap-4">
+              <div className="relative h-12 w-12 shrink-0">
+                <div className="absolute inset-0 rounded-full border-4 border-slate-200" />
+                <div className="absolute inset-0 rounded-full border-4 border-[#0b2a7a] border-t-transparent animate-spin" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-bold text-sm text-slate-800">
+                  Loading data
+                </p>
+                <p className="text-xs text-slate-500 mt-1">
+                  Please wait while the latest data is being loaded...
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+              <div className="h-full w-2/5 rounded-full bg-[#0b2a7a] animate-pulse" />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Page content */}
       <main className="flex-1 px-4 pt-4 pb-28 max-w-md w-full mx-auto min-w-0">
