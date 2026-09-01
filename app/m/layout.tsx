@@ -16,11 +16,31 @@ export default function MobileLayout({
 }: {
   children: React.ReactNode;
 }) {
+  return (
+    <RegionFilterProvider>
+      <MobileShell>{children}</MobileShell>
+    </RegionFilterProvider>
+  );
+}
+
+function MobileShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
   const { t, dir } = useI18n();
+  const { loading } = useRegionFilter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { loading: dataLoading } = useRegionFilter();
+  const [showLoading, setShowLoading] = useState(true);
+
+  // Never leave the mobile UI locked forever if an API/network request hangs.
+  useEffect(() => {
+    if (!loading) {
+      setShowLoading(false);
+      return;
+    }
+
+    setShowLoading(true);
+    const failsafe = window.setTimeout(() => setShowLoading(false), 12000);
+    return () => window.clearTimeout(failsafe);
+  }, [loading]);
 
   useEffect(() => {
     const check = async () => {
@@ -41,7 +61,6 @@ export default function MobileLayout({
   ];
 
   return (
-    <RegionFilterProvider>
     <div
       dir={dir}
       className="min-h-screen flex flex-col overflow-x-hidden w-full"
@@ -68,36 +87,6 @@ export default function MobileLayout({
           </span>
         </div>
       </div>
-
-      {/* Global data-loading overlay: blocks all mobile interaction until initial data is ready */}
-      {dataLoading && (
-        <div
-          className="fixed inset-0 z-[100] bg-slate-900/20 backdrop-blur-[2px] flex items-center justify-center px-6"
-          aria-live="polite"
-          aria-busy="true"
-        >
-          <div className="w-full max-w-sm bg-white rounded-3xl shadow-2xl border border-slate-100 p-5">
-            <div className="flex items-center gap-4">
-              <div className="relative h-12 w-12 shrink-0">
-                <div className="absolute inset-0 rounded-full border-4 border-slate-200" />
-                <div className="absolute inset-0 rounded-full border-4 border-[#0b2a7a] border-t-transparent animate-spin" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="font-bold text-sm text-slate-800">
-                  Loading data
-                </p>
-                <p className="text-xs text-slate-500 mt-1">
-                  Please wait while the latest data is being loaded...
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-4 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-              <div className="h-full w-2/5 rounded-full bg-[#0b2a7a] animate-pulse" />
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Page content */}
       <main className="flex-1 px-4 pt-4 pb-28 max-w-md w-full mx-auto min-w-0">
@@ -129,7 +118,20 @@ export default function MobileLayout({
           })}
         </div>
       </nav>
+      {showLoading && (
+        <div className="fixed inset-0 z-[100] bg-[#f4f7fc]/95 backdrop-blur-sm flex items-center justify-center px-6">
+          <div className="w-full max-w-xs rounded-3xl bg-white shadow-xl border border-slate-100 p-6 text-center">
+            <div className="mx-auto mb-4 h-12 w-12 rounded-2xl flex items-center justify-center bg-[#071d5c]">
+              <div className="h-6 w-6 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+            </div>
+            <p className="font-bold text-[#071d5c]">Loading data</p>
+            <p className="mt-1 text-xs text-slate-500">Please wait while the latest data is loaded</p>
+            <div className="mt-5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+              <div className="h-full w-1/2 rounded-full bg-[#071d5c] animate-pulse" />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-    </RegionFilterProvider>
   );
 }
