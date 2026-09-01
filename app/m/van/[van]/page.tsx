@@ -225,7 +225,7 @@ export default function MobileVanDetailPage() {
                     </span>
                   </div>
                   {e.customer_name && (
-                    <p className="text-xs text-slate-600 mt-1">{e.customer_name}</p>
+                    <p className="text-xs text-slate-600 mt-1">{e.customer_code ? `${e.customer_code} · ` : ""}{e.customer_name}</p>
                   )}
                   {e.reason && (
                     <p className="text-xs text-slate-500 mt-1">{e.reason}</p>

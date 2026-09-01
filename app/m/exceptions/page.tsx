@@ -168,7 +168,7 @@ export default function MobileExceptionsPage() {
                   {e.invoice}
                 </p>
                 <p className="text-xs text-slate-500 truncate">
-                  {e.van_code} · {e.customer_name}
+                  {e.van_code} · {e.customer_code ? `${e.customer_code} · ` : ""}{e.customer_name}
                 </p>
                 <p className="text-[11px] text-slate-400 mt-1">
                   {e.permanent
@@ -220,7 +220,7 @@ export default function MobileExceptionsPage() {
                     }`}
                   >
                     {matchedRow
-                      ? `${t("autoDetected")}: ${matchedRow.vanCode} · ${matchedRow.customerName}`
+                      ? `${t("autoDetected")}: ${matchedRow.vanCode} · ${matchedRow.customerCode || ""} · ${matchedRow.customerName}`
                       : t("invoiceNotFound")}
                   </p>
                 )}
