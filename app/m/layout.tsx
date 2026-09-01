@@ -7,6 +7,7 @@ import { Home, Truck, AlertTriangle, Grid2x2, Settings as SettingsIcon } from "l
 import { useI18n } from "@/lib/i18n";
 import { storage } from "@/utils/storage";
 import { RegionFilterProvider } from "@/lib/regionFilter";
+import { supabase } from "@/lib/supabase";
 
 const NAVY_FROM = "#071d5c";
 const NAVY_TO = "#0b2a7a";
@@ -20,11 +21,25 @@ export default function MobileLayout({
   const router = useRouter();
   const { t, dir } = useI18n();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedInName, setLoggedInName] = useState("");
 
   useEffect(() => {
     const check = async () => {
       const user = await storage.getItem("currentUser");
       setIsLoggedIn(!!user);
+
+      if (!user) {
+        setLoggedInName("");
+        return;
+      }
+
+      const { data } = await supabase
+        .from("app_users")
+        .select("full_name")
+        .eq("username", user)
+        .maybeSingle();
+
+      setLoggedInName(data?.full_name || user);
     };
     check();
     window.addEventListener("user-changed", check);
@@ -63,7 +78,7 @@ export default function MobileLayout({
             Credit Dashboard
           </span>
           <span className="text-[11px] px-2 py-1 rounded-full bg-white/15">
-            {isLoggedIn ? t("loggedInAs") : t("notLoggedIn")}
+            {isLoggedIn ? `${t("loggedInAs")} ${loggedInName}` : t("notLoggedIn")}
           </span>
         </div>
       </div>
