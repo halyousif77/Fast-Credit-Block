@@ -254,7 +254,7 @@ export default function MobileMorePage() {
           <div className="h-10 w-10 rounded-xl flex items-center justify-center text-white" style={{ background: "#071d5c" }}>
             <Upload size={19} />
           </div>
-          <p className="font-semibold text-sm">Import Files</p>
+          <p className="font-semibold text-sm">{dir === "rtl" ? "استيراد الملفات" : "Import Files"}</p>
         </div>
         <Chevron size={18} className="text-slate-400" />
       </button>
@@ -270,7 +270,7 @@ export default function MobileMorePage() {
           >
             <div className="bg-[#071d5c] text-white px-5 py-4 flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-bold">Import Files</h2>
+                <h2 className="text-xl font-bold">{dir === "rtl" ? "استيراد الملفات" : "Import Files"}</h2>
                 <p className="text-blue-100 text-xs mt-1">Upload and process system files</p>
               </div>
               <button
