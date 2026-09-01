@@ -12,22 +12,53 @@ export default function MobileHomePage() {
   const Chevron = dir === "rtl" ? ChevronLeft : ChevronRight;
 
   const { loading, filteredRows } = useRegionFilter();
+
   const [permissions, setPermissions] = useState<Record<string, boolean>>({});
+  const [exceptions, setExceptions] = useState<any[]>([]);
+  const [collectedInvoices, setCollectedInvoices] = useState<string[]>([]);
+  const [creditRules, setCreditRules] = useState<any[]>([]);
 
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
-      const { data: perms } = await supabase
-        .from("van_permissions")
-        .select("*");
+      const [permissionsRes, exceptionsRes, collectionRes, rulesRes] =
+        await Promise.all([
+          supabase.from("van_permissions").select("*"),
+          fetch("/api/exceptions"),
+          fetch("/api/collection-data"),
+          supabase.from("credit_block_rules").select("*"),
+        ]);
+
       if (cancelled) return;
 
       const map: Record<string, boolean> = {};
-      (perms || []).forEach((p: any) => {
-        map[p.van_code] = !!p.is_unblocked;
+      (permissionsRes.data || []).forEach((p: any) => {
+        map[String(p.van_code || "").trim().toUpperCase()] = !!p.is_unblocked;
       });
       setPermissions(map);
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const exJson = await exceptionsRes.json();
+      const validExceptions = (Array.isArray(exJson) ? exJson : []).filter((item: any) => {
+        if (item.permanent) return true;
+        if (!item.till_date) return false;
+        const till = new Date(item.till_date);
+        till.setHours(0, 0, 0, 0);
+        return till >= today;
+      });
+
+      setExceptions(validExceptions);
+
+      const collectionJson = await collectionRes.json();
+      setCollectedInvoices(
+        (collectionJson.invoices || []).map((invoice: any) =>
+          String(invoice).replace(/\s/g, "").trim().toUpperCase()
+        )
+      );
+      setCreditRules(rulesRes.data || []);
     })();
 
     return () => {
@@ -36,63 +67,118 @@ export default function MobileHomePage() {
   }, []);
 
   const stats = useMemo(() => {
-    const vans = new Set<string>();
-    let totalAmount = 0;
+    const normalize = (value: any) =>
+      String(value || "")
+        .replace(/^ATS\s+/i, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toUpperCase();
 
-    filteredRows.forEach((r) => {
-      if (r.vanCode) vans.add(r.vanCode);
-      totalAmount += r.amount;
+    const normalizeInvoice = (value: any) =>
+      String(value || "").replace(/\s/g, "").trim().toUpperCase();
+
+    const rulesMap = new Map(
+      creditRules.map((rule: any) => [normalize(rule.payment_term), rule])
+    );
+
+    const exceptionSet = new Set(
+      exceptions.map((item: any) => normalizeInvoice(item.invoice)).filter(Boolean)
+    );
+    const collectedSet = new Set(collectedInvoices);
+
+    // Use the same base rules as the desktop dashboard:
+    // NOT CENTRAL only, exclude Legal, then apply the credit blocking rule.
+    const baseRows = filteredRows.filter((row: any) => {
+      const isNotCentral =
+        String(row.centralInvoice || "").trim().toUpperCase() === "NOT CENTRAL";
+      const isLegal = String(row.invoiceStatus || "").toLowerCase().includes("legal");
+      return isNotCentral && !isLegal;
     });
 
-    const vanList = Array.from(vans);
-    const unblockedCount = vanList.filter((v) => permissions[v]).length;
-    const blockedCount = vanList.length - unblockedCount;
+    const filteredData = baseRows.filter((row: any) => {
+      const rule = rulesMap.get(normalize(row.paymentTerm));
+      const creditDays = Number(row.creditDays) || 0;
+      const showInvoice = rule
+        ? creditDays >= Number(rule.block_at_day)
+        : creditDays >= 1;
+
+      return showInvoice || exceptionSet.has(normalizeInvoice(row.invoice));
+    });
+
+    const blockedRows = filteredData.filter((row: any) => {
+      const invoice = normalizeInvoice(row.invoice);
+      return !exceptionSet.has(invoice) && !collectedSet.has(invoice);
+    });
+
+    const vanRows = filteredData.filter((row: any) => row.vanCode);
+    const allVans = new Set(vanRows.map((row: any) => normalize(row.vanCode)));
+    const blockedVans = new Set(
+      blockedRows.map((row: any) => normalize(row.vanCode)).filter(Boolean)
+    );
+
+    const exceptionRows = filteredData.filter((row: any) =>
+      exceptionSet.has(normalizeInvoice(row.invoice))
+    );
+
+    const legalCount = exceptions.filter((item: any) => {
+      if (!item.permanent) return false;
+      return exceptionRows.some(
+        (row: any) => normalizeInvoice(row.invoice) === normalizeInvoice(item.invoice)
+      );
+    }).length;
+
+    const exceptionCount = exceptions.filter((item: any) => {
+      if (item.permanent) return false;
+      return exceptionRows.some(
+        (row: any) => normalizeInvoice(row.invoice) === normalizeInvoice(item.invoice)
+      );
+    }).length;
+
+    const activeEmployees = [...allVans].filter((van) => !blockedVans.has(van)).length;
 
     return {
-      invoiceCount: filteredRows.length,
-      totalAmount,
-      vanCount: vanList.length,
-      blockedCount,
-      unblockedCount,
+      blockedCount: blockedRows.length,
+      exceptionCount,
+      legalCount,
+      activeEmployees,
+      employeeCount: allVans.size,
     };
-  }, [filteredRows, permissions]);
+  }, [filteredRows, creditRules, exceptions, collectedInvoices]);
 
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
         <StatCard
           icon={<FileText size={18} />}
-          label={t("totalInvoices")}
-          value={loading ? "—" : stats.invoiceCount.toLocaleString()}
-        />
-        <StatCard
-          icon={<Truck size={18} />}
-          label={t("vansCount")}
-          value={loading ? "—" : stats.vanCount.toLocaleString()}
-        />
-        <StatCard
-          icon={<ShieldOff size={18} />}
-          label={t("blocked")}
+          label="Blocked Invoices"
           value={loading ? "—" : stats.blockedCount.toLocaleString()}
           tone="red"
         />
         <StatCard
+          icon={<ShieldOff size={18} />}
+          label="Exceptions"
+          value={loading ? "—" : stats.exceptionCount.toLocaleString()}
+        />
+        <StatCard
           icon={<ShieldCheck size={18} />}
-          label={t("unblocked")}
-          value={loading ? "—" : stats.unblockedCount.toLocaleString()}
+          label="Active"
+          value={loading ? "—" : stats.activeEmployees.toLocaleString()}
           tone="green"
+        />
+        <StatCard
+          icon={<Truck size={18} />}
+          label="Employees"
+          value={loading ? "—" : stats.employeeCount.toLocaleString()}
         />
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
-        <p className="text-xs text-slate-500 mb-1">{t("totalAmount")}</p>
-        <p className="text-2xl font-bold" style={{ color: "#071d5c" }}>
-          {loading
-            ? "—"
-            : stats.totalAmount.toLocaleString(undefined, {
-                maximumFractionDigits: 0,
-              })}
-        </p>
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-xs text-slate-500">Legal</p>
+          <p className="text-xl font-bold" style={{ color: "#071d5c" }}>
+            {loading ? "—" : stats.legalCount.toLocaleString()}
+          </p>
+        </div>
       </div>
 
       <Link
