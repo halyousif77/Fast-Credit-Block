@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, Search, ShieldCheck, ShieldOff } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useI18n } from "@/lib/i18n";
+import { fetchCreditRows } from "@/lib/creditData";
 
 export default function MobileVanDetailPage() {
   const params = useParams();
@@ -25,13 +26,10 @@ export default function MobileVanDetailPage() {
     (async () => {
       setLoading(true);
 
-      const res = await fetch("/api/credit-data");
-      const json = await res.json();
+      const data = await fetchCreditRows();
       if (cancelled) return;
 
-      setRows(
-        (json.data || []).filter((r: any) => r.van_code === vanCode)
-      );
+      setRows(data.filter((r) => r.vanCode === vanCode));
 
       const { data: perm } = await supabase
         .from("van_permissions")
@@ -55,8 +53,8 @@ export default function MobileVanDetailPage() {
     return rows.filter(
       (r) =>
         String(r.invoice || "").toLowerCase().includes(q) ||
-        String(r.customer_name || "").toLowerCase().includes(q) ||
-        String(r.customer_code || "").toLowerCase().includes(q)
+        String(r.customerName || "").toLowerCase().includes(q) ||
+        String(r.customerCode || "").toLowerCase().includes(q)
     );
   }, [rows, search]);
 
@@ -124,18 +122,17 @@ export default function MobileVanDetailPage() {
             <div className="flex items-center justify-between mb-1">
               <p className="font-semibold text-sm">{r.invoice}</p>
               <p className="text-sm font-bold" style={{ color: "#071d5c" }}>
-                {parseFloat(r.credit_invoice_amount || 0).toLocaleString(
-                  undefined,
-                  { maximumFractionDigits: 0 }
-                )}
+                {r.amount.toLocaleString(undefined, {
+                  maximumFractionDigits: 0,
+                })}
               </p>
             </div>
             <p className="text-xs text-slate-500 truncate">
-              {r.customer_name} · {r.customer_code}
+              {r.customerName} · {r.customerCode}
             </p>
-            {r.trx_date && (
+            {r.trxDate && (
               <p className="text-[11px] text-slate-400 mt-1">
-                {String(r.trx_date).split("T")[0]}
+                {String(r.trxDate).split("T")[0]}
               </p>
             )}
           </div>

@@ -17,6 +17,45 @@ export async function DELETE(
   const { id } =
     await context.params;
 
+  let requestedBy = "";
+  try {
+    const body = await request.json();
+    requestedBy = body?.requestedBy || "";
+  } catch {
+    // no body sent
+  }
+
+  const { data: existing, error: fetchError } =
+    await supabase
+      .from("exceptions")
+      .select("created_by")
+      .eq("id", id)
+      .maybeSingle();
+
+  if (fetchError) {
+    return NextResponse.json({
+      success: false,
+      error: fetchError.message,
+    });
+  }
+
+  if (!existing) {
+    return NextResponse.json({
+      success: false,
+      error: "Exception not found",
+    });
+  }
+
+  if (!requestedBy || existing.created_by !== requestedBy) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: "You can only delete exceptions you added",
+      },
+      { status: 403 }
+    );
+  }
+
   const { error } =
     await supabase
       .from("exceptions")

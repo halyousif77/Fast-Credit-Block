@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, PieChart, FileBarChart, Users2, ScrollText, Bell } from "lucide-react";
+import { ChevronLeft, ChevronRight, FileBarChart, Users2, ScrollText, Bell } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 export default function MobileMorePage() {
   const { t, dir } = useI18n();
   const Chevron = dir === "rtl" ? ChevronLeft : ChevronRight;
 
+  // Summary now lives on the "Van" tab directly, so it's no longer listed here.
   const items = [
-    { href: "/m/summary", label: t("summary"), icon: PieChart, color: "#071d5c" },
     { href: "/m/reports", label: t("reports"), icon: FileBarChart, color: "#0b2a7a" },
     { href: "/m/users", label: t("users"), icon: Users2, color: "#071d5c" },
     { href: "/m/logs", label: t("logs"), icon: ScrollText, color: "#0b2a7a" },

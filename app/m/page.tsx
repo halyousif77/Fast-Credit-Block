@@ -5,26 +5,19 @@ import Link from "next/link";
 import { Truck, FileText, ShieldCheck, ShieldOff, ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useI18n } from "@/lib/i18n";
+import { useRegionFilter } from "@/lib/regionFilter";
 
 export default function MobileHomePage() {
   const { t, dir } = useI18n();
   const Chevron = dir === "rtl" ? ChevronLeft : ChevronRight;
 
-  const [loading, setLoading] = useState(true);
-  const [rows, setRows] = useState<any[]>([]);
+  const { loading, filteredRows } = useRegionFilter();
   const [permissions, setPermissions] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
-      setLoading(true);
-
-      const res = await fetch("/api/credit-data");
-      const json = await res.json();
-      if (cancelled) return;
-      setRows(json.data || []);
-
       const { data: perms } = await supabase
         .from("van_permissions")
         .select("*");
@@ -35,8 +28,6 @@ export default function MobileHomePage() {
         map[p.van_code] = !!p.is_unblocked;
       });
       setPermissions(map);
-
-      setLoading(false);
     })();
 
     return () => {
@@ -48,10 +39,9 @@ export default function MobileHomePage() {
     const vans = new Set<string>();
     let totalAmount = 0;
 
-    rows.forEach((r) => {
-      if (r.van_code) vans.add(r.van_code);
-      const amt = parseFloat(r.credit_invoice_amount);
-      if (!isNaN(amt)) totalAmount += amt;
+    filteredRows.forEach((r) => {
+      if (r.vanCode) vans.add(r.vanCode);
+      totalAmount += r.amount;
     });
 
     const vanList = Array.from(vans);
@@ -59,13 +49,13 @@ export default function MobileHomePage() {
     const blockedCount = vanList.length - unblockedCount;
 
     return {
-      invoiceCount: rows.length,
+      invoiceCount: filteredRows.length,
       totalAmount,
       vanCount: vanList.length,
       blockedCount,
       unblockedCount,
     };
-  }, [rows, permissions]);
+  }, [filteredRows, permissions]);
 
   return (
     <div className="space-y-4">
@@ -117,7 +107,7 @@ export default function MobileHomePage() {
             <Truck size={20} />
           </div>
           <div>
-            <p className="font-semibold text-sm">{t("van")}</p>
+            <p className="font-semibold text-sm">{t("vanSummary")}</p>
             <p className="text-xs text-slate-500">{t("viewAll")}</p>
           </div>
         </div>

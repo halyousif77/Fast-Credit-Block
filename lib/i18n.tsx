@@ -64,6 +64,37 @@ const dict = {
   users: { ar: "المستخدمون", en: "Users", hi: "उपयोगकर्ता" },
   logs: { ar: "السجلات", en: "Logs", hi: "लॉग्स" },
   notifications: { ar: "الإشعارات", en: "Notifications", hi: "सूचनाएं" },
+
+  // Region filter
+  regionFilter: { ar: "فلترة الريجون", en: "Region filter", hi: "क्षेत्र फ़िल्टर" },
+  regionFilterHint: {
+    ar: "اختر ريجون واحد أو أكثر، وسيتم تطبيقه تلقائيًا على كل الصفحات",
+    en: "Pick one or more regions - it applies automatically across every page",
+    hi: "एक या अधिक क्षेत्र चुनें - यह हर पेज पर अपने आप लागू होगा",
+  },
+  allRegions: { ar: "كل المناطق", en: "All regions", hi: "सभी क्षेत्र" },
+  clear: { ar: "مسح", en: "Clear", hi: "साफ़ करें" },
+
+  // Van / summary table
+  employeeId: { ar: "رقم الموظف", en: "Employee ID", hi: "कर्मचारी आईडी" },
+  permission: { ar: "الصلاحية", en: "Permission", hi: "अनुमति" },
+  remaining: { ar: "متبقي", en: "Remaining", hi: "शेष" },
+  allCollected: { ar: "تم التحصيل بالكامل", en: "All collected", hi: "सभी एकत्रित" },
+  vanSummary: { ar: "ملخص الفانات", en: "Vans Summary", hi: "वैन सारांश" },
+
+  // Exceptions
+  autoDetected: { ar: "تم اكتشافه تلقائيًا", en: "Auto-detected", hi: "स्वतः पहचाना गया" },
+  invoiceNotFound: {
+    ar: "لم يتم العثور على الفاتورة في البيانات الحالية",
+    en: "Invoice not found in current data",
+    hi: "मौजूदा डेटा में चालान नहीं मिला",
+  },
+  onlyDeleteOwn: {
+    ar: "يمكنك حذف الاستثناءات التي أضفتها أنت فقط",
+    en: "You can only delete exceptions you added",
+    hi: "आप केवल वही अपवाद हटा सकते हैं जो आपने जोड़े हैं",
+  },
+  addedBy: { ar: "أضيف بواسطة", en: "Added by", hi: "द्वारा जोड़ा गया" },
 } as const;
 
 export type DictKey = keyof typeof dict;

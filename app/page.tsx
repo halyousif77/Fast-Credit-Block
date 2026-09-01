@@ -2452,6 +2452,12 @@ item.created_by === currentUser && (
         `/api/exceptions/${item.id}`,
         {
           method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            requestedBy: currentUser,
+          }),
         }
       );
 

@@ -1,24 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Plus, Trash2, Search, X } from "lucide-react";
 import { toast } from "sonner";
 import { storage } from "@/utils/storage";
 import { useI18n } from "@/lib/i18n";
+import { useRegionFilter } from "@/lib/regionFilter";
 
 export default function MobileExceptionsPage() {
   const { t } = useI18n();
+  const { rows } = useRegionFilter();
 
   const [loading, setLoading] = useState(true);
   const [exceptions, setExceptions] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [showAdd, setShowAdd] = useState(false);
+  const [currentUser, setCurrentUser] = useState("");
 
   const [form, setForm] = useState({
-    van_code: "",
     invoice: "",
-    customer_code: "",
-    customer_name: "",
     permanent: true,
     till_date: "",
   });
@@ -33,6 +33,10 @@ export default function MobileExceptionsPage() {
 
   useEffect(() => {
     load();
+    (async () => {
+      const user = await storage.getItem("currentUser");
+      setCurrentUser(user || "");
+    })();
   }, []);
 
   const filtered = exceptions.filter((e) => {
@@ -45,27 +49,39 @@ export default function MobileExceptionsPage() {
     );
   });
 
+  // Match the invoice number the user typed against the currently loaded
+  // credit data, so the van/customer fields don't need to be entered by
+  // hand - they're detected silently in the background.
+  const matchedRow = useMemo(() => {
+    const q = form.invoice.trim().replace(/\s/g, "").toUpperCase();
+    if (!q) return null;
+    return (
+      rows.find((r) => String(r.invoice || "").replace(/\s/g, "").toUpperCase() === q) ||
+      null
+    );
+  }, [form.invoice, rows]);
+
   const handleAdd = async () => {
-    if (!form.invoice || !form.van_code) {
+    if (!form.invoice) {
       toast.error(t("noData"));
       return;
     }
 
-    const currentUser = (await storage.getItem("currentUser")) || "mobile";
+    const user = (await storage.getItem("currentUser")) || "mobile";
 
     const res = await fetch("/api/exceptions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         invoice: form.invoice,
-        van_code: form.van_code,
-        customer_code: form.customer_code,
-        customer_name: form.customer_name,
+        van_code: matchedRow?.vanCode || "",
+        customer_code: matchedRow?.customerCode || "",
+        customer_name: matchedRow?.customerName || "",
         permanent: form.permanent,
         till_date: form.permanent
           ? "2099-12-31"
           : form.till_date || "2099-12-31",
-        created_by: currentUser,
+        created_by: user,
       }),
     });
 
@@ -74,22 +90,31 @@ export default function MobileExceptionsPage() {
     if (json.success) {
       toast.success(t("save"));
       setShowAdd(false);
-      setForm({
-        van_code: "",
-        invoice: "",
-        customer_code: "",
-        customer_name: "",
-        permanent: true,
-        till_date: "",
-      });
+      setForm({ invoice: "", permanent: true, till_date: "" });
       load();
     } else {
       toast.error(json.error || "Error");
     }
   };
 
-  const handleDelete = async (id: string) => {
-    await fetch(`/api/exceptions/${id}`, { method: "DELETE" });
+  const handleDelete = async (e: any) => {
+    if (e.created_by !== currentUser) {
+      toast.error(t("onlyDeleteOwn"));
+      return;
+    }
+
+    const res = await fetch(`/api/exceptions/${e.id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ requestedBy: currentUser }),
+    });
+    const json = await res.json();
+
+    if (!json.success) {
+      toast.error(json.error || t("onlyDeleteOwn"));
+      return;
+    }
+
     load();
   };
 
@@ -150,14 +175,19 @@ export default function MobileExceptionsPage() {
                     ? t("permanent")
                     : `${t("tillDate")}: ${String(e.till_date).split("T")[0]}`}
                 </p>
+                <p className="text-[11px] text-slate-400">
+                  {t("addedBy")}: {e.created_by}
+                </p>
               </div>
 
-              <button
-                onClick={() => handleDelete(e.id)}
-                className="h-9 w-9 shrink-0 rounded-lg bg-red-50 text-red-600 flex items-center justify-center"
-              >
-                <Trash2 size={16} />
-              </button>
+              {e.created_by === currentUser && (
+                <button
+                  onClick={() => handleDelete(e)}
+                  className="h-9 w-9 shrink-0 rounded-lg bg-red-50 text-red-600 flex items-center justify-center"
+                >
+                  <Trash2 size={16} />
+                </button>
+              )}
             </div>
           </div>
         ))}
@@ -174,30 +204,27 @@ export default function MobileExceptionsPage() {
             </div>
 
             <div className="space-y-3">
-              <input
-                placeholder={t("van")}
-                value={form.van_code}
-                onChange={(e) =>
-                  setForm({ ...form, van_code: e.target.value })
-                }
-                className="w-full border border-slate-200 rounded-xl p-3 text-sm"
-              />
-              <input
-                placeholder={t("invoice")}
-                value={form.invoice}
-                onChange={(e) =>
-                  setForm({ ...form, invoice: e.target.value })
-                }
-                className="w-full border border-slate-200 rounded-xl p-3 text-sm"
-              />
-              <input
-                placeholder={t("customer")}
-                value={form.customer_name}
-                onChange={(e) =>
-                  setForm({ ...form, customer_name: e.target.value })
-                }
-                className="w-full border border-slate-200 rounded-xl p-3 text-sm"
-              />
+              <div>
+                <input
+                  placeholder={t("invoice")}
+                  value={form.invoice}
+                  onChange={(e) =>
+                    setForm({ ...form, invoice: e.target.value })
+                  }
+                  className="w-full border border-slate-200 rounded-xl p-3 text-sm"
+                />
+                {form.invoice.trim() && (
+                  <p
+                    className={`text-[11px] mt-1 px-1 ${
+                      matchedRow ? "text-green-600" : "text-orange-500"
+                    }`}
+                  >
+                    {matchedRow
+                      ? `${t("autoDetected")}: ${matchedRow.vanCode} · ${matchedRow.customerName}`
+                      : t("invoiceNotFound")}
+                  </p>
+                )}
+              </div>
 
               <label className="flex items-center gap-2 text-sm">
                 <input

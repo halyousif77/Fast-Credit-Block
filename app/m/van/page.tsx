@@ -4,39 +4,64 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Search, Truck, ChevronLeft, ChevronRight, ShieldCheck, ShieldOff } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { storage } from "@/utils/storage";
 import { useI18n } from "@/lib/i18n";
+import { useRegionFilter } from "@/lib/regionFilter";
+import { isOutstandingRow } from "@/lib/creditData";
 
-export default function MobileVanListPage() {
+type VanSummary = {
+  vanCode: string;
+  employeeIds: string;
+  remaining: number;
+  exceptions: number;
+};
+
+function getStatusStyle(remaining: number, ex: number) {
+  if (remaining === 0 && ex === 0) return "bg-green-100 text-green-700";
+  if (remaining > 0 && ex === 0) return "bg-pink-100 text-pink-700";
+  if (remaining === 0 && ex > 0) return "bg-orange-100 text-orange-700";
+  return "bg-orange-200 text-orange-900";
+}
+
+export default function MobileVanSummaryPage() {
   const { t, dir } = useI18n();
   const Chevron = dir === "rtl" ? ChevronLeft : ChevronRight;
+  const { loading, filteredRows } = useRegionFilter();
 
-  const [loading, setLoading] = useState(true);
-  const [rows, setRows] = useState<any[]>([]);
-  const [permissions, setPermissions] = useState<Record<string, boolean>>({});
   const [search, setSearch] = useState("");
+  const [permissions, setPermissions] = useState<Record<string, boolean>>({});
+  const [exceptions, setExceptions] = useState<any[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
-      setLoading(true);
-
-      const res = await fetch("/api/credit-data");
-      const json = await res.json();
+      const user = await storage.getItem("currentUser");
       if (cancelled) return;
-      setRows(json.data || []);
+      setIsLoggedIn(!!user);
 
-      const { data: perms } = await supabase
-        .from("van_permissions")
-        .select("*");
+      const { data: perms } = await supabase.from("van_permissions").select("*");
       if (cancelled) return;
-
       const map: Record<string, boolean> = {};
       (perms || []).forEach((p: any) => {
         map[p.van_code] = !!p.is_unblocked;
       });
       setPermissions(map);
-      setLoading(false);
+
+      const res = await fetch("/api/exceptions");
+      const json = await res.json();
+      if (cancelled) return;
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const valid = (Array.isArray(json) ? json : []).filter((item: any) => {
+        if (item.permanent) return true;
+        const till = new Date(item.till_date);
+        till.setHours(0, 0, 0, 0);
+        return till >= today;
+      });
+      setExceptions(valid);
     })();
 
     return () => {
@@ -45,37 +70,74 @@ export default function MobileVanListPage() {
   }, []);
 
   const vans = useMemo(() => {
-    const map: Record<
-      string,
-      { van_code: string; employee_name: string; count: number; amount: number }
-    > = {};
+    const map: Record<string, { ids: Set<string>; remaining: number; exceptions: number }> = {};
 
-    rows.forEach((r) => {
-      const code = r.van_code || "—";
+    filteredRows.forEach((r) => {
+      if (!isOutstandingRow(r)) return;
+      if (r.creditDays < 1) return;
+
+      const code = r.vanCode || "—";
       if (!map[code]) {
-        map[code] = {
-          van_code: code,
-          employee_name: r.employee_name || "",
-          count: 0,
-          amount: 0,
-        };
+        map[code] = { ids: new Set(), remaining: 0, exceptions: 0 };
       }
-      map[code].count += 1;
-      const amt = parseFloat(r.credit_invoice_amount);
-      if (!isNaN(amt)) map[code].amount += amt;
+      if (r.employeeAtsCode) map[code].ids.add(r.employeeAtsCode);
+
+      const invoiceKey = String(r.invoice || "").replace(/\s/g, "").toUpperCase();
+      const isException = exceptions.some(
+        (e) => String(e.invoice || "").replace(/\s/g, "").toUpperCase() === invoiceKey
+      );
+
+      if (isException) {
+        map[code].exceptions += 1;
+      } else {
+        map[code].remaining += 1;
+      }
     });
 
-    return Object.values(map)
+    const list: VanSummary[] = Object.entries(map).map(([vanCode, info]) => ({
+      vanCode,
+      employeeIds: Array.from(info.ids).join(" / "),
+      remaining: info.remaining,
+      exceptions: info.exceptions,
+    }));
+
+    return list
       .filter((v) => {
         const q = search.trim().toLowerCase();
         if (!q) return true;
         return (
-          v.van_code.toLowerCase().includes(q) ||
-          v.employee_name.toLowerCase().includes(q)
+          v.vanCode.toLowerCase().includes(q) ||
+          v.employeeIds.toLowerCase().includes(q)
         );
       })
-      .sort((a, b) => a.van_code.localeCompare(b.van_code));
-  }, [rows, search]);
+      .sort((a, b) => a.vanCode.localeCompare(b.vanCode, undefined, { numeric: true }));
+  }, [filteredRows, exceptions, search]);
+
+  const getStatusLabel = (remaining: number, ex: number) => {
+    if (remaining > 0 && ex > 0) return `${remaining} ${t("remaining")} · Ex`;
+    if (remaining > 0) return `${remaining} ${t("remaining")}`;
+    if (remaining === 0 && ex > 0) return `Ex · ${t("allCollected")}`;
+    return t("allCollected");
+  };
+
+  const togglePermission = async (vanCode: string, checked: boolean) => {
+    setPermissions((prev) => ({ ...prev, [vanCode]: checked }));
+    await supabase
+      .from("van_permissions")
+      .upsert({ van_code: vanCode, is_unblocked: checked }, { onConflict: "van_code" });
+
+    if (checked) {
+      try {
+        await fetch("/api/send-push", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ van_code: vanCode }),
+        });
+      } catch {
+        // best-effort push notification
+      }
+    }
+  };
 
   return (
     <div className="space-y-3">
@@ -94,52 +156,69 @@ export default function MobileVanListPage() {
       </div>
 
       {loading && (
-        <p className="text-center text-sm text-slate-400 py-10">
-          {t("loading")}
-        </p>
+        <p className="text-center text-sm text-slate-400 py-10">{t("loading")}</p>
       )}
 
       {!loading && vans.length === 0 && (
-        <p className="text-center text-sm text-slate-400 py-10">
-          {t("noData")}
-        </p>
+        <p className="text-center text-sm text-slate-400 py-10">{t("noData")}</p>
       )}
 
       <div className="space-y-2">
         {vans.map((v) => {
-          const unblocked = !!permissions[v.van_code];
+          const unblocked = !!permissions[v.vanCode];
           return (
-            <Link
-              key={v.van_code}
-              href={`/m/van/${encodeURIComponent(v.van_code)}`}
-              className="flex items-center justify-between bg-white rounded-2xl shadow-sm border border-slate-100 p-3.5 active:scale-[0.98] transition-transform"
+            <div
+              key={v.vanCode}
+              className="bg-white rounded-2xl shadow-sm border border-slate-100 p-3.5"
             >
-              <div className="flex items-center gap-3 min-w-0">
-                <div
-                  className="h-10 w-10 shrink-0 rounded-xl flex items-center justify-center text-white"
-                  style={{ background: "#071d5c" }}
+              <div className="flex items-center justify-between gap-2">
+                <Link
+                  href={`/m/van/${encodeURIComponent(v.vanCode)}`}
+                  className="flex items-center gap-3 min-w-0 flex-1"
                 >
-                  <Truck size={18} />
-                </div>
-                <div className="min-w-0">
-                  <p className="font-semibold text-sm truncate">
-                    {v.van_code}
-                  </p>
-                  <p className="text-xs text-slate-500 truncate">
-                    {v.employee_name || "—"} · {v.count} {t("invoice")}
-                  </p>
-                </div>
+                  <div
+                    className="h-10 w-10 shrink-0 rounded-xl flex items-center justify-center text-white"
+                    style={{ background: "#071d5c" }}
+                  >
+                    <Truck size={18} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-sm truncate">{v.vanCode}</p>
+                    <p className="text-xs text-slate-500 truncate">
+                      {t("employeeId")}: {v.employeeIds || "—"}
+                    </p>
+                  </div>
+                </Link>
+                <Chevron size={16} className="text-slate-400 shrink-0" />
               </div>
 
-              <div className="flex items-center gap-2 shrink-0">
-                {unblocked ? (
-                  <ShieldCheck size={16} className="text-green-600" />
-                ) : (
-                  <ShieldOff size={16} className="text-red-500" />
-                )}
-                <Chevron size={16} className="text-slate-400" />
+              <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
+                <span
+                  className={`text-[11px] font-semibold px-2.5 py-1 rounded-full ${getStatusStyle(
+                    v.remaining,
+                    v.exceptions
+                  )}`}
+                >
+                  {getStatusLabel(v.remaining, v.exceptions)}
+                </span>
+
+                <label className="flex items-center gap-1.5 text-xs text-slate-500">
+                  {unblocked ? (
+                    <ShieldCheck size={15} className="text-green-600" />
+                  ) : (
+                    <ShieldOff size={15} className="text-red-500" />
+                  )}
+                  {t("permission")}
+                  <input
+                    type="checkbox"
+                    disabled={!isLoggedIn}
+                    checked={unblocked}
+                    onChange={(e) => togglePermission(v.vanCode, e.target.checked)}
+                    className="w-4 h-4 accent-blue-600 ms-1"
+                  />
+                </label>
               </div>
-            </Link>
+            </div>
           );
         })}
       </div>

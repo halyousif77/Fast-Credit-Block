@@ -9,14 +9,17 @@ import {
   Monitor,
   ChevronLeft,
   ChevronRight,
+  MapPin,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { storage } from "@/utils/storage";
 import { useI18n, LANGUAGES } from "@/lib/i18n";
+import { useRegionFilter } from "@/lib/regionFilter";
 
 export default function MobileSettingsPage() {
   const { t, lang, setLang, dir } = useI18n();
   const Chevron = dir === "rtl" ? ChevronLeft : ChevronRight;
+  const { allRegions, selectedRegions, setSelectedRegions } = useRegionFilter();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
@@ -108,6 +111,54 @@ export default function MobileSettingsPage() {
         </div>
       </section>
 
+      {/* Region filter */}
+      <section className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <p className="px-4 pt-4 text-xs font-semibold text-slate-400 uppercase">
+          {t("regionFilter")}
+        </p>
+        <p className="px-4 pb-2 pt-1 text-xs text-slate-400">
+          {t("regionFilterHint")}
+        </p>
+
+        <div className="pb-2">
+          {allRegions.length === 0 && (
+            <p className="px-4 py-3 text-sm text-slate-400">{t("noData")}</p>
+          )}
+
+          {allRegions.map((region) => {
+            const checked = selectedRegions.includes(region);
+            return (
+              <button
+                key={region}
+                onClick={() =>
+                  setSelectedRegions(
+                    checked
+                      ? selectedRegions.filter((r) => r !== region)
+                      : [...selectedRegions, region]
+                  )
+                }
+                className="w-full flex items-center justify-between px-4 py-3 border-t border-slate-50 first:border-t-0"
+              >
+                <span className="flex items-center gap-2 text-sm font-medium">
+                  <MapPin size={15} className="text-slate-400" />
+                  {region}
+                </span>
+                {checked && <Check size={18} style={{ color: "#071d5c" }} />}
+              </button>
+            );
+          })}
+        </div>
+
+        {selectedRegions.length > 0 && (
+          <button
+            onClick={() => setSelectedRegions([])}
+            className="w-full text-center text-sm text-red-600 font-medium py-3 border-t border-slate-50"
+          >
+            {t("clear")} ({t("allRegions")})
+          </button>
+        )}
+      </section>
+
       {/* Language */}
       <section className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         <p className="px-4 pt-4 pb-2 text-xs font-semibold text-slate-400 uppercase">
@@ -141,7 +192,7 @@ export default function MobileSettingsPage() {
           className="flex items-center justify-between px-4 py-3"
         >
           <span className="text-sm">
-            {t("summary")} · {t("reports")} · {t("users")} · {t("logs")}
+            {t("reports")} · {t("users")} · {t("logs")}
           </span>
           <Chevron size={16} className="text-slate-400" />
         </Link>

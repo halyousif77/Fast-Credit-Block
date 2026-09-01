@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Home, Truck, AlertTriangle, Grid2x2, Settings as SettingsIcon } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { storage } from "@/utils/storage";
+import { RegionFilterProvider } from "@/lib/regionFilter";
 
 const NAVY_FROM = "#071d5c";
 const NAVY_TO = "#0b2a7a";
@@ -32,13 +33,14 @@ export default function MobileLayout({
 
   const tabs = [
     { href: "/m", label: t("home"), icon: Home, match: (p: string) => p === "/m" },
-    { href: "/m/van", label: t("van"), icon: Truck, match: (p: string) => p.startsWith("/m/van") },
+    { href: "/m/van", label: t("vanSummary"), icon: Truck, match: (p: string) => p.startsWith("/m/van") || p.startsWith("/m/summary") },
     { href: "/m/exceptions", label: t("exceptions"), icon: AlertTriangle, match: (p: string) => p.startsWith("/m/exceptions") },
-    { href: "/m/more", label: t("more"), icon: Grid2x2, match: (p: string) => p.startsWith("/m/more") || ["/m/summary","/m/reports","/m/users","/m/logs","/m/notifications-admin"].some((x)=>p.startsWith(x)) },
+    { href: "/m/more", label: t("more"), icon: Grid2x2, match: (p: string) => p.startsWith("/m/more") || ["/m/reports","/m/users","/m/logs","/m/notifications-admin"].some((x)=>p.startsWith(x)) },
     { href: "/m/settings", label: t("settings"), icon: SettingsIcon, match: (p: string) => p.startsWith("/m/settings") },
   ];
 
   return (
+    <RegionFilterProvider>
     <div
       dir={dir}
       className="min-h-screen flex flex-col overflow-x-hidden w-full"
@@ -97,5 +99,6 @@ export default function MobileLayout({
         </div>
       </nav>
     </div>
+    </RegionFilterProvider>
   );
 }
