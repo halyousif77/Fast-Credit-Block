@@ -10,6 +10,8 @@ import {
   ChevronLeft,
   ChevronRight,
   MapPin,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { storage } from "@/utils/storage";
@@ -19,7 +21,16 @@ import { useRegionFilter } from "@/lib/regionFilter";
 export default function MobileSettingsPage() {
   const { t, lang, setLang, dir } = useI18n();
   const Chevron = dir === "rtl" ? ChevronLeft : ChevronRight;
-  const { allRegions, selectedRegions, setSelectedRegions } = useRegionFilter();
+  const {
+    allRegions,
+    citiesByRegion,
+    selectedRegions,
+    selectedCities,
+    setSelectedRegions,
+    setSelectedCities,
+    clearFilters,
+  } = useRegionFilter();
+  const [expandedRegions, setExpandedRegions] = useState<string[]>([]);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
@@ -111,7 +122,7 @@ export default function MobileSettingsPage() {
         </div>
       </section>
 
-      {/* Region filter */}
+      {/* Region / City filter */}
       <section className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         <p className="px-4 pt-4 text-xs font-semibold text-slate-400 uppercase">
           {t("regionFilter")}
@@ -126,32 +137,77 @@ export default function MobileSettingsPage() {
           )}
 
           {allRegions.map((region) => {
-            const checked = selectedRegions.includes(region);
+            const expanded = expandedRegions.includes(region);
+            const cities = citiesByRegion.get(region) || [];
+            const regionChecked = selectedRegions.includes(region);
+
             return (
-              <button
-                key={region}
-                onClick={() =>
-                  setSelectedRegions(
-                    checked
-                      ? selectedRegions.filter((r) => r !== region)
-                      : [...selectedRegions, region]
-                  )
-                }
-                className="w-full flex items-center justify-between px-4 py-3 border-t border-slate-50 first:border-t-0"
-              >
-                <span className="flex items-center gap-2 text-sm font-medium">
-                  <MapPin size={15} className="text-slate-400" />
-                  {region}
-                </span>
-                {checked && <Check size={18} style={{ color: "#071d5c" }} />}
-              </button>
+              <div key={region} className="border-t border-slate-50 first:border-t-0">
+                <div className="flex items-center gap-1 px-2 py-1">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setExpandedRegions((prev) =>
+                        expanded ? prev.filter((r) => r !== region) : [...prev, region]
+                      )
+                    }
+                    className="w-8 h-10 flex items-center justify-center text-slate-400"
+                    aria-label={region}
+                  >
+                    {expanded ? <ChevronUp size={17} /> : <ChevronDown size={17} />}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setSelectedRegions(
+                        regionChecked
+                          ? selectedRegions.filter((r) => r !== region)
+                          : [...selectedRegions, region]
+                      )
+                    }
+                    className="flex-1 flex items-center justify-between py-2 pr-2 text-start"
+                  >
+                    <span className="flex items-center gap-2 text-sm font-medium">
+                      <MapPin size={15} className="text-slate-400" />
+                      {region}
+                    </span>
+                    {regionChecked && <Check size={18} style={{ color: "#071d5c" }} />}
+                  </button>
+                </div>
+
+                {expanded && (
+                  <div className="pb-1 ps-11 pe-2">
+                    {cities.map((city) => {
+                      const checked = selectedCities.includes(city);
+                      return (
+                        <button
+                          key={`${region}|${city}`}
+                          type="button"
+                          onClick={() =>
+                            setSelectedCities(
+                              checked
+                                ? selectedCities.filter((c) => c !== city)
+                                : [...selectedCities, city]
+                            )
+                          }
+                          className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-start"
+                        >
+                          <span className="text-sm text-slate-600">{city}</span>
+                          {checked && <Check size={17} style={{ color: "#071d5c" }} />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
 
-        {selectedRegions.length > 0 && (
+        {(selectedRegions.length > 0 || selectedCities.length > 0) && (
           <button
-            onClick={() => setSelectedRegions([])}
+            onClick={clearFilters}
             className="w-full text-center text-sm text-red-600 font-medium py-3 border-t border-slate-50"
           >
             {t("clear")} ({t("allRegions")})
