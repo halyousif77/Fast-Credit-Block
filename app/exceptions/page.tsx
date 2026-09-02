@@ -1247,7 +1247,7 @@ await supabase
   
   {isAddingExceptions
     ? t("processing")
-    : "Add Exceptions"}
+    : t("addExceptions")}
 </button>
       </div>
       <div className="bg-white rounded-xl border shadow-sm p-5">
@@ -1488,7 +1488,7 @@ await supabase
         >
           {deletingId === item.id
             ? t("deleting")
-            : "Delete"}
+            : t("delete")}
         </button>
       </div>
     )}
@@ -1719,7 +1719,7 @@ await addLog(
       <div className="text-lg font-bold">
         {isUploadingCollection
           ? t("uploadingCollectionShort")
-          : "Import Collection"}
+          : t("importCollection")}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
@@ -1750,7 +1750,7 @@ await addLog(
       <div className="text-lg font-bold">
         {isImportingUsers
           ? t("importingUsersShort")
-          : "Import Users"}
+          : t("importUsers")}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1781,7 +1781,7 @@ await addLog(
       <div className="text-lg font-bold">
         {isUploadingCredit
           ? t("uploadingCreditShort")
-          : "Import Credit"}
+          : t("importCredit")}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">

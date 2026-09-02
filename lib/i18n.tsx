@@ -210,6 +210,20 @@ const dict = {
   creditFileNotUpdated: { ar: "🚨 لم يتم تحديث ملف الائتمان اليوم", en: "🚨 Credit File Not Updated Today", hi: "🚨 आज क्रेडिट फ़ाइल अपडेट नहीं हुई" },
   uploadTodayCredit: { ar: "يرجى رفع ملف الائتمان الخاص باليوم.", en: "Please upload today's Credit file.", hi: "कृपया आज की क्रेडिट फ़ाइल अपलोड करें।" },
   filters: { ar: "الفلاتر", en: "Filters", hi: "फ़िल्टर" },
+  addExceptions: { ar: "إضافة الاستثناءات", en: "Add Exceptions", hi: "अपवाद जोड़ें" },
+  currentExceptions: { ar: "الاستثناءات الحالية", en: "Current Exceptions", hi: "वर्तमान अपवाद" },
+  edit: { ar: "تعديل", en: "Edit", hi: "संपादित करें" },
+  updatePassword: { ar: "تحديث كلمة المرور", en: "Update Password", hi: "पासवर्ड अपडेट करें" },
+  resetToDefault: { ar: "إعادة إلى الافتراضي", en: "Reset To Default", hi: "डिफ़ॉल्ट पर रीसेट करें" },
+  saveProfile: { ar: "حفظ الملف الشخصي", en: "Save Profile", hi: "प्रोफ़ाइल सहेजें" },
+  exceptionDeleteAlerts: { ar: "تنبيهات حذف الاستثناءات", en: "Exception Delete Alerts", hi: "अपवाद हटाने की सूचनाएं" },
+  creditBlockRules: { ar: "قواعد حظر الائتمان", en: "Credit Block Rules", hi: "क्रेडिट ब्लॉक नियम" },
+  welcomeBack: { ar: "مرحبًا بعودتك", en: "Welcome Back", hi: "वापसी पर स्वागत है" },
+  guestUser: { ar: "مستخدم زائر", en: "Guest User", hi: "अतिथि उपयोगकर्ता" },
+  notSignedIn: { ar: "غير مسجل الدخول", en: "Not Signed In", hi: "साइन इन नहीं है" },
+  activityLogs: { ar: "سجل النشاط", en: "Activity Logs", hi: "गतिविधि लॉग" },
+  allUsers: { ar: "جميع المستخدمين", en: "All Users", hi: "सभी उपयोगकर्ता" },
+
 } as const;
 
 export type DictKey = keyof typeof dict;

@@ -788,7 +788,7 @@ setPassword("");
 >
   {isImportingUsers
     ? t("importing")
-    : "Import Users"}
+    : t("importUsers")}
     <input
       type="file"
       accept=".xlsx,.xls"
@@ -1121,7 +1121,7 @@ setPassword("");
   }`}
   onClick={handleSave}
 >
-  {saving ? "Saving..." : "Save"}
+  {saving ? "Saving..." : t("save")}
 </button>
   ) : (
 <button
@@ -1135,7 +1135,7 @@ setPassword("");
 >
   {editingUserId === user.id
     ? t("editing")
-    : "Edit"}
+    : t("edit")}
 </button>
   ))}
 
@@ -1151,7 +1151,7 @@ setPassword("");
 >
   {deletingUserId === user.id
     ? t("deleting")
-    : "Delete"}
+    : t("delete")}
 </button>
 )}
 
@@ -1316,7 +1316,7 @@ setPassword("");
       <div className="text-lg font-bold">
         {isUploadingCollection
           ? t("uploadingCollectionShort")
-          : "Import Collection"}
+          : t("importCollection")}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
@@ -1347,7 +1347,7 @@ setPassword("");
       <div className="text-lg font-bold">
         {isImportingUsers
           ? t("importingUsersShort")
-          : "Import Users"}
+          : t("importUsers")}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1378,7 +1378,7 @@ setPassword("");
       <div className="text-lg font-bold">
         {isUploadingCredit
           ? t("uploadingCreditShort")
-          : "Import Credit"}
+          : t("importCredit")}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">

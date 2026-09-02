@@ -1150,7 +1150,7 @@ return (
       <div className="text-lg font-bold">
         {isUploadingCollection
           ? t("uploadingCollectionShort")
-          : "Import Collection"}
+          : t("importCollection")}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
@@ -1181,7 +1181,7 @@ return (
       <div className="text-lg font-bold">
         {isImportingUsers
           ? t("importingUsersShort")
-          : "Import Users"}
+          : t("importUsers")}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1212,7 +1212,7 @@ return (
       <div className="text-lg font-bold">
         {isUploadingCredit
           ? t("uploadingCreditShort")
-          : "Import Credit"}
+          : t("importCredit")}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">

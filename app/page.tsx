@@ -2052,7 +2052,7 @@ onClick={async () => {
 >
   {isSendingWhatsApp
     ? t("processing")
-    : "WhatsApp"}
+    : t("whatsapp")}
 </button>
 
   </div>
@@ -2329,13 +2329,13 @@ await addLog(
 >
   {isAddingException
   ? t("processing")
-  : "Add Exception"}
+  : t("addException")}
   </button>
 )}
             <div className="mt-8">
 
   <h4 className="font-bold mb-4">
-    Current Exceptions
+    {t("currentExceptions")}
   </h4>
 
   <div className="max-h-[350px] overflow-y-auto border rounded-lg">
@@ -2842,7 +2842,7 @@ setShowLoginModal(false);
       <div className="text-lg font-bold">
         {isUploadingCollection
           ? t("uploadingCollectionShort")
-          : "Import Collection"}
+          : t("importCollection")}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
@@ -2873,7 +2873,7 @@ setShowLoginModal(false);
       <div className="text-lg font-bold">
         {isImportingUsers
           ? t("importingUsersShort")
-          : "Import Users"}
+          : t("importUsers")}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -2904,7 +2904,7 @@ setShowLoginModal(false);
       <div className="text-lg font-bold">
         {isUploadingCredit
           ? t("uploadingCreditShort")
-          : "Import Credit"}
+          : t("importCredit")}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">

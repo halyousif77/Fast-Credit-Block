@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabase";
 import { useI18n } from "@/lib/i18n";
 
 export default function NotificationBell() {
-  const { t } = useI18n();
+  const { t, dir, lang } = useI18n();
 
   const [open, setOpen] = useState(false);
 
@@ -186,6 +186,49 @@ useEffect(() => {
 
 }, []);
 
+  const localizeNotification = (n: any) => {
+    if (lang === "en") return { title: n.title, message: n.message };
+
+    const title = String(n.title || "");
+    const message = String(n.message || "");
+    const titleMap: Array<[string, string]> = [
+      ["Credit File Imported", "تم استيراد ملف الائتمان"],
+      ["Credit File Updated", "تم تحديث ملف الائتمان"],
+      ["Users Imported", "تم استيراد المستخدمين"],
+      ["Users File Imported", "تم استيراد ملف المستخدمين"],
+      ["Collection File Uploaded", "تم رفع ملف التحصيل"],
+      ["Collection File Imported", "تم استيراد ملف التحصيل"],
+      ["Collection Updated", "تم تحديث التحصيل"],
+      ["New Exception", "استثناء جديد"],
+      ["Exception Expired", "انتهى الاستثناء"],
+      ["Exceptions Added", "تمت إضافة الاستثناءات"],
+      ["Exception Deleted", "تم حذف الاستثناء"],
+    ];
+    const messageMap: Array<[string, string]> = [
+      ["Credit file uploaded successfully", "تم رفع ملف الائتمان بنجاح"],
+      ["users imported successfully", "تم استيراد المستخدمين بنجاح"],
+      ["Collection", "التحصيل"],
+      ["uploaded successfully", "تم الرفع بنجاح"],
+      ["added successfully", "تمت الإضافة بنجاح"],
+      ["deleted successfully", "تم الحذف بنجاح"],
+    ];
+
+    let localizedTitle = title;
+    for (const [from, to] of titleMap) {
+      if (localizedTitle.toLowerCase().includes(from.toLowerCase())) {
+        localizedTitle = localizedTitle.replace(new RegExp(from, "ig"), to);
+        break;
+      }
+    }
+
+    let localizedMessage = message;
+    for (const [from, to] of messageMap) {
+      localizedMessage = localizedMessage.replace(new RegExp(from, "ig"), to);
+    }
+
+    return { title: localizedTitle, message: localizedMessage };
+  };
+
   const unreadCount =
   notifications.filter(
     (n) => !n.is_read
@@ -263,18 +306,21 @@ useEffect(() => {
 
         <div
   className="
-    absolute
-    left-1/2
-    -translate-x-1/2
-    top-12
-    w-[min(420px,calc(100vw-1rem))]
-    max-w-[calc(100vw-1rem)]
+    fixed
+    top-16
+    w-[min(420px,calc(100vw-2rem))]
+    max-w-[calc(100vw-2rem)]
+    max-h-[calc(100vh-5rem)]
+    overflow-hidden
     bg-white
     border
     rounded-xl
     shadow-xl
-    z-50
+    z-[9999]
   "
+  style={{
+    [dir === "rtl" ? "right" : "left"]: "1rem",
+  }}
 >
           <div className="p-4 border-b">
             <h3 className="font-bold">
@@ -317,11 +363,11 @@ useEffect(() => {
   }`}
 >
   <div className="font-semibold text-slate-800">
-    {n.title}
+    {localizeNotification(n).title}
   </div>
 
   <div className="text-sm text-slate-500 mt-1">
-    {n.message}
+    {localizeNotification(n).message}
   </div>
 
   <div className="text-xs text-slate-400 mt-2">
