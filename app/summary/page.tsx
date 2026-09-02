@@ -779,10 +779,9 @@ const filteredData = data.filter((row) => {
 ) => {
 
   if (
-    remaining > 0 &&
-    ex > 0
+    remaining > 0
   ) {
-    return `${remaining} ${t("remaining")} , ${t("legal")}`;
+    return `${remaining} ${t("remaining")}`;
   }
 
   if (
