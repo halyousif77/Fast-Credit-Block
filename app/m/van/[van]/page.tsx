@@ -10,7 +10,6 @@ import { useI18n } from "@/lib/i18n";
 import { fetchCreditRows } from "@/lib/creditData";
 
 export default function MobileVanDetailPage() {
-  const { t } = useI18n();
   const params = useParams();
   const router = useRouter();
   const { t, dir } = useI18n();

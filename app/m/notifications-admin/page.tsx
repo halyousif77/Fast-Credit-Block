@@ -16,7 +16,6 @@ function urlBase64ToUint8Array(base64String: string) {
 }
 
 export default function MobileNotificationsAdminPage() {
-  const { t } = useI18n();
   const { t, dir } = useI18n();
   const router = useRouter();
   const Back = dir === "rtl" ? ArrowRight : ArrowLeft;

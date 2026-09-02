@@ -84,9 +84,9 @@ html[data-theme="dark"] .bg-slate-800,
 html[data-theme="dark"] .bg-slate-900 {
   background-color: var(--surface-3) !important;
 }
-html[data-theme="dark"] .hover\\:bg-slate-50:hover,
-html[data-theme="dark"] .hover\\:bg-gray-100:hover,
-html[data-theme="dark"] .hover\\:bg-slate-100:hover {
+html[data-theme="dark"] .hover\:bg-slate-50:hover,
+html[data-theme="dark"] .hover\:bg-gray-100:hover,
+html[data-theme="dark"] .hover\:bg-slate-100:hover {
   background-color: var(--surface-2) !important;
 }
 

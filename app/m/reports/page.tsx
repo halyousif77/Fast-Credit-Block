@@ -8,7 +8,6 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 export default function MobileReportsPage() {
-  const { t } = useI18n();
   const { t, dir } = useI18n();
   const router = useRouter();
   const Back = dir === "rtl" ? ArrowRight : ArrowLeft;
