@@ -119,7 +119,7 @@ const dict = {
   permanent: { ar: "دائم", en: "Permanent", hi: "स्थायी" },
   tillDate: { ar: "حتى تاريخ", en: "Till date", hi: "तिथि तक" },
   save: { ar: "حفظ", en: "Save", hi: "सहेजें" },
-  onlyYasserCanAddExceptions: { ar: "إضافة الاستثناءات متاحة للحساب Yasser فقط", en: "Only the Yasser account can add exceptions", hi: "केवल Yasser खाता अपवाद जोड़ सकता है" },
+  yasserCannotAddExceptions: { ar: "الحساب Yasser لا يمكنه إضافة الاستثناءات", en: "The Yasser account cannot add exceptions", hi: "Yasser खाता अपवाद नहीं जोड़ सकता" },
   copyInvoices: { ar: "نسخ الفواتير", en: "Copy invoices", hi: "चालान कॉपी करें" },
   copied: { ar: "تم النسخ", en: "Copied", hi: "कॉपी हो गया" },
   delete: { ar: "حذف", en: "Delete", hi: "हटाएं" },

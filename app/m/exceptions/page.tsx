@@ -20,7 +20,7 @@ export default function MobileExceptionsPage() {
   const [editingException, setEditingException] = useState<any | null>(null);
   const [savingEdit, setSavingEdit] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
-  const canAddException = currentUser.trim().toLowerCase() === "yasser";
+  const canAddException = Boolean(currentUser.trim()) && currentUser.trim().toLowerCase() !== "yasser";
 
   const [form, setForm] = useState({
     invoice: "",
@@ -89,7 +89,7 @@ export default function MobileExceptionsPage() {
 
   const handleAdd = async () => {
     if (!canAddException) {
-      toast.error(t("onlyYasserCanAddExceptions"));
+      toast.error(t("yasserCannotAddExceptions"));
       return;
     }
     if (!form.invoice) {
