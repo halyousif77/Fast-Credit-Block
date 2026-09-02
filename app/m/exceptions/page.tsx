@@ -177,6 +177,21 @@ export default function MobileExceptionsPage() {
                     ? t("permanent")
                     : `${t("tillDate")}: ${String(e.till_date).split("T")[0]}`}
                 </p>
+                {!e.permanent && e.till_date && (() => {
+                  const till = new Date(e.till_date);
+                  till.setHours(0, 0, 0, 0);
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+                  const daysLeft = Math.max(
+                    0,
+                    Math.round((till.getTime() - today.getTime()) / 86400000)
+                  );
+                  return (
+                    <p className="text-xs font-semibold text-blue-600 mt-1 dark-mobile-exception-days">
+                      {daysLeft === 0 ? "Expires today" : `${daysLeft} day${daysLeft === 1 ? "" : "s"} left`}
+                    </p>
+                  );
+                })()}
                 <p className="text-[11px] text-slate-400">
                   {t("addedBy")}: {e.created_by}
                 </p>

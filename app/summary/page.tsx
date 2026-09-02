@@ -1283,11 +1283,11 @@ onClick={async () => {
     <div className="flex items-center justify-between">
 
       <div>
-        <p className="text-sm text-orange-600">
+        <p className="text-sm text-orange-600 dark-summary-orange">
           Exception Invoices
         </p>
 
-        <h2 className="text-3xl font-bold mt-2 text-orange-600">
+        <h2 className="text-3xl font-bold mt-2 text-orange-600 dark-summary-orange">
           {vans.reduce(
             (
               sum: number,
@@ -1303,7 +1303,7 @@ onClick={async () => {
       <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
         <CircleAlert
           size={22}
-          className="text-orange-600"
+          className="text-orange-600 dark-summary-orange"
         />
       </div>
 
@@ -1316,11 +1316,11 @@ onClick={async () => {
     <div className="flex items-center justify-between">
 
       <div>
-        <p className="text-sm text-green-600">
+        <p className="text-sm text-green-600 dark-summary-green">
           All Collected Vans
         </p>
 
-        <h2 className="text-3xl font-bold mt-2 text-green-600">
+        <h2 className="text-3xl font-bold mt-2 text-green-600 dark-summary-green">
           {
             vans.filter(
               ([_, info]: any) =>
@@ -1333,7 +1333,7 @@ onClick={async () => {
       <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
         <CheckCircle
           size={22}
-          className="text-green-600"
+          className="text-green-600 dark-summary-green"
         />
       </div>
 

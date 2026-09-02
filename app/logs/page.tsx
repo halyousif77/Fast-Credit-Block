@@ -753,7 +753,7 @@ return (
 
       <div className="bg-white rounded-xl border border-slate-200 p-5 mb-6">
 
-        <h1 className="text-3xl font-bold text-[#071d5c] flex items-center gap-2">
+        <h1 className="text-3xl font-bold text-[#071d5c] flex items-center gap-2 dark-logs-title">
           <Activity size={28} />
           Activity Logs
         </h1>
@@ -772,7 +772,7 @@ return (
             Total Activities
           </div>
 
-          <div className="text-4xl font-bold mt-3 text-[#071d5c]">
+          <div className="text-4xl font-bold mt-3 text-[#071d5c] dark-logs-total">
             {filteredLogs.length}
           </div>
 
@@ -889,7 +889,7 @@ return (
         setSelectedAction("");
         setSelectedDate("");
       }}
-      className="px-4 py-2 bg-slate-200 rounded-lg hover:bg-slate-300"
+      className="px-4 py-2 bg-slate-200 rounded-lg hover:bg-slate-300 dark-logs-reset"
     >
       Reset
     </button>

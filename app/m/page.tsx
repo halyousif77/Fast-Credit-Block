@@ -160,6 +160,7 @@ export default function MobileHomePage() {
           icon={<ShieldOff size={18} />}
           label={t("exceptions")}
           value={loading ? "—" : stats.exceptionCount.toLocaleString()}
+          tone="blue"
         />
         <StatCard
           icon={<ShieldCheck size={18} />}
@@ -171,6 +172,7 @@ export default function MobileHomePage() {
           icon={<Truck size={18} />}
           label={t("employees")}
           value={loading ? "—" : stats.employeeCount.toLocaleString()}
+          tone="blue"
         />
       </div>
 
@@ -233,10 +235,10 @@ function StatCard({
   icon: React.ReactNode;
   label: string;
   value: string;
-  tone?: "red" | "green";
+  tone?: "red" | "green" | "blue";
 }) {
   const color =
-    tone === "red" ? "#dc2626" : tone === "green" ? "#16a34a" : "#071d5c";
+    tone === "red" ? "#dc2626" : tone === "green" ? "#16a34a" : tone === "blue" ? "#2563eb" : "#071d5c";
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
@@ -244,7 +246,7 @@ function StatCard({
         {icon}
         <span className="text-xs font-medium text-slate-500">{label}</span>
       </div>
-      <p className="text-xl font-bold" style={{ color }}>
+      <p className={`text-xl font-bold ${tone === "blue" ? "dark-mobile-blue-number" : ""}`} style={{ color }}>
         {value}
       </p>
     </div>

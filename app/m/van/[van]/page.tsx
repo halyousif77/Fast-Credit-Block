@@ -128,7 +128,7 @@ export default function MobileVanDetailPage() {
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 flex items-center justify-between">
         <div>
           <p className="text-xs text-slate-500">{t("van")}</p>
-          <p className="font-bold text-lg" style={{ color: "#071d5c" }}>
+          <p className="font-bold text-lg dark-mobile-van-name" style={{ color: "#071d5c" }}>
             {vanCode}
           </p>
         </div>

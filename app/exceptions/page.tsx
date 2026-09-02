@@ -1538,6 +1538,11 @@ await supabase
                   <p className="text-xs text-slate-500 mt-2">
                     Friday is automatically moved to Saturday, same as the Add Exception calendar.
                   </p>
+                  {editTillDate && (
+                    <p className="text-sm font-semibold text-green-600 mt-2 dark-edit-days">
+                      Exception Duration: {calculateBusinessDays(editTillDate)} Working Days
+                    </p>
+                  )}
                 </div>
               )}
 

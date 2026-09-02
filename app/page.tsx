@@ -1719,7 +1719,7 @@ onClick={async () => {
 
 
 </div>
-  <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition">
+  <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition dark-dashboard-orange">
 
   <FileWarning
     size={130}
@@ -1730,11 +1730,11 @@ onClick={async () => {
   Exceptions
 </p>
 
-<h2 className="text-4xl font-bold text-slate-900 mt-2 relative z-10">
+<h2 className="text-4xl font-bold text-slate-900 mt-2 relative z-10 dark-dashboard-number-orange">
   {exceptionCount}
 </h2>
 
-<div className="mt-4 h-1 rounded-full bg-orange-500" />
+<div className="mt-4 h-1 rounded-full bg-orange-500 dark-dashboard-orange-bar" />
 
 <div className="flex items-center mt-4 relative z-10">
   <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-xs">
@@ -1743,7 +1743,7 @@ onClick={async () => {
 </div>
 
 </div>
-  <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition">
+  <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition dark-dashboard-green">
 
   <ShieldCheck
     size={130}
@@ -1754,11 +1754,11 @@ onClick={async () => {
     Active
   </p>
 
-  <h2 className="text-4xl font-bold text-slate-900 mt-2 relative z-10">
+  <h2 className="text-4xl font-bold text-slate-900 mt-2 relative z-10 dark-dashboard-number-green">
     {activeEmployees}
   </h2>
 
-  <div className="mt-4 h-1 rounded-full bg-green-500" />
+  <div className="mt-4 h-1 rounded-full bg-green-500 dark-dashboard-green-bar" />
 
 </div>
   <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition">

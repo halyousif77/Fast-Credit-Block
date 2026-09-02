@@ -355,3 +355,90 @@ html[data-theme="dark"] .mobile-shell,
 html[data-theme="dark"] .mobile-shell main {
   background-color: var(--background) !important;
 }
+
+/* Refined dark palette: softer accent colors and stronger text hierarchy. */
+html[data-theme="dark"] .dark-dashboard-orange {
+  background-color: #211a16 !important;
+  border-color: #4a3426 !important;
+}
+html[data-theme="dark"] .dark-dashboard-orange p,
+html[data-theme="dark"] .dark-dashboard-number-orange {
+  color: #fdc58d !important;
+}
+html[data-theme="dark"] .dark-dashboard-orange .text-orange-500\/5 {
+  color: rgb(251 146 60 / 0.10) !important;
+}
+html[data-theme="dark"] .dark-dashboard-orange-bar {
+  background-color: #b66a2d !important;
+}
+html[data-theme="dark"] .dark-dashboard-green {
+  background-color: #15231c !important;
+  border-color: #2f4a3b !important;
+}
+html[data-theme="dark"] .dark-dashboard-green p,
+html[data-theme="dark"] .dark-dashboard-number-green {
+  color: #a7e3bf !important;
+}
+html[data-theme="dark"] .dark-dashboard-green .text-green-500\/5 {
+  color: rgb(74 222 128 / 0.10) !important;
+}
+html[data-theme="dark"] .dark-dashboard-green-bar {
+  background-color: #3b9a68 !important;
+}
+
+html[data-theme="dark"] .dark-logs-title {
+  color: #9fc5ff !important;
+}
+html[data-theme="dark"] .dark-logs-total {
+  color: #a9caff !important;
+}
+html[data-theme="dark"] .dark-logs-reset {
+  background-color: #263449 !important;
+  color: #d8e2ef !important;
+  border: 1px solid #3b4b62 !important;
+}
+html[data-theme="dark"] .dark-logs-reset:hover {
+  background-color: #33445c !important;
+}
+
+html[data-theme="dark"] .dark-summary-orange {
+  color: #f2b477 !important;
+}
+html[data-theme="dark"] .dark-summary-green {
+  color: #91d5ae !important;
+}
+html[data-theme="dark"] .dark-edit-days {
+  color: #8ed2aa !important;
+}
+
+html[data-theme="dark"] .dark-users-table,
+html[data-theme="dark"] .dark-users-table tbody,
+html[data-theme="dark"] .dark-users-table tbody td {
+  color: #d6e0ec !important;
+}
+html[data-theme="dark"] .dark-users-table tbody tr:hover {
+  background-color: #1b2940 !important;
+}
+
+html[data-theme="dark"] .dark-mobile-blue-number {
+  color: #9fc5ff !important;
+}
+html[data-theme="dark"] .dark-mobile-van-name {
+  color: #a9caff !important;
+}
+html[data-theme="dark"] .dark-mobile-exception-days {
+  color: #8fbaff !important;
+}
+
+/* Keep the mobile navigation anchored to the viewport, including browsers with dynamic toolbars. */
+.mobile-bottom-nav {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+}
+html[data-theme="dark"] .mobile-bottom-nav {
+  background-color: #0e1726 !important;
+  border-top-color: #2d3d55 !important;
+}
