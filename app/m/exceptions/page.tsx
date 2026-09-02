@@ -1,4 +1,6 @@
 "use client";
+import { apiFetch as fetch } from "@/lib/apiCache";
+
 
 import { useEffect, useMemo, useState } from "react";
 import { Plus, Trash2, Search, X } from "lucide-react";

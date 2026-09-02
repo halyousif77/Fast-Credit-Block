@@ -1,4 +1,6 @@
 "use client";
+import { apiFetch as fetch } from "@/lib/apiCache";
+
 import { addLog } from "@/lib/activityLog";
 import * as XLSX from "xlsx";
 import { toast } from "sonner";

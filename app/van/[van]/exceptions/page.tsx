@@ -1,4 +1,6 @@
 "use client";
+import { apiFetch as fetch } from "@/lib/apiCache";
+
 import { ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";

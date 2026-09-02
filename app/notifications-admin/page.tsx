@@ -1,4 +1,6 @@
 "use client";
+import { apiFetch as fetch } from "@/lib/apiCache";
+
 
 import { useEffect, useState } from "react";
 

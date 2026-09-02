@@ -159,3 +159,86 @@ export async function POST(
     error: error?.message,
   });
 }
+
+export async function PATCH(
+  request: Request
+) {
+  try {
+    const body = await request.json();
+
+    const id = Number(body.id);
+    const invoice = String(body.invoice || "")
+      .trim()
+      .replace(/\s/g, "")
+      .toUpperCase();
+    const tillDate = String(body.till_date || "").trim();
+    const updatedBy = String(body.updatedBy || "").trim();
+
+    if (!id || !invoice || !updatedBy) {
+      return NextResponse.json(
+        { success: false, error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Only the user who created the exception may edit it.
+    const { data: existing, error: existingError } = await supabase
+      .from("exceptions")
+      .select("id, invoice, created_by, permanent, till_date")
+      .eq("id", id)
+      .single();
+
+    if (existingError || !existing) {
+      return NextResponse.json(
+        { success: false, error: "Exception not found" },
+        { status: 404 }
+      );
+    }
+
+    if (String(existing.created_by || "") !== updatedBy) {
+      return NextResponse.json(
+        { success: false, error: "You can only edit exceptions you added" },
+        { status: 403 }
+      );
+    }
+
+    const updateData: Record<string, any> = {
+      invoice,
+    };
+
+    // Legal/permanent exceptions do not require a Till Date.
+    if (!existing.permanent) {
+      if (!tillDate) {
+        return NextResponse.json(
+          { success: false, error: "Till Date is required" },
+          { status: 400 }
+        );
+      }
+      updateData.till_date = tillDate;
+    }
+
+    const { data: updated, error: updateError } = await supabase
+      .from("exceptions")
+      .update(updateData)
+      .eq("id", id)
+      .select("*")
+      .single();
+
+    if (updateError) {
+      return NextResponse.json(
+        { success: false, error: updateError.message },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: updated,
+    });
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, error: error?.message || "Unexpected Error" },
+      { status: 500 }
+    );
+  }
+}

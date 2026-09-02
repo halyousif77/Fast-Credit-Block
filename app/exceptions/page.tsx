@@ -1,5 +1,7 @@
 
 "use client";
+import { apiFetch as fetch } from "@/lib/apiCache";
+
 import * as XLSX from "xlsx";
 import { toast } from "sonner";
 import { addLog } from "@/lib/activityLog";
@@ -18,6 +20,7 @@ import {
   LogOut,
     ClipboardList,
   PieChart,
+  Pencil,
 } from "lucide-react";
 
 
@@ -370,6 +373,16 @@ const isBusy =
   useState("");
     const [deletingId, setDeletingId] =
   useState<number | null>(null);
+  const [editingId, setEditingId] =
+  useState<number | null>(null);
+  const [editInvoice, setEditInvoice] =
+  useState("");
+  const [editTillDate, setEditTillDate] =
+  useState("");
+  const [editPermanent, setEditPermanent] =
+  useState(false);
+  const [isSavingEdit, setIsSavingEdit] =
+  useState(false);
   const [isAddingExceptions, setIsAddingExceptions] =
   useState(false);
   const [isLoggedIn, setIsLoggedIn] =
@@ -622,6 +635,106 @@ const calculateBusinessDays = (
   return count;
 
 };
+const handleEditDateChange = (value: string) => {
+
+  const selectedDate = new Date(value);
+
+  if (selectedDate.getDay() === 5) {
+    selectedDate.setDate(selectedDate.getDate() + 1);
+
+    setEditTillDate(
+      selectedDate.toISOString().split("T")[0]
+    );
+
+    return;
+  }
+
+  setEditTillDate(value);
+};
+
+const openEdit = (item: any) => {
+  setEditingId(item.id);
+  setEditInvoice(String(item.invoice || ""));
+  setEditPermanent(Boolean(item.permanent));
+  setEditTillDate(String(item.till_date || ""));
+};
+
+const closeEdit = () => {
+  if (isSavingEdit) return;
+  setEditingId(null);
+  setEditInvoice("");
+  setEditTillDate("");
+  setEditPermanent(false);
+};
+
+const saveEdit = async () => {
+  if (editingId === null || isSavingEdit) return;
+
+  const normalizedInvoice = editInvoice
+    .trim()
+    .replace(/\s/g, "")
+    .toUpperCase();
+
+  if (!normalizedInvoice) {
+    toast.error("Invoice number is required");
+    return;
+  }
+
+  if (!editPermanent && !editTillDate) {
+    toast.error("Till Date is required");
+    return;
+  }
+
+  setIsSavingEdit(true);
+
+  try {
+    const response = await fetch("/api/exceptions", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: editingId,
+        invoice: normalizedInvoice,
+        till_date: editPermanent ? undefined : editTillDate,
+        updatedBy: currentUser,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "Failed to update exception");
+    }
+
+    setExceptions(prev =>
+      prev.map(exception =>
+        exception.id === editingId
+          ? {
+              ...exception,
+              invoice: normalizedInvoice,
+              ...(editPermanent ? {} : { till_date: editTillDate }),
+            }
+          : exception
+      )
+    );
+
+    await addLog(
+      currentUser,
+      currentUser,
+      "EDIT_EXCEPTION",
+      `${normalizedInvoice} | Till Date: ${editTillDate}`
+    );
+
+    toast.success("Exception updated successfully");
+    closeEdit();
+  } catch (error: any) {
+    toast.error(error?.message || "Failed to update exception");
+  } finally {
+    setIsSavingEdit(false);
+  }
+};
+
 const uniqueExceptions: any[] = Object.values(
   exceptions.reduce((acc: any, item: any) => {
     const key = item.invoice;
@@ -1222,7 +1335,7 @@ await supabase
               <th className="p-3 text-left">Till Date</th>
               <th className="p-3 text-left">Days</th>
 {isLoggedIn && (
-  <th className="p-3 text-left">Delete</th>
+  <th className="p-3 text-left">Actions</th>
 )}
 
             </tr>
@@ -1294,77 +1407,87 @@ await supabase
 <td className="p-3">
   {isLoggedIn &&
     currentUser === item.created_by && (
-      <button
-  disabled={deletingId === item.id}
-  className={`text-white px-3 py-1 rounded text-xs ${
-    deletingId === item.id
-      ? "bg-slate-400 cursor-not-allowed"
-      : "bg-red-600 hover:bg-red-700"
-  }`}
-  onClick={async () => {
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          disabled={isSavingEdit || deletingId === item.id}
+          className="inline-flex items-center gap-1 text-white px-3 py-1 rounded text-xs bg-blue-600 hover:bg-blue-700 disabled:bg-slate-400 disabled:cursor-not-allowed"
+          onClick={() => openEdit(item)}
+        >
+          <Pencil size={13} />
+          Edit
+        </button>
 
-    if (deletingId === item.id)
-      return;
+        <button
+          disabled={deletingId === item.id || isSavingEdit}
+          className={`text-white px-3 py-1 rounded text-xs ${
+            deletingId === item.id
+              ? "bg-slate-400 cursor-not-allowed"
+              : "bg-red-600 hover:bg-red-700"
+          }`}
+          onClick={async () => {
 
-    setDeletingId(item.id);
+            if (deletingId === item.id)
+              return;
 
-    try {
-await supabase
-  .from("exceptions")
-  .delete()
-  .eq("invoice", item.invoice);
-const { data: userInfo } = await supabase
-  .from("app_users")
-  .select("full_name")
-  .eq("username", currentUser)
-  .single();
+            setDeletingId(item.id);
 
-await addLog(
-  currentUser,
-  userInfo?.full_name || currentUser,
-  "DELETE_EXCEPTION",
-  item.invoice
-);
-      setExceptions(prev =>
-  prev.filter(
-    exception => exception.invoice !== item.invoice
-  )
-);
-      const { data: settings } = await supabase
-  .from("user_settings")
-  .select("exception_delete_alert")
-  .eq("username", currentUser)
-  .single();
+            try {
+              await supabase
+                .from("exceptions")
+                .delete()
+                .eq("invoice", item.invoice);
 
-if (settings?.exception_delete_alert) {
+              const { data: userInfo } = await supabase
+                .from("app_users")
+                .select("full_name")
+                .eq("username", currentUser)
+                .single();
 
-const { data: user } = await supabase
-  .from("app_users")
-  .select("full_name")
-  .eq("username", currentUser)
-  .single();
+              await addLog(
+                currentUser,
+                userInfo?.full_name || currentUser,
+                "DELETE_EXCEPTION",
+                item.invoice
+              );
 
-await supabase
-  .from("notifications")
-  .insert({
-    username: null,
-    title: "🗑️ Exception Deleted",
-    message: `${user?.full_name || currentUser} removed invoice ${item.invoice}.`,
-  });
+              setExceptions(prev =>
+                prev.filter(
+                  exception => exception.invoice !== item.invoice
+                )
+              );
 
-}
-    } finally {
+              const { data: settings } = await supabase
+                .from("user_settings")
+                .select("exception_delete_alert")
+                .eq("username", currentUser)
+                .single();
 
-      setDeletingId(null);
+              if (settings?.exception_delete_alert) {
+                const { data: user } = await supabase
+                  .from("app_users")
+                  .select("full_name")
+                  .eq("username", currentUser)
+                  .single();
 
-    }
-
-  }}
->
-  {deletingId === item.id
-    ? "Deleting..."
-    : "Delete"}
-</button>
+                await supabase
+                  .from("notifications")
+                  .insert({
+                    username: null,
+                    title: "🗑️ Exception Deleted",
+                    message: `${user?.full_name || currentUser} removed invoice ${item.invoice}.`,
+                  });
+              }
+            } finally {
+              setDeletingId(null);
+            }
+          }}
+        >
+          {deletingId === item.id
+            ? "Deleting..."
+            : "Delete"}
+        </button>
+      </div>
     )}
 </td>
 </tr>
@@ -1377,6 +1500,69 @@ await supabase
         </div>
             </div>
       </main>
+
+      {editingId !== null && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+          <div className="bg-white w-[420px] max-w-full rounded-2xl shadow-2xl p-8">
+            <h2 className="text-2xl font-bold text-slate-800 mb-6">
+              Edit Exception
+            </h2>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Invoice #
+                </label>
+                <input
+                  type="text"
+                  value={editInvoice}
+                  onChange={(e) => setEditInvoice(e.target.value)}
+                  className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled={isSavingEdit}
+                />
+              </div>
+
+              {!editPermanent && (
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Till Date
+                  </label>
+                  <input
+                    type="date"
+                    value={editTillDate}
+                    min={new Date().toISOString().split("T")[0]}
+                    onChange={(e) => handleEditDateChange(e.target.value)}
+                    className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                    disabled={isSavingEdit}
+                  />
+                  <p className="text-xs text-slate-500 mt-2">
+                    Friday is automatically moved to Saturday, same as the Add Exception calendar.
+                  </p>
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={closeEdit}
+                  disabled={isSavingEdit}
+                  className="flex-1 border border-slate-300 text-slate-700 px-4 py-3 rounded-lg hover:bg-slate-50 disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={saveEdit}
+                  disabled={isSavingEdit}
+                  className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 disabled:bg-slate-400"
+                >
+                  {isSavingEdit ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showLoginModal && (
 

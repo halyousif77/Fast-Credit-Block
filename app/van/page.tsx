@@ -1,4 +1,6 @@
 "use client";
+import { apiFetch as fetch } from "@/lib/apiCache";
+
 
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";

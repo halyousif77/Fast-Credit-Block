@@ -1,9 +1,15 @@
 "use client";
+import { apiFetch as fetch } from "@/lib/apiCache";
+
 import { supabase } from "@/lib/supabase";
 import { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 import { storage as localStorage } from "@/utils/storage";
 
 export default function GlobalFilter() {
+  const pathname = usePathname();
+  const isMobile = pathname.startsWith("/m");
+
   const [showFilters, setShowFilters] = useState(false);
 
   const [data, setData] = useState<any[]>([]);
@@ -19,6 +25,8 @@ export default function GlobalFilter() {
 
   // Toggle global filter
 useEffect(() => {
+  if (isMobile) return;
+
   const syncVans = async () => {
     if (!data.length) return;
 
@@ -90,9 +98,11 @@ setSelectedVans(updatedFilters.vans);
   };
 
   syncVans();
-}, [data]);
+}, [data, isMobile]);
 
   useEffect(() => {
+    if (isMobile) return;
+
     const handleToggleFilters = () => {
       setShowFilters((prev) => !prev);
     };
@@ -108,10 +118,12 @@ setSelectedVans(updatedFilters.vans);
         handleToggleFilters
       );
     };
-  }, []);
+  }, [isMobile]);
 
   // Load credit data
   useEffect(() => {
+    if (isMobile) return;
+
     const loadData = async () => {
       try {
         const response = await fetch("/api/credit-data");
@@ -129,10 +141,12 @@ setSelectedVans(updatedFilters.vans);
     };
 
     loadData();
-  }, []);
+  }, [isMobile]);
 
   // Load saved filters
   useEffect(() => {
+    if (isMobile) return;
+
     const loadFilters = async () => {
       try {
         const user = await localStorage.getItem(
@@ -170,7 +184,7 @@ setSelectedVans(updatedFilters.vans);
     };
 
     loadFilters();
-  }, []);
+  }, [isMobile]);
 
   // Get regions
   const regions = useMemo(() => {
@@ -243,6 +257,8 @@ setSelectedVans(updatedFilters.vans);
         : [...prev, cityKey]
     );
   };
+
+  if (isMobile) return null;
 
   return (
     <>

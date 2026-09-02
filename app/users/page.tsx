@@ -1,4 +1,6 @@
 "use client";
+import { apiFetch as fetch } from "@/lib/apiCache";
+
 import { addLog } from "@/lib/activityLog";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";

@@ -1,4 +1,6 @@
 "use client";
+import { apiFetch as fetch } from "@/lib/apiCache";
+
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BellDot } from "lucide-react";

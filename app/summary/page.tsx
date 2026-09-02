@@ -1,4 +1,6 @@
 "use client";
+import { apiFetch as fetch } from "@/lib/apiCache";
+
 import WhatsAppReport from "@/components/WhatsAppReport";
 import html2canvas from "html2canvas";
 import { FaWhatsapp } from "react-icons/fa";
