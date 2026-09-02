@@ -1,6 +1,7 @@
 
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
+import { useI18n } from "@/lib/i18n";
 
 import * as XLSX from "xlsx";
 import { toast } from "sonner";
@@ -25,6 +26,7 @@ import {
 
 
 export default function ExceptionsPage() {
+  const { t } = useI18n();
   const handleImport = async (
   event: React.ChangeEvent<HTMLInputElement>
 ) => {
@@ -762,7 +764,7 @@ if (!hasAccess) {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <h1 className="text-2xl font-bold text-red-600">
-        You Dont Have Permission To Enter This Page
+        {t("noPermissionPage")}
       </h1>
     </div>
   );
@@ -774,7 +776,7 @@ return (
 
         <div className="p-4">
           <h1 className="text-xl font-bold leading-tight">
-            Credit With Route Block
+            {t("creditWithRouteBlock")}
           </h1>
         </div>
 
@@ -785,7 +787,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <LayoutDashboard size={18} />
-    <span>Dashboard</span>
+    <span>{t("dashboard")}</span>
   </Link>
 
 <div
@@ -799,7 +801,7 @@ return (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition cursor-pointer"
 >
   <Upload size={18} />
-  <span>Import File</span>
+  <span>{t("importFile")}</span>
 </div>
 
 <Link
@@ -813,7 +815,7 @@ return (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
 >
   <ClipboardList size={18} />
-  <span>Logs</span>
+  <span>{t("logs")}</span>
 </Link>
 
   <Link
@@ -821,7 +823,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-600"
   >
     <AlertCircle size={18} />
-    <span>Exceptions</span>
+    <span>{t("exceptions")}</span>
   </Link>
 
   <Link
@@ -829,7 +831,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <BarChart3 size={18} />
-    <span>Summary</span>
+    <span>{t("summary")}</span>
   </Link>
 
   <Link
@@ -837,7 +839,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <PieChart size={18} />
-    <span>Reports</span>
+    <span>{t("reports")}</span>
   </Link>
 
 <Link
@@ -851,7 +853,7 @@ return (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
 >
   <Settings size={18} />
-  <span>Settings</span>
+  <span>{t("settings")}</span>
 </Link>
 
   <Link
@@ -859,7 +861,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <Users size={18} />
-    <span>Users</span>
+    <span>{t("users")}</span>
   </Link>
 
 </nav>
@@ -897,7 +899,7 @@ setIsLoggedIn(false);
 }}
     >
       <LogOut size={18} />
-      Logout
+      {t("logout")}
     </div>
 
   ) : (
@@ -907,7 +909,7 @@ setIsLoggedIn(false);
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      Login
+      {t("login")}
     </div>
 
   )}
@@ -920,7 +922,7 @@ setIsLoggedIn(false);
 
       <div className="bg-white rounded-xl border p-5 mb-6">
         <h1 className="text-3xl font-bold">
-          Exceptions Management
+          {t("exceptionsManagement")}
         </h1>
       </div>
 
@@ -934,7 +936,7 @@ setIsLoggedIn(false);
 
    
     <h3 className="font-bold text-lg mb-4">
-      Add Multiple Exceptions
+      {t("addMultipleExceptions")}
     </h3>
 
     <textarea
@@ -957,7 +959,7 @@ P1316600015512`}
           setIsPermanent(e.target.checked)
         }
       />
-      Legal
+      {t("legal")}
     </label>
 
 {!isPermanent && (
@@ -1252,11 +1254,11 @@ await supabase
   <div className="flex justify-between items-center mb-6">
 
     <h3 className="font-bold text-lg">
-      Recent Activity
+      {t("recentActivity")}
     </h3>
 
     <span className="text-xs text-slate-400">
-      Last Actions
+      {t("lastActions")}
     </span>
 
   </div>
@@ -1266,7 +1268,7 @@ await supabase
   <div className="border border-green-200 bg-green-50 rounded-xl p-4">
 
     <div className="text-green-700 font-semibold">
-      Added Exceptions
+      {t("addedExceptions")}
     </div>
 
     <div className="text-3xl font-bold mt-2">
@@ -1274,14 +1276,14 @@ await supabase
     </div>
 
     <div className="text-sm text-slate-500">
-      Total Records    </div>
+      {t("totalRecords")}    </div>
 
   </div>
 
   <div className="border border-amber-200 bg-amber-50 rounded-xl p-4">
 
     <div className="text-amber-700 font-semibold">
-      Legal Exceptions
+      {t("legalExceptions")}
     </div>
 
     <div className="text-3xl font-bold mt-2">
@@ -1289,7 +1291,7 @@ await supabase
     </div>
 
     <div className="text-sm text-slate-500">
-      Total Records
+      {t("totalRecords")}
     </div>
 
   </div>
@@ -1305,12 +1307,12 @@ await supabase
   <div className="flex justify-between items-center mb-4">
 
   <h3 className="font-bold text-xl">
-    Current Exceptions
+    {t("currentExceptions")}
   </h3>
 
   <input
     type="text"
-    placeholder="Search..."
+    placeholder={t("search")}
     value={searchTerm}
     onChange={(e) => setSearchTerm(e.target.value)}
     className="border rounded-lg px-4 py-2 w-72"
@@ -1326,16 +1328,16 @@ await supabase
   <table className="w-full text-sm">
           <thead>
             <tr className="bg-[#071d5c] text-white">
-              <th className="p-3 text-left">Van Code</th>
-              <th className="p-3 text-left">Employee Name</th>
-              <th className="p-3 text-left">ATS Code</th>
-              <th className="p-3 text-left">Customer Code</th>
-              <th className="p-3 text-left">Customer Name</th>
-              <th className="p-3 text-left">Invoice #</th>
-              <th className="p-3 text-left">Till Date</th>
-              <th className="p-3 text-left">Days</th>
+              <th className="p-3 text-left">{t("vanCode")}</th>
+              <th className="p-3 text-left">{t("employeeName")}</th>
+              <th className="p-3 text-left">{t("atsCode")}</th>
+              <th className="p-3 text-left">{t("customerCode")}</th>
+              <th className="p-3 text-left">{t("customerName")}</th>
+              <th className="p-3 text-left">{t("invoiceNo")}</th>
+              <th className="p-3 text-left">{t("tillDate")}</th>
+              <th className="p-3 text-left">{t("days")}</th>
 {isLoggedIn && (
-  <th className="p-3 text-left">Actions</th>
+  <th className="p-3 text-left">{t("actions")}</th>
 )}
 
             </tr>
@@ -1398,7 +1400,7 @@ await supabase
           <td className="p-3">
   {item.permanent ? (
     <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
-      Legal
+      {t("legal")}
     </span>
   ) : (
     daysLeft
@@ -1415,7 +1417,7 @@ await supabase
           onClick={() => openEdit(item)}
         >
           <Pencil size={13} />
-          Edit
+          {t("edit")}
         </button>
 
         <button
@@ -1505,13 +1507,13 @@ await supabase
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
           <div className="bg-white w-[420px] max-w-full rounded-2xl shadow-2xl p-8">
             <h2 className="text-2xl font-bold text-slate-800 mb-6">
-              Edit Exception
+              {t("editException")}
             </h2>
 
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Invoice #
+                  {t("invoiceNo")}
                 </label>
                 <input
                   type="text"
@@ -1525,7 +1527,7 @@ await supabase
               {!editPermanent && (
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Till Date
+                    {t("tillDate")}
                   </label>
                   <input
                     type="date"
@@ -1553,7 +1555,7 @@ await supabase
                   disabled={isSavingEdit}
                   className="flex-1 border border-slate-300 text-slate-700 px-4 py-3 rounded-lg hover:bg-slate-50 disabled:opacity-50"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   type="button"
@@ -1576,12 +1578,12 @@ await supabase
           <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
             <h2 className="text-3xl font-bold text-slate-800 mb-6">
-              Welcome Back
+              {t("welcomeBack")}
             </h2>
 
             <input
               type="text"
-              placeholder="Username"
+              placeholder={t("username")}
               value={username}
               onChange={(e) =>
                 setUsername(e.target.value)
@@ -1591,7 +1593,7 @@ await supabase
 
             <input
               type="password"
-              placeholder="Password"
+              placeholder={t("password")}
               value={password}
               onChange={(e) =>
                 setPassword(e.target.value)
@@ -1636,7 +1638,7 @@ await addLog(
   setShowLoginModal(false);
 
 }}            >
-              Login
+              {t("login")}
             </button>
         <button
           className="w-full mt-3 border py-3 rounded-xl"
@@ -1644,7 +1646,7 @@ await addLog(
             setShowLoginModal(false)
           }
         >
-          Cancel
+          {t("cancel")}
         </button>
           </div>
 
@@ -1672,11 +1674,11 @@ await addLog(
   <div>
 
     <h2 className="text-2xl font-bold">
-      Import Files
+      {t("importFiles")}
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      Upload and process system files
+      {t("uploadSystemFiles")}
     </p>
 
   </div>
@@ -1722,7 +1724,7 @@ await addLog(
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        Collected Invoices File
+        {t("collectedInvoicesFile")}
       </div>
 
     </div>
@@ -1784,7 +1786,7 @@ await addLog(
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        Credit Block File
+        {t("creditBlockFile")}
       </div>
 
     </div>

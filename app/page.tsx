@@ -1,5 +1,6 @@
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
+import { useI18n } from "@/lib/i18n";
 
 
 import {
@@ -36,6 +37,7 @@ import {
 } from "lucide-react";
 
 export default function Home() {
+  const { t } = useI18n();
     const handleDateChange = (value: string) => {
   const selectedDate = new Date(value);
 
@@ -1544,7 +1546,7 @@ return (
 
     <div className="p-4">
       <h1 className="text-xl font-bold leading-tight">
-        Credit With Route Block
+        {t("creditWithRouteBlock")}
       </h1>
     </div>
 
@@ -1556,7 +1558,7 @@ return (
     href="/"
     className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-600"  >
     <LayoutDashboard size={18} />
-    <span>Dashboard</span>
+    <span>{t("dashboard")}</span>
   </Link>
 
 <div
@@ -1570,7 +1572,7 @@ return (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition cursor-pointer"
 >
   <Upload size={18} />
-  <span>Import File</span>
+  <span>{t("importFile")}</span>
 </div>
 
   <Link
@@ -1584,14 +1586,14 @@ return (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
 >
   <ClipboardList size={18} />
-  <span>Logs</span>
+  <span>{t("logs")}</span>
 </Link>
 
   <Link
     href="/exceptions"
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"  >
     <AlertCircle size={18} />
-    <span>Exceptions</span>
+    <span>{t("exceptions")}</span>
   </Link>
 
   <Link
@@ -1599,7 +1601,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <BarChart3 size={18} />
-    <span>Summary</span>
+    <span>{t("summary")}</span>
   </Link>
 
   <Link
@@ -1607,7 +1609,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <PieChart size={18} />
-    <span>Reports</span>
+    <span>{t("reports")}</span>
   </Link>
 
   <Link
@@ -1621,7 +1623,7 @@ return (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
 >
   <Settings size={18} />
-  <span>Settings</span>
+  <span>{t("settings")}</span>
 </Link>
 
   <Link
@@ -1629,7 +1631,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <Users size={18} />
-    <span>Users</span>
+    <span>{t("users")}</span>
   </Link>
 
 </nav>
@@ -1659,7 +1661,7 @@ onClick={async () => {
 }}
     >
       <LogOut size={18} />
-      Logout
+      {t("logout")}
     </div>
 
   ) : (
@@ -1669,7 +1671,7 @@ onClick={async () => {
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      Login
+      {t("login")}
     </div>
 
   )}
@@ -1684,7 +1686,7 @@ onClick={async () => {
         <div className="bg-white rounded-xl border border-slate-200 p-5 mb-6 flex justify-between items-center">
 
           <h2 className="text-3xl font-bold">
-            Dashboard
+            {t("dashboard")}
           </h2>
 
           <div className="flex gap-8">
@@ -1707,7 +1709,7 @@ onClick={async () => {
   />
 
   <p className="text-slate-500 text-sm relative z-10">
-    Blocked Invoices
+    {t("blockedInvoices")}
   </p>
 
   <h2 className="text-4xl font-bold text-slate-900 mt-2 relative z-10">
@@ -1727,7 +1729,7 @@ onClick={async () => {
   />
 
   <p className="text-slate-500 text-sm relative z-10 dark-dashboard-label">
-  Exceptions
+  {t("exceptions")}
 </p>
 
 <h2 className="text-4xl font-bold text-slate-900 mt-2 relative z-10 dark-dashboard-number-orange">
@@ -1751,7 +1753,7 @@ onClick={async () => {
   />
 
   <p className="text-slate-500 text-sm relative z-10 dark-dashboard-label">
-    Active
+    {t("active")}
   </p>
 
   <h2 className="text-4xl font-bold text-slate-900 mt-2 relative z-10 dark-dashboard-number-green">
@@ -1769,7 +1771,7 @@ onClick={async () => {
   />
 
   <p className="text-slate-500 text-sm relative z-10">
-    Employees
+    {t("employees")}
   </p>
 
   <h2 className="text-4xl font-bold text-slate-900 mt-2 relative z-10">
@@ -1846,7 +1848,7 @@ onClick={async () => {
                 : ""
             }`}
           >
-            Credit Data
+            {t("creditData")}
           </h4>
 
           <p
@@ -1856,7 +1858,7 @@ onClick={async () => {
                 : "text-slate-500"
             }`}
           >
-            Credit Block Report
+            {t("creditBlockReport")}
           </p>
 
         </div>
@@ -1889,7 +1891,7 @@ onClick={async () => {
             : "text-slate-400"
         }`}
       >
-        Latest File
+        {t("latestFile")}
       </p>
 
       <p
@@ -1939,11 +1941,11 @@ onClick={async () => {
               <div>
 
                 <h4 className="font-bold text-lg">
-                  Collection Data
+                  {t("collectionData")}
                 </h4>
 
                 <p className="text-sm text-slate-500">
-                  Collection Report
+                  {t("collectionReport")}
                 </p>
 
               </div>
@@ -1964,7 +1966,7 @@ onClick={async () => {
           <div className="bg-slate-50 rounded-2xl p-4">
 
             <p className="text-xs uppercase tracking-wide text-slate-400 mb-1">
-              Latest File
+              {t("latestFile")}
             </p>
 
             <p className="text-sm text-slate-700 break-words">
@@ -1990,7 +1992,7 @@ onClick={async () => {
             <div className="flex justify-between items-center mb-5">
 
   <h3 className="font-bold text-xl">
-    Active Credit Blocks
+    {t("activeCreditBlocks")}
   </h3>
 
   <div className="flex gap-2 items-center">
@@ -2006,7 +2008,7 @@ onClick={async () => {
   onChange={(e) =>
     setSearchText(e.target.value)
   }
-  placeholder="Search..."
+  placeholder={t("search")}
   className="border rounded-lg pl-10 py-2 px-4 w-40 h-[42px]"/>
     </div>
 
@@ -2019,7 +2021,7 @@ onClick={async () => {
     >
 
       <option value="">
-        Select Van
+        {t("selectVan")}
       </option>
 
       {whatsappVanCodes.map(
@@ -2064,20 +2066,20 @@ onClick={async () => {
 
                   <tr className="bg-[#0b2668] text-white">
 
-<th className="p-3">Van Code</th>
-<th className="p-3">Employee Name</th>
-<th className="p-3">ATS Code</th>
-<th className="p-3">Customer Code</th>
-<th className="p-3">Customer Name</th>
-<th className="p-3">Central Invoice</th>
-<th className="p-3">Payment Term</th>
-<th className="p-3">Invoice #</th>
-<th className="p-3">Trx Date</th>
-<th className="p-3">Credit Amount</th>
-<th className="p-3">Pending CIM</th>
-<th className="p-3">Credit Days</th>
-<th className="p-3">Rejected Count</th>
-<th className="p-3">Status</th>
+<th className="p-3">{t("vanCode")}</th>
+<th className="p-3">{t("employeeName")}</th>
+<th className="p-3">{t("atsCode")}</th>
+<th className="p-3">{t("customerCode")}</th>
+<th className="p-3">{t("customerName")}</th>
+<th className="p-3">{t("centralInvoice")}</th>
+<th className="p-3">{t("paymentTerm")}</th>
+<th className="p-3">{t("invoiceNo")}</th>
+<th className="p-3">{t("trxDate")}</th>
+<th className="p-3">{t("creditAmount")}</th>
+<th className="p-3">{t("pendingCim")}</th>
+<th className="p-3">{t("creditDays")}</th>
+<th className="p-3">{t("rejectedCount")}</th>
+<th className="p-3">{t("status")}</th>
 
                   </tr>
 
@@ -2159,13 +2161,13 @@ onClick={async () => {
   {isBlockedInvoice(row) ? (
 
     <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
-      Block
+      {t("block")}
     </span>
 
   ) : (
 
     <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
-      Open
+      {t("open")}
     </span>
 
   )}
@@ -2186,7 +2188,7 @@ onClick={async () => {
           <div className="bg-white rounded-xl border shadow-sm p-5">
 
             <h3 className="font-bold text-xl mb-5">
-              Exception Invoices
+              {t("exceptionInvoices")}
             </h3>
 
 {isLoggedIn && (
@@ -2196,7 +2198,7 @@ onClick={async () => {
       onChange={(e) =>
         setInvoiceNo(e.target.value)
       }
-      placeholder="Invoice No."
+      placeholder={t("invoiceNoDot")}
       className="w-full border rounded-lg p-3 mb-3"
     />
 
@@ -2332,7 +2334,7 @@ await addLog(
             <div className="mt-8">
 
   <h4 className="font-bold mb-4">
-    Current Exceptions
+    {t("currentExceptions")}
   </h4>
 
   <div className="max-h-[350px] overflow-y-auto border rounded-lg">
@@ -2344,21 +2346,21 @@ await addLog(
         <tr className="border-b">
 
           <th className="text-left p-2">
-            Invoice
+            {t("invoice")}
           </th>
 
           <th className="text-left p-2">
-            Till Date
+            {t("tillDate")}
           </th>
 
           <th className="text-left p-2">
-            Days
+            {t("days")}
           </th>
 
           {isLoggedIn && (
 
             <th className="text-left p-2">
-              Delete
+              {t("delete")}
             </th>
 
           )}
@@ -2516,7 +2518,7 @@ item.created_by === currentUser && (
   <div className="col-span-1 bg-white rounded-xl border shadow-sm p-5">
 
   <h3 className="font-bold mb-4">
-    Employees Cleared Today
+    {t("employeesClearedToday")}
   </h3>
 
   <table className="w-full text-sm">
@@ -2524,11 +2526,11 @@ item.created_by === currentUser && (
     <thead>
       <tr className="border-b">
         <th className="text-left p-2">
-  Van Code
+  {t("vanCode")}
 </th>
 
         <th className="text-left p-2">
-          Cleared
+          {t("cleared")}
         </th>
       </tr>
     </thead>
@@ -2560,7 +2562,7 @@ item.created_by === currentUser && (
 <div className="bg-white rounded-xl border shadow-sm p-5">
 
   <h3 className="font-bold mb-4">
-    Top Vans With Blocks
+    {t("topVansWithBlocks")}
   </h3>
 
   <div className="space-y-4">
@@ -2605,14 +2607,14 @@ item.created_by === currentUser && (
     <div className="bg-white rounded-xl border shadow-sm p-5">
 
   <h3 className="font-bold mb-4">
-    Collection Progress
+    {t("collectionProgress")}
   </h3>
 
   <div className="flex justify-between mb-4">
 
     <div>
       <p className="text-sm text-slate-500">
-        Cleared
+        {t("cleared")}
       </p>
 
       <h2 className="text-3xl font-bold text-green-600">
@@ -2633,7 +2635,7 @@ item.created_by === currentUser && (
 
     <div>
       <p className="text-sm text-slate-500">
-        Remaining
+        {t("remaining")}
       </p>
 
       <h2 className="text-3xl font-bold text-red-600">
@@ -2683,18 +2685,18 @@ item.created_by === currentUser && (
           <div className="text-center mb-6">
 
             <h2 className="text-3xl font-bold text-slate-800">
-              Welcome Back
+              {t("welcomeBack")}
             </h2>
 
             <p className="text-slate-500 mt-2">
-              Sign in to access management features
+              {t("signInManagement")}
             </p>
 
           </div>
 
           <input
             type="text"
-            placeholder="Username"
+            placeholder={t("username")}
             value={username}
             onChange={(e) =>
               setUsername(e.target.value)
@@ -2704,7 +2706,7 @@ item.created_by === currentUser && (
 
           <input
             type="password"
-            placeholder="Password"
+            placeholder={t("password")}
             value={password}
             onChange={(e) =>
               setPassword(e.target.value)
@@ -2753,7 +2755,7 @@ localStorage.setItem(
 setShowLoginModal(false);
             }}
           >
-            Login
+            {t("login")}
           </button>
 
           <button
@@ -2762,7 +2764,7 @@ setShowLoginModal(false);
               setShowLoginModal(false)
             }
           >
-            Cancel
+            {t("cancel")}
           </button>
 
         </div>
@@ -2793,11 +2795,11 @@ setShowLoginModal(false);
   <div>
 
     <h2 className="text-2xl font-bold">
-      Import Files
+      {t("importFiles")}
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      Upload and process system files
+      {t("uploadSystemFiles")}
     </p>
 
   </div>
@@ -2843,7 +2845,7 @@ setShowLoginModal(false);
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        Collected Invoices File
+        {t("collectedInvoicesFile")}
       </div>
 
     </div>
@@ -2905,7 +2907,7 @@ setShowLoginModal(false);
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        Credit Block File
+        {t("creditBlockFile")}
       </div>
 
     </div>

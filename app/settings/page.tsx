@@ -1,5 +1,6 @@
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
+import { useI18n } from "@/lib/i18n";
 
 import { addLog } from "@/lib/activityLog";
 import * as XLSX from "xlsx";
@@ -22,6 +23,7 @@ import {
 } from "lucide-react";
 
 export default function SettingsPage() {
+  const { t } = useI18n();
   const { theme, setTheme } = useTheme();
   const [isSavingRules, setIsSavingRules] = useState(false);
 const [isResettingRules, setIsResettingRules] = useState(false);
@@ -681,7 +683,7 @@ useEffect(() => {
 
         <div className="p-4">
           <h1 className="text-xl font-bold leading-tight">
-            Credit With Route Block
+            {t("creditWithRouteBlock")}
           </h1>
         </div>
 
@@ -692,7 +694,7 @@ useEffect(() => {
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <LayoutDashboard size={18} />
-    <span>Dashboard</span>
+    <span>{t("dashboard")}</span>
   </Link>
 
 <div
@@ -706,7 +708,7 @@ useEffect(() => {
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition cursor-pointer"
 >
   <Upload size={18} />
-  <span>Import File</span>
+  <span>{t("importFile")}</span>
 </div>
 
 <Link
@@ -720,7 +722,7 @@ useEffect(() => {
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
 >
   <ClipboardList size={18} />
-  <span>Logs</span>
+  <span>{t("logs")}</span>
 </Link>
 
   <Link
@@ -728,7 +730,7 @@ useEffect(() => {
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <AlertCircle size={18} />
-    <span>Exceptions</span>
+    <span>{t("exceptions")}</span>
   </Link>
 
   <Link
@@ -736,7 +738,7 @@ useEffect(() => {
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <BarChart3 size={18} />
-    <span>Summary</span>
+    <span>{t("summary")}</span>
   </Link>
 
   <Link
@@ -744,7 +746,7 @@ useEffect(() => {
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <PieChart size={18} />
-    <span>Reports</span>
+    <span>{t("reports")}</span>
   </Link>
 
 <Link
@@ -758,7 +760,7 @@ useEffect(() => {
     className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-600"
 >
   <Settings size={18} />
-  <span>Settings</span>
+  <span>{t("settings")}</span>
 </Link>
 
   
@@ -768,7 +770,7 @@ useEffect(() => {
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <Users size={18} />
-    <span>Users</span>
+    <span>{t("users")}</span>
   </Link>
 
 </nav>
@@ -784,7 +786,7 @@ useEffect(() => {
       }}
     >
       <LogOut size={18} />
-      Logout
+      {t("logout")}
     </div>
 
   ) : (
@@ -794,7 +796,7 @@ useEffect(() => {
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      Login
+      {t("login")}
     </div>
 
   )}
@@ -804,7 +806,7 @@ useEffect(() => {
 
       {/* Content */}
       <main className="flex-1 p-6">
-        <h1 className="text-3xl font-bold mb-6">Settings</h1>
+        <h1 className="text-3xl font-bold mb-6">{t("settings")}</h1>
 
         <div className="flex gap-6">
           {/* Left Menu */}
@@ -860,18 +862,18 @@ useEffect(() => {
             {activeTab === "dashboardFilters" && (
   <>
     <h2 className="text-2xl font-semibold mb-2">
-      Dashboard Filters
+      {t("dashboardFilters")}
     </h2>
 
     <p className="text-gray-500 mb-8">
-      Configure which invoices appear on the dashboard.
+      {t("configureInvoiceVisibility")}
     </p>
 
     <div className="space-y-8">
 
       <div>
         <h3 className="font-semibold mb-3">
-          Invoice Status
+          {t("invoiceStatus")}
         </h3>
 
         <div className="space-y-3">
@@ -884,7 +886,7 @@ useEffect(() => {
                 setShowOverdue(e.target.checked)
               }
             />
-            Overdue
+            {t("overdue")}
           </label>
 
           <label className="flex gap-3 items-center">
@@ -895,7 +897,7 @@ useEffect(() => {
                 setShowDue(e.target.checked)
               }
             />
-            Due
+            {t("due")}
           </label>
 
           <label className="flex gap-3 items-center">
@@ -906,7 +908,7 @@ useEffect(() => {
                 setShowLegal(e.target.checked)
               }
             />
-            Legal
+            {t("legal")}
           </label>
 
         </div>
@@ -916,7 +918,7 @@ useEffect(() => {
 
       <div>
         <h3 className="font-semibold mb-3">
-          Invoice Type
+          {t("invoiceType")}
         </h3>
 
         <div className="space-y-3">
@@ -931,7 +933,7 @@ useEffect(() => {
                 )
               }
             />
-            Normal Invoices
+            {t("normalInvoices")}
           </label>
 
           <label className="flex gap-3 items-center">
@@ -944,7 +946,7 @@ useEffect(() => {
                 )
               }
             />
-            Exception Invoices
+            {t("exceptionInvoices")}
           </label>
 
         </div>
@@ -954,7 +956,7 @@ useEffect(() => {
 
       <div>
         <h3 className="font-semibold mb-3">
-          Invoice Visibility
+          {t("invoiceVisibility")}
         </h3>
 
         <div className="space-y-3">
@@ -969,7 +971,7 @@ useEffect(() => {
                 )
               }
             />
-            Hide Fully Collected Invoices
+            {t("hideFullyCollectedInvoices")}
           </label>
 
           <label className="flex gap-3 items-center">
@@ -982,7 +984,7 @@ useEffect(() => {
                 )
               }
             />
-            Hide User Block
+            {t("hideUserBlock")}
           </label>
 
         </div>
@@ -1033,7 +1035,7 @@ useEffect(() => {
 )}
             {activeTab === "theme" && (
               <div>
-                <h2 className="text-2xl font-semibold mb-2">Site Appearance</h2>
+                <h2 className="text-2xl font-semibold mb-2">{t("siteAppearance")}</h2>
                 <p className="text-gray-500 mb-8">Choose a clean light or dark color scheme for the entire site.</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
                   <button
@@ -1044,8 +1046,8 @@ useEffect(() => {
                       <div className="h-3 w-2/3 rounded bg-slate-200 mb-2" />
                       <div className="h-8 rounded bg-slate-100" />
                     </div>
-                    <div className="font-semibold">Light</div>
-                    <div className="text-sm text-gray-500">Current white appearance</div>
+                    <div className="font-semibold">{t("light")}</div>
+                    <div className="text-sm text-gray-500">{t("currentWhiteAppearance")}</div>
                   </button>
                   <button
                     onClick={() => setTheme("dark")}
@@ -1055,8 +1057,8 @@ useEffect(() => {
                       <div className="h-3 w-2/3 rounded bg-slate-600 mb-2" />
                       <div className="h-8 rounded bg-slate-800" />
                     </div>
-                    <div className={theme === "dark" ? "font-semibold text-white" : "font-semibold"}>Dark</div>
-                    <div className={theme === "dark" ? "text-sm text-slate-300" : "text-sm text-gray-500"}>Dark navy/slate, high contrast</div>
+                    <div className={theme === "dark" ? "font-semibold text-white" : "font-semibold"}>{t("dark")}</div>
+                    <div className={theme === "dark" ? "text-sm text-slate-300" : "text-sm text-gray-500"}>{t("darkNavySlate")}</div>
                   </button>
                 </div>
               </div>
@@ -1065,11 +1067,11 @@ useEffect(() => {
             {activeTab === "notifications" && (
               <>
                 <h2 className="text-2xl font-semibold mb-2">
-                  Notifications
+                  {t("notifications")}
                 </h2>
 
                 <p className="text-gray-500 mb-6">
-                  Manage your notification preferences
+                  {t("manageNotificationPreferences")}
                 </p>
 
                 <div className="space-y-4">
@@ -1081,7 +1083,7 @@ useEffect(() => {
     setInvoiceAlert(e.target.checked)
   }
 />
-                    Invoice Disappeared Alerts
+                    {t("invoiceDisappearedAlerts")}
                   </label>
 <label className="flex items-center gap-3">
   <input
@@ -1093,7 +1095,7 @@ useEffect(() => {
       )
     }
   />
-  Exception Expired Alerts
+  {t("exceptionExpiredAlerts")}
 </label>
                   <label className="flex items-center gap-3">
                     <input
@@ -1103,7 +1105,7 @@ useEffect(() => {
     setExceptionAlert(e.target.checked)
   }
 />
-                    Exception Add Alerts
+                    {t("exceptionAddAlerts")}
                   </label>
 
 <label className="flex items-center gap-3">
@@ -1114,7 +1116,7 @@ useEffect(() => {
       setExceptionDeleteAlert(e.target.checked)
     }
   />
-  Exception Delete Alerts
+  {t("exceptionDeleteAlerts")}
 </label>
                   <label className="flex items-center gap-3">
                     <input
@@ -1124,7 +1126,7 @@ useEffect(() => {
     setCreditImportAlert(e.target.checked)
   }
 />
-                    Credit Import Alerts
+                    {t("creditImportAlerts")}
                   </label>
 
                   <label className="flex items-center gap-3">
@@ -1135,7 +1137,7 @@ useEffect(() => {
     setCollectionImportAlert(e.target.checked)
   }
 />
-                    Collection Import Alerts
+                    {t("collectionImportAlerts")}
                   </label>
                 </div>
 
@@ -1234,7 +1236,7 @@ collection_disabled_at:
     alert("Settings Saved Successfully");
   }}
 >
-  Save Changes
+  {t("saveChanges")}
 </button>
               </>
             )}
@@ -1243,23 +1245,23 @@ collection_disabled_at:
             {activeTab === "security" && (
               <>
                 <h2 className="text-2xl font-semibold mb-2">
-                  Security
+                  {t("security")}
                 </h2>
 
                 <p className="text-gray-500 mb-6">
-                  Manage your security settings
+                  {t("manageSecuritySettings")}
                 </p>
 
 <div className="mb-8">
   <h3 className="text-lg font-semibold mb-4">
-    Profile Information
+    {t("profileInformation")}
   </h3>
 
   <div className="space-y-4">
 
     <input
       type="text"
-      placeholder="Username"
+      placeholder={t("username")}
       value={username}
       onChange={(e) =>
         setUsername(e.target.value)
@@ -1269,7 +1271,7 @@ collection_disabled_at:
 
     <input
       type="text"
-      placeholder="Full Name"
+      placeholder={t("fullName")}
       value={fullName}
       onChange={(e) =>
         setFullName(e.target.value)
@@ -1339,28 +1341,28 @@ collection_disabled_at:
   );
 }}
   >
-    Save Profile
+    {t("saveProfile")}
   </button>
 </div>
 
                 <div className="space-y-4">
                   <input
   type="password"
-  placeholder="Current Password"
+  placeholder={t("currentPassword")}
   value={currentPassword}
   onChange={(e) => setCurrentPassword(e.target.value)}
   className="w-full border rounded-lg p-3"
 />
   <input
   type="password"
-  placeholder="New Password"
+  placeholder={t("newPassword")}
   value={newPassword}
   onChange={(e) => setNewPassword(e.target.value)}
   className="w-full border rounded-lg p-3"
 />
   <input
   type="password"
-  placeholder="Confirm New Password"
+  placeholder={t("confirmNewPassword")}
   value={confirmPassword}
   onChange={(e) => setConfirmPassword(e.target.value)}
   className="w-full border rounded-lg p-3"
@@ -1459,15 +1461,15 @@ collection_disabled_at:
 {activeTab === "creditRules" && (
   <>
     <h2 className="text-2xl font-semibold mb-2">
-      Credit Block Rules
+      {t("creditBlockRules")}
     </h2>
 
     <p className="text-gray-500 mb-6">
-      Configure invoice block thresholds.
+      {t("configureInvoiceThresholds")}
     </p>
 
     {loadingRules ? (
-      <div>Loading...</div>
+      <div>{t("loading")}</div>
     ) : (
       <>
         <div className="space-y-3">
@@ -1618,12 +1620,12 @@ if (isSavingRules || isResettingRules)
     <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
       <h2 className="text-3xl font-bold text-slate-800 mb-6">
-        Welcome Back
+        {t("welcomeBack")}
       </h2>
 
       <input
         type="text"
-        placeholder="Username"
+        placeholder={t("username")}
         value={currentUser}
         onChange={(e) =>
           setCurrentUser(e.target.value)
@@ -1632,7 +1634,7 @@ if (isSavingRules || isResettingRules)
       />
 <input
   type="password"
-  placeholder="Password"
+  placeholder={t("password")}
   value={loginPassword}
   onChange={(e) => setLoginPassword(e.target.value)}
   className="w-full border p-3 rounded-xl mb-4"
@@ -1675,7 +1677,7 @@ if (isSavingRules || isResettingRules)
   
   }}
 >
-  Login
+  {t("login")}
 </button>
 
       <button
@@ -1684,7 +1686,7 @@ if (isSavingRules || isResettingRules)
           setShowLoginModal(false)
         }
       >
-        Cancel
+        {t("cancel")}
       </button>
 
     </div>
@@ -1713,11 +1715,11 @@ if (isSavingRules || isResettingRules)
   <div>
 
     <h2 className="text-2xl font-bold">
-      Import Files
+      {t("importFiles")}
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      Upload and process system files
+      {t("uploadSystemFiles")}
     </p>
 
   </div>
@@ -1763,7 +1765,7 @@ if (isSavingRules || isResettingRules)
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        Collected Invoices File
+        {t("collectedInvoicesFile")}
       </div>
 
     </div>
@@ -1825,7 +1827,7 @@ if (isSavingRules || isResettingRules)
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        Credit Block File
+        {t("creditBlockFile")}
       </div>
 
     </div>

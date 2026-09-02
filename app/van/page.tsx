@@ -1,5 +1,6 @@
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
+import { useI18n } from "@/lib/i18n";
 
 
 import Link from "next/link";
@@ -12,6 +13,7 @@ import { usePathname } from "next/navigation";
 import { storage as localStorage } from "@/utils/storage";
 
 export default function MobileSummaryPage() {
+  const { t } = useI18n();
   const pathname = usePathname();  
   const [whatsAppVan, setWhatsAppVan] =
   useState("");
@@ -594,7 +596,7 @@ return (
     <div className="mb-4">
   <input
     type="text"
-    placeholder="Search Van Code..."
+    placeholder={t("searchVanCode")}
     value={searchTerm}
     onChange={(e) => setSearchTerm(e.target.value)}
     className="
@@ -635,7 +637,7 @@ text-white
 
 
 <th className="p-3">
-Status
+{t("status")}
 </th>
 
 <th className="p-3">
@@ -643,7 +645,7 @@ ID
 </th>
 
 <th className="p-3">
-Van Code
+{t("vanCode")}
 </th>
 
 </tr>

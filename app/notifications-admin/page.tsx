@@ -1,10 +1,12 @@
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
+import { useI18n } from "@/lib/i18n";
 
 
 import { useEffect, useState } from "react";
 
 export default function NotificationsAdmin() {
+  const { t } = useI18n();
   const [enabled, setEnabled] =
     useState(false);
 
@@ -129,7 +131,7 @@ setEnabled(false);
     <div className="min-h-screen flex items-center justify-center bg-slate-100">
       <div className="bg-white p-8 rounded-2xl shadow-xl text-center">
         <h1 className="text-2xl font-bold mb-6">
-          Admin Notifications
+          {t("adminNotifications")}
         </h1>
 
         <button

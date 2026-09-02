@@ -1,5 +1,6 @@
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
+import { useI18n } from "@/lib/i18n";
 
 import { addLog } from "@/lib/activityLog";
 import * as XLSX from "xlsx";
@@ -23,6 +24,7 @@ import { storage as localStorage } from "@/utils/storage";
 
 
 export default function ReportsPage() {
+  const { t } = useI18n();
   const [missingLoaded, setMissingLoaded] =
   useState(false);
   const [isImportingUsers, setIsImportingUsers] =
@@ -719,7 +721,7 @@ return (
 
         <div className="p-4">
           <h1 className="text-xl font-bold leading-tight">
-            Credit With Route Block
+            {t("creditWithRouteBlock")}
           </h1>
         </div>
 
@@ -730,7 +732,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <LayoutDashboard size={18} />
-    <span>Dashboard</span>
+    <span>{t("dashboard")}</span>
   </Link>
 
 <div
@@ -744,7 +746,7 @@ return (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition cursor-pointer"
 >
   <Upload size={18} />
-  <span>Import File</span>
+  <span>{t("importFile")}</span>
 </div>
 
 <Link
@@ -758,7 +760,7 @@ return (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
 >
   <ClipboardList size={18} />
-  <span>Logs</span>
+  <span>{t("logs")}</span>
 </Link>
 
   <Link
@@ -766,7 +768,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <AlertCircle size={18} />
-    <span>Exceptions</span>
+    <span>{t("exceptions")}</span>
   </Link>
 
   <Link
@@ -774,7 +776,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <BarChart3 size={18} />
-    <span>Summary</span>
+    <span>{t("summary")}</span>
   </Link>
 
   <Link
@@ -782,7 +784,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-600"
   >
     <PieChart size={18} />
-    <span>Reports</span>
+    <span>{t("reports")}</span>
   </Link>
 
 <Link
@@ -796,7 +798,7 @@ return (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
 >
   <Settings size={18} />
-  <span>Settings</span>
+  <span>{t("settings")}</span>
 </Link>
 
   <Link
@@ -804,7 +806,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <Users size={18} />
-    <span>Users</span>
+    <span>{t("users")}</span>
   </Link>
 
 </nav>
@@ -820,7 +822,7 @@ return (
       }}
     >
       <LogOut size={18} />
-      Logout
+      {t("logout")}
     </div>
 
   ) : (
@@ -830,7 +832,7 @@ return (
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      Login
+      {t("login")}
     </div>
 
   )}
@@ -841,7 +843,7 @@ return (
   <main className="flex-1 p-6">
 
       <h1 className="text-3xl font-bold mb-6">
-        Reports
+        {t("reports")}
       </h1>
     {missingLoaded && (
   <div
@@ -884,23 +886,23 @@ return (
       <tr className="bg-amber-600 text-white">
 
 <th className="w-[110px] p-2 text-left">
-  Organization Code
+  {t("organizationCode")}
 </th>
 
 <th className="w-[200px] p-2 text-left">
-  Organization Name
+  {t("organizationName")}
 </th>
 
 <th className="w-[140px] p-2 text-left">
-  Invoice No
+  {t("invoiceNoPlain")}
 </th>
 
 <th className="w-[100px] p-2 text-left">
-  First Seen
+  {t("firstSeen")}
 </th>
 
         <th className="w-[100px] p-2 text-left">
-          Missing From
+          {t("missingFrom")}
         </th>
 
       </tr>
@@ -918,7 +920,7 @@ return (
         text-slate-500
       "
     >
-      No disappeared invoices found
+      {t("noDisappearedInvoices")}
     </td>
   </tr>
 
@@ -977,7 +979,7 @@ return (
 
   <input
     type="text"
-    placeholder="Search..."
+    placeholder={t("search")}
     value={searchText}
     onChange={(e) =>
       setSearchText(e.target.value)
@@ -998,7 +1000,7 @@ return (
             setSelectedTab("credit")
           }
         >
-          Credit File
+          {t("creditFile")}
         </button>
 
         {collections.map(
@@ -1126,11 +1128,11 @@ return (
       <tr className="bg-slate-800 text-white">
 
         <th className="p-3">
-          Invoice
+          {t("invoice")}
         </th>
 
         <th className="p-3">
-          Uploaded By
+          {t("uploadedBy")}
         </th>
 
       </tr>
@@ -1177,12 +1179,12 @@ return (
       <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
         <h2 className="text-3xl font-bold text-slate-800 mb-6">
-          Welcome Back
+          {t("welcomeBack")}
         </h2>
 
         <input
           type="text"
-          placeholder="Username"
+          placeholder={t("username")}
           value={username}
           onChange={(e) =>
             setUsername(e.target.value)
@@ -1192,7 +1194,7 @@ return (
 
         <input
           type="password"
-          placeholder="Password"
+          placeholder={t("password")}
           value={password}
           onChange={(e) =>
             setPassword(e.target.value)
@@ -1238,7 +1240,7 @@ setPassword("");
 
 }}
         >
-          Login
+          {t("login")}
         </button>
 
         <button
@@ -1247,7 +1249,7 @@ setPassword("");
             setShowLoginModal(false)
           }
         >
-          Cancel
+          {t("cancel")}
         </button>
 
       </div>
@@ -1276,11 +1278,11 @@ setPassword("");
   <div>
 
     <h2 className="text-2xl font-bold">
-      Import Files
+      {t("importFiles")}
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      Upload and process system files
+      {t("uploadSystemFiles")}
     </p>
 
   </div>
@@ -1326,7 +1328,7 @@ setPassword("");
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        Collected Invoices File
+        {t("collectedInvoicesFile")}
       </div>
 
     </div>
@@ -1388,7 +1390,7 @@ setPassword("");
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        Credit Block File
+        {t("creditBlockFile")}
       </div>
 
     </div>

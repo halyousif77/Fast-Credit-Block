@@ -1,5 +1,6 @@
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
+import { useI18n } from "@/lib/i18n";
 
 import WhatsAppReport from "@/components/WhatsAppReport";
 import html2canvas from "html2canvas";
@@ -30,6 +31,7 @@ import {
 import { useEffect, useState } from "react";
 
 export default function SummaryPage() {
+  const { t } = useI18n();
   const [whatsAppVan, setWhatsAppVan] =
   useState("");
 
@@ -1075,7 +1077,7 @@ const sendWhatsApp = async (
 
         <div className="p-4">
           <h1 className="text-xl font-bold leading-tight">
-            Credit With Route Block
+            {t("creditWithRouteBlock")}
           </h1>
         </div>
 
@@ -1086,7 +1088,7 @@ const sendWhatsApp = async (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <LayoutDashboard size={18} />
-    <span>Dashboard</span>
+    <span>{t("dashboard")}</span>
   </Link>
 
   <div
@@ -1100,7 +1102,7 @@ const sendWhatsApp = async (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition cursor-pointer"
 >
   <Upload size={18} />
-  <span>Import File</span>
+  <span>{t("importFile")}</span>
 </div>
 
   <Link
@@ -1114,7 +1116,7 @@ const sendWhatsApp = async (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
 >
   <ClipboardList size={18} />
-  <span>Logs</span>
+  <span>{t("logs")}</span>
 </Link>
 
   <Link
@@ -1122,7 +1124,7 @@ const sendWhatsApp = async (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <AlertCircle size={18} />
-    <span>Exceptions</span>
+    <span>{t("exceptions")}</span>
   </Link>
 
   <Link
@@ -1130,7 +1132,7 @@ const sendWhatsApp = async (
     className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-600"
   >
     <BarChart3 size={18} />
-    <span>Summary</span>
+    <span>{t("summary")}</span>
   </Link>
 
   <Link
@@ -1138,7 +1140,7 @@ const sendWhatsApp = async (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <PieChart size={18} />
-    <span>Reports</span>
+    <span>{t("reports")}</span>
   </Link>
 
   <Link
@@ -1152,7 +1154,7 @@ const sendWhatsApp = async (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
 >
   <Settings size={18} />
-  <span>Settings</span>
+  <span>{t("settings")}</span>
 </Link>
 
   <Link
@@ -1160,7 +1162,7 @@ const sendWhatsApp = async (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <Users size={18} />
-    <span>Users</span>
+    <span>{t("users")}</span>
   </Link>
 
 </nav>
@@ -1194,7 +1196,7 @@ onClick={async () => {
 }}
     >
       <LogOut size={18} />
-      Logout
+      {t("logout")}
     </div>
 
   ) : (
@@ -1204,7 +1206,7 @@ onClick={async () => {
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      Login
+      {t("login")}
     </div>
 
   )}
@@ -1215,7 +1217,7 @@ onClick={async () => {
       <main className="flex-1 p-6">
 
         <h1 className="text-3xl font-bold mb-6">
-          Summary
+          {t("summary")}
         </h1>
 <div className="grid grid-cols-4 gap-4 mb-6">
 
@@ -1226,7 +1228,7 @@ onClick={async () => {
 
       <div>
         <p className="text-sm text-slate-500">
-          Total Vans
+          {t("totalVans")}
         </p>
 
         <h2 className="text-3xl font-bold mt-2">
@@ -1251,7 +1253,7 @@ onClick={async () => {
 
       <div>
         <p className="text-sm text-pink-600">
-          Remaining Invoices
+          {t("remainingInvoices")}
         </p>
 
         <h2 className="text-3xl font-bold mt-2 text-pink-600">
@@ -1284,7 +1286,7 @@ onClick={async () => {
 
       <div>
         <p className="text-sm text-orange-600 dark-summary-orange">
-          Exception Invoices
+          {t("exceptionInvoices")}
         </p>
 
         <h2 className="text-3xl font-bold mt-2 text-orange-600 dark-summary-orange">
@@ -1317,7 +1319,7 @@ onClick={async () => {
 
       <div>
         <p className="text-sm text-green-600 dark-summary-green">
-          All Collected Vans
+          {t("allCollectedVans")}
         </p>
 
         <h2 className="text-3xl font-bold mt-2 text-green-600 dark-summary-green">
@@ -1364,11 +1366,11 @@ onClick={async () => {
       <div>
 
         <h2 className="text-xl font-bold text-slate-800">
-          Van Performance
+          {t("vanPerformance")}
         </h2>
 
        <p className="text-xs text-slate-500 mt-1">
-          Credit block status by van
+          {t("creditBlockStatusByVan")}
         </p>
 
       </div>
@@ -1389,7 +1391,7 @@ onClick={async () => {
 <tr className="bg-[#071d5c] text-white border-b border-blue-900">
 
 <th className="px-4 py-3 text-center text-sm font-semibold border-r border-blue-900">
-  Status
+  {t("status")}
 </th>
 
 <th className="px-4 py-3 text-center text-sm font-semibold border-r border-blue-900">
@@ -1397,11 +1399,11 @@ onClick={async () => {
 </th>
 
 <th className="px-4 py-3 text-center text-sm font-semibold border-r border-blue-900">
-  Van Code
+  {t("vanCode")}
 </th>
 
 <th className="px-4 py-3 text-center text-sm font-semibold">
-  Permission
+  {t("permission")}
 </th>
 
 </tr>
@@ -1600,11 +1602,11 @@ onChange={async (e) => {
 <div className="flex-1 bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col">    <div className="px-5 py-4 border-b border-slate-100">
 
     <h2 className="text-lg font-bold text-slate-800">
-      Region Summary
+      {t("regionSummary")}
     </h2>
 
     <p className="text-xs text-slate-500 mt-1">
-      Outstanding invoices by region
+      {t("outstandingInvoicesByRegion")}
     </p>
 
   </div>
@@ -1692,11 +1694,11 @@ onChange={async (e) => {
   <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
       <h2 className="text-3xl font-bold text-slate-800 mb-6">
-  Welcome Back
+  {t("welcomeBack")}
 </h2>
       <input
         className="w-full border p-3 rounded-xl mb-4"
-                placeholder="Username"
+                placeholder={t("username")}
         value={username}
         onChange={(e) =>
           setUsername(e.target.value)
@@ -1705,7 +1707,7 @@ onChange={async (e) => {
 
 <input
   type="password"
-  placeholder="Password"
+  placeholder={t("password")}
   value={password}
   onChange={(e) => setPassword(e.target.value)}
   className="w-full border p-3 rounded-xl mb-4"
@@ -1751,7 +1753,7 @@ setUsername("");
 setPassword("");
 }}
         >
-          Login
+          {t("login")}
         </button>
         <button
           className="w-full mt-3 border py-3 rounded-xl"
@@ -1759,7 +1761,7 @@ setPassword("");
             setShowLoginModal(false)
           }
         >
-          Cancel
+          {t("cancel")}
         </button>
       </div>
 
@@ -1788,11 +1790,11 @@ setPassword("");
   <div>
 
     <h2 className="text-2xl font-bold">
-      Import Files
+      {t("importFiles")}
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      Upload and process system files
+      {t("uploadSystemFiles")}
     </p>
 
   </div>
@@ -1838,7 +1840,7 @@ setPassword("");
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        Collected Invoices File
+        {t("collectedInvoicesFile")}
       </div>
 
     </div>
@@ -1900,7 +1902,7 @@ setPassword("");
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        Credit Block File
+        {t("creditBlockFile")}
       </div>
 
     </div>

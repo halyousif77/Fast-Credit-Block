@@ -1,5 +1,6 @@
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
+import { useI18n } from "@/lib/i18n";
 
 import { addLog } from "@/lib/activityLog";
 import { toast } from "sonner";
@@ -23,6 +24,7 @@ import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 
 export default function UsersPage() {
+  const { t } = useI18n();
   
   const [isImportingUsers, setIsImportingUsers] =
   useState(false);
@@ -630,7 +632,7 @@ return (
 
     <div className="p-4">
       <h1 className="text-xl font-bold leading-tight">
-        Credit With Route Block
+        {t("creditWithRouteBlock")}
       </h1>
     </div>
 
@@ -641,7 +643,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <LayoutDashboard size={18} />
-    <span>Dashboard</span>
+    <span>{t("dashboard")}</span>
   </Link>
 
 <div
@@ -655,7 +657,7 @@ return (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition cursor-pointer"
 >
   <Upload size={18} />
-  <span>Import File</span>
+  <span>{t("importFile")}</span>
 </div>
 
 <Link
@@ -669,14 +671,14 @@ return (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
 >
   <ClipboardList size={18} />
-  <span>Logs</span>
+  <span>{t("logs")}</span>
 </Link>
   <Link
     href="/exceptions"
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <AlertCircle size={18} />
-    <span>Exceptions</span>
+    <span>{t("exceptions")}</span>
   </Link>
 
   <Link
@@ -684,7 +686,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <BarChart3 size={18} />
-    <span>Summary</span>
+    <span>{t("summary")}</span>
   </Link>
 
   <Link
@@ -692,7 +694,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
   >
     <PieChart size={18} />
-    <span>Reports</span>
+    <span>{t("reports")}</span>
   </Link>
 
   <Link
@@ -706,7 +708,7 @@ return (
   className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition"
 >
   <Settings size={18} />
-  <span>Settings</span>
+  <span>{t("settings")}</span>
 </Link>
 
   <Link
@@ -714,7 +716,7 @@ return (
     className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-600"
   >
     <Users size={18} />
-    <span>Users</span>
+    <span>{t("users")}</span>
   </Link>
 
 </nav>
@@ -744,12 +746,12 @@ setPassword("");
   {isLoggedIn ? (
     <>
       <LogOut size={18} />
-      Logout
+      {t("logout")}
     </>
   ) : (
     <>
       <Users size={18} />
-      Login
+      {t("login")}
     </>
   )}
 </div>
@@ -759,7 +761,7 @@ setPassword("");
   onClick={() => setShowLoginModal(true)}
 >
   <Users size={18} />
-  Login
+  {t("login")}
 </div>
   )}
 
@@ -772,7 +774,7 @@ setPassword("");
       <div className="flex justify-between mb-6">
 
         <h1 className="text-3xl font-bold">
-          Users
+          {t("users")}
         </h1>
 
         {isLoggedIn && (
@@ -820,7 +822,7 @@ setPassword("");
           className="border rounded p-2"
         >
           <option value="">
-            Region
+            {t("region")}
           </option>
 
           {[...new Set(
@@ -847,7 +849,7 @@ setPassword("");
           className="border rounded p-2"
         >
           <option value="">
-            City
+            {t("city")}
           </option>
 
           {[...new Set(
@@ -874,7 +876,7 @@ setPassword("");
           className="border rounded p-2"
         >
           <option value="">
-            Organization Code
+            {t("organizationCode")}
           </option>
 
           {[...new Set(
@@ -902,7 +904,7 @@ setPassword("");
           className="border rounded p-2"
         >
           <option value="">
-            Van Sub Inventory
+            {t("vanSubInventory")}
           </option>
 
           {[...new Set(
@@ -931,35 +933,35 @@ setPassword("");
             <tr className="bg-slate-800 text-white">
 
               <th className="p-3">
-                Region
+                {t("region")}
               </th>
 
               <th className="p-3">
-                City
+                {t("city")}
               </th>
 
               <th className="p-3">
-                Organization Code
+                {t("organizationCode")}
               </th>
 
               <th className="p-3">
-                User Code
+                {t("userCode")}
               </th>
 
               <th className="p-3">
-                Organization Name
+                {t("organizationName")}
               </th>
 
               <th className="p-3">
-                Van Sub Inventory
+                {t("vanSubInventory")}
               </th>
 
               <th className="p-3">
-                Contact
+                {t("contact")}
               </th>
 
               <th className="p-3">
-                Actions
+                {t("actions")}
               </th>
 
             </tr>
@@ -1174,12 +1176,12 @@ setPassword("");
       <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
         <h2 className="text-3xl font-bold text-center mb-6">
-          Login
+          {t("login")}
         </h2>
 
         <input
           type="text"
-          placeholder="Username"
+          placeholder={t("username")}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           className="w-full border p-3 rounded-xl mb-4"
@@ -1187,7 +1189,7 @@ setPassword("");
 
         <input
           type="password"
-          placeholder="Password"
+          placeholder={t("password")}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="w-full border p-3 rounded-xl mb-4"
@@ -1232,14 +1234,14 @@ setUsername("");
 setPassword("");
           }}
         >
-          Login
+          {t("login")}
         </button>
 
         <button
           className="w-full mt-3 border py-3 rounded-xl"
           onClick={() => setShowLoginModal(false)}
         >
-          Cancel
+          {t("cancel")}
         </button>
 
       </div>
@@ -1267,11 +1269,11 @@ setPassword("");
   <div>
 
     <h2 className="text-2xl font-bold">
-      Import Files
+      {t("importFiles")}
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      Upload and process system files
+      {t("uploadSystemFiles")}
     </p>
 
   </div>
@@ -1317,7 +1319,7 @@ setPassword("");
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        Collected Invoices File
+        {t("collectedInvoicesFile")}
       </div>
 
     </div>
@@ -1379,7 +1381,7 @@ setPassword("");
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        Credit Block File
+        {t("creditBlockFile")}
       </div>
 
     </div>
