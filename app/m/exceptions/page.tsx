@@ -3,7 +3,7 @@ import { apiFetch as fetch } from "@/lib/apiCache";
 
 
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Trash2, Search, X } from "lucide-react";
+import { Plus, Trash2, Search, X, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { storage } from "@/utils/storage";
 import { useI18n } from "@/lib/i18n";
@@ -17,13 +17,36 @@ export default function MobileExceptionsPage() {
   const [exceptions, setExceptions] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [showAdd, setShowAdd] = useState(false);
+  const [editingException, setEditingException] = useState<any | null>(null);
+  const [savingEdit, setSavingEdit] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
 
   const [form, setForm] = useState({
     invoice: "",
-    permanent: true,
+    permanent: false,
     till_date: "",
   });
+
+  const getTodayInput = () => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  };
+
+  const normalizeTillDate = (value: string) => {
+    if (!value) return "";
+    const d = new Date(`${value}T00:00:00`);
+    if (d.getDay() === 5) d.setDate(d.getDate() + 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  };
+
+  const getDaysLeft = (date: string) => {
+    if (!date) return null;
+    const till = new Date(`${date}T00:00:00`);
+    const today = new Date();
+    till.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    return Math.max(0, Math.round((till.getTime() - today.getTime()) / 86400000));
+  };
 
   const load = async () => {
     setLoading(true);
@@ -92,10 +115,59 @@ export default function MobileExceptionsPage() {
     if (json.success) {
       toast.success(t("save"));
       setShowAdd(false);
-      setForm({ invoice: "", permanent: true, till_date: "" });
+      setForm({ invoice: "", permanent: false, till_date: "" });
       load();
     } else {
       toast.error(json.error || "Error");
+    }
+  };
+
+  const openEdit = (e: any) => {
+    if (e.created_by !== currentUser) {
+      toast.error(t("onlyDeleteOwn"));
+      return;
+    }
+    setEditingException(e);
+    setForm({
+      invoice: e.invoice || "",
+      permanent: !!e.permanent,
+      till_date: e.permanent ? "" : String(e.till_date || "").split("T")[0],
+    });
+  };
+
+  const handleEdit = async () => {
+    if (!editingException || editingException.created_by !== currentUser) return;
+    if (!form.invoice.trim()) {
+      toast.error(t("noData"));
+      return;
+    }
+    if (!form.permanent && !form.till_date) {
+      toast.error("Please select an expiration date");
+      return;
+    }
+
+    setSavingEdit(true);
+    try {
+      const res = await fetch(`/api/exceptions/${editingException.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          invoice: form.invoice.trim(),
+          till_date: form.permanent ? null : form.till_date,
+          updatedBy: currentUser,
+        }),
+      });
+      const json = await res.json();
+      if (!json.success) {
+        toast.error(json.error || "Error");
+        return;
+      }
+      toast.success(t("save"));
+      setEditingException(null);
+      setForm({ invoice: "", permanent: false, till_date: "" });
+      load();
+    } finally {
+      setSavingEdit(false);
     }
   };
 
@@ -198,12 +270,22 @@ export default function MobileExceptionsPage() {
               </div>
 
               {e.created_by === currentUser && (
-                <button
-                  onClick={() => handleDelete(e)}
-                  className="h-9 w-9 shrink-0 rounded-lg bg-red-50 text-red-600 flex items-center justify-center"
-                >
-                  <Trash2 size={16} />
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => openEdit(e)}
+                    className="h-9 w-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"
+                    aria-label="Edit exception"
+                  >
+                    <Pencil size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(e)}
+                    className="h-9 w-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center"
+                    aria-label="Delete exception"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -211,7 +293,7 @@ export default function MobileExceptionsPage() {
       </div>
 
       {showAdd && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center">
+        <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-4">
           <div className="bg-white w-full sm:w-96 rounded-t-3xl sm:rounded-3xl p-5 max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <p className="font-bold text-base">{t("addException")}</p>
@@ -255,14 +337,24 @@ export default function MobileExceptionsPage() {
               </label>
 
               {!form.permanent && (
-                <input
-                  type="date"
-                  value={form.till_date}
-                  onChange={(e) =>
-                    setForm({ ...form, till_date: e.target.value })
-                  }
-                  className="w-full border border-slate-200 rounded-xl p-3 text-sm"
-                />
+                <div>
+                  <input
+                    type="date"
+                    min={getTodayInput()}
+                    value={form.till_date}
+                    onChange={(e) =>
+                      setForm({ ...form, till_date: normalizeTillDate(e.target.value) })
+                    }
+                    className="w-full h-11 border border-slate-200 rounded-xl px-3 text-sm bg-white"
+                  />
+                  {form.till_date && (
+                    <p className="text-xs font-semibold text-blue-600 mt-1 px-1">
+                      {getDaysLeft(form.till_date) === 0
+                        ? "Expires today"
+                        : `${getDaysLeft(form.till_date)} day${getDaysLeft(form.till_date) === 1 ? "" : "s"} left`}
+                    </p>
+                  )}
+                </div>
               )}
 
               <button
@@ -271,6 +363,54 @@ export default function MobileExceptionsPage() {
                 style={{ background: "#071d5c" }}
               >
                 {t("save")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editingException && (
+        <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-sm rounded-3xl p-5 max-h-[85vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-4">
+              <p className="font-bold text-base">Edit Exception</p>
+              <button onClick={() => setEditingException(null)} disabled={savingEdit}>
+                <X size={20} className="text-slate-400" />
+              </button>
+            </div>
+            <div className="space-y-3">
+              <input
+                placeholder={t("invoice")}
+                value={form.invoice}
+                onChange={(e) => setForm({ ...form, invoice: e.target.value })}
+                className="w-full h-11 border border-slate-200 rounded-xl px-3 text-sm"
+              />
+              {!form.permanent && (
+                <div>
+                  <input
+                    type="date"
+                    min={getTodayInput()}
+                    value={form.till_date}
+                    onChange={(e) =>
+                      setForm({ ...form, till_date: normalizeTillDate(e.target.value) })
+                    }
+                    className="w-full h-11 border border-slate-200 rounded-xl px-3 text-sm bg-white"
+                  />
+                  {form.till_date && (
+                    <p className="text-xs font-semibold text-blue-600 mt-1 px-1">
+                      {getDaysLeft(form.till_date) === 0
+                        ? "Expires today"
+                        : `${getDaysLeft(form.till_date)} day${getDaysLeft(form.till_date) === 1 ? "" : "s"} left`}
+                    </p>
+                  )}
+                </div>
+              )}
+              <button
+                onClick={handleEdit}
+                disabled={savingEdit}
+                className={`w-full text-white py-3 rounded-xl font-medium ${savingEdit ? "bg-slate-400" : "bg-[#071d5c]"}`}
+              >
+                {savingEdit ? "..." : t("save")}
               </button>
             </div>
           </div>
