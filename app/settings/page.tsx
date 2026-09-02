@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useTheme } from "@/lib/theme";
 import {
   LayoutDashboard,
   Upload,
