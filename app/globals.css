@@ -493,4 +493,6 @@ html[data-theme="dark"] .dark-settings-menu button.bg-blue-100 {
   background-color: #19345d !important;
   color: #a9ccff !important;
 }
-\n.mobile-van-amount { color: #071d5c !important; }\nhtml[data-theme="dark"] .mobile-van-amount { color: #FBBF24 !important; }\n
+
+.mobile-van-amount { color: #071d5c !important; }
+html[data-theme="dark"] .mobile-van-amount { color: #FBBF24 !important; }
