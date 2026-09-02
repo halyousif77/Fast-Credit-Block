@@ -34,6 +34,7 @@ export default function MobileVanSummaryPage() {
   const [permissions, setPermissions] = useState<Record<string, boolean>>({});
   const [exceptions, setExceptions] = useState<any[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState("");
   const [collectedInvoices, setCollectedInvoices] = useState<string[]>([]);
   const [creditRules, setCreditRules] = useState<any[]>([]);
 
@@ -43,7 +44,9 @@ export default function MobileVanSummaryPage() {
     (async () => {
       const user = await storage.getItem("currentUser");
       if (cancelled) return;
-      setIsLoggedIn(!!user);
+      const username = String(user || "").trim();
+      setCurrentUser(username);
+      setIsLoggedIn(!!username);
 
       const { data: perms } = await supabase.from("van_permissions").select("*");
       if (cancelled) return;
@@ -177,13 +180,16 @@ export default function MobileVanSummaryPage() {
   }, [filteredRows, exceptions, collectedInvoices, creditRules, search, permissions]);
 
   const getStatusLabel = (remaining: number, ex: number) => {
-    if (remaining > 0 && ex > 0) return `${remaining} ${t("remaining")} · Ex`;
+    if (remaining > 0 && ex > 0) return `${remaining} ${t("remainingEx")}`;
     if (remaining > 0) return `${remaining} ${t("remaining")}`;
     if (remaining === 0 && ex > 0) return `Ex · ${t("allCollected")}`;
     return t("allCollected");
   };
 
+  const canChangePermission = isLoggedIn && currentUser.trim().toLowerCase() !== "yasser";
+
   const togglePermission = async (vanCode: string, checked: boolean) => {
+    if (!canChangePermission) return;
     setPermissions((prev) => ({ ...prev, [vanCode]: checked }));
     await supabase
       .from("van_permissions")
@@ -274,7 +280,7 @@ export default function MobileVanSummaryPage() {
                   {t("permission")}
                   <input
                     type="checkbox"
-                    disabled={!isLoggedIn}
+                    disabled={!canChangePermission}
                     checked={unblocked}
                     onChange={(e) => togglePermission(v.vanCode, e.target.checked)}
                     className="w-4 h-4 accent-blue-600 ms-1"
