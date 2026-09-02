@@ -58,7 +58,7 @@ export default function MobileLayout({
     <RegionFilterProvider>
     <div
       dir={dir}
-      className="min-h-screen flex flex-col overflow-x-hidden w-full"
+      className="min-h-screen flex flex-col overflow-x-hidden w-full mobile-shell"
       style={{
         background: "#f4f7fc",
         fontFamily:
@@ -101,8 +101,7 @@ export default function MobileLayout({
               <Link
                 key={tab.href}
                 href={tab.href}
-                className="flex flex-col items-center justify-center gap-1 py-2 text-[10px] px-0.5 min-w-0"
-                style={{ color: active ? NAVY_TO : "#94a3b8" }}
+                className={`flex flex-col items-center justify-center gap-1 py-2 text-[10px] px-0.5 min-w-0 ${active ? "mobile-nav-active" : ""}`}
               >
                 <Icon size={21} strokeWidth={active ? 2.4 : 2} />
                 <span className={`truncate max-w-full ${active ? "font-semibold" : ""}`}>

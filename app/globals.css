@@ -39,83 +39,319 @@ body {
 
 /* Site theme */
 html[data-theme="dark"] {
-  --background: #0f172a;
+  color-scheme: dark;
+  --background: #0b1220;
   --foreground: #e5e7eb;
+  --surface: #111a2b;
+  --surface-2: #162238;
+  --surface-3: #1b2a41;
+  --border: #2b3a52;
+  --border-strong: #3a4b65;
+  --text: #e5e7eb;
+  --text-strong: #f8fafc;
+  --muted: #94a3b8;
+  --green-bg: #123524;
+  --green-text: #86efac;
+  --amber-bg: #3a2d0b;
+  --amber-text: #fde68a;
+  --orange-bg: #3a1f0b;
+  --orange-text: #fdba74;
+  --red-bg: #3a151b;
+  --red-text: #fda4af;
+  --pink-bg: #3a172c;
+  --pink-text: #f9a8d4;
+  --blue-bg: #132b52;
+  --blue-text: #93c5fd;
 }
 
+html[data-theme="dark"],
 html[data-theme="dark"] body,
-html[data-theme="dark"] .bg-slate-100,
-html[data-theme="dark"] .bg-slate-50 {
-  background-color: #0f172a !important;
-  color: #e5e7eb;
+html[data-theme="dark"] main,
+html[data-theme="dark"] .min-h-screen {
+  background-color: var(--background) !important;
+  color: var(--text);
 }
 
+/* Surfaces */
 html[data-theme="dark"] .bg-white {
-  background-color: #172033 !important;
+  background-color: var(--surface) !important;
+}
+html[data-theme="dark"] .bg-slate-50,
+html[data-theme="dark"] .bg-slate-100 {
+  background-color: var(--background) !important;
+}
+html[data-theme="dark"] .bg-slate-800,
+html[data-theme="dark"] .bg-slate-900 {
+  background-color: var(--surface-3) !important;
+}
+html[data-theme="dark"] .hover\\:bg-slate-50:hover,
+html[data-theme="dark"] .hover\\:bg-gray-100:hover,
+html[data-theme="dark"] .hover\\:bg-slate-100:hover {
+  background-color: var(--surface-2) !important;
 }
 
+/* Common page/root inline backgrounds used by the desktop and mobile layouts. */
+html[data-theme="dark"] [style*="#f4f7fc"] {
+  background-color: var(--background) !important;
+}
+
+/* Text: never force normal body text to white on a light-looking surface. */
 html[data-theme="dark"] .text-slate-900,
 html[data-theme="dark"] .text-gray-900,
 html[data-theme="dark"] .text-black {
-  color: #f8fafc !important;
+  color: var(--text-strong) !important;
 }
-
 html[data-theme="dark"] .text-slate-800,
 html[data-theme="dark"] .text-gray-800,
 html[data-theme="dark"] .text-slate-700,
-html[data-theme="dark"] .text-gray-700,
-html[data-theme="dark"] .text-slate-600,
-html[data-theme="dark"] .text-gray-600 {
-  color: #d1d5db !important;
+html[data-theme="dark"] .text-gray-700 {
+  color: #dbe4f0 !important;
 }
-
+html[data-theme="dark"] .text-slate-600,
+html[data-theme="dark"] .text-gray-600,
 html[data-theme="dark"] .text-slate-500,
 html[data-theme="dark"] .text-gray-500,
 html[data-theme="dark"] .text-slate-400,
 html[data-theme="dark"] .text-gray-400 {
-  color: #9ca3af !important;
+  color: var(--muted) !important;
 }
 
+/* Borders */
+html[data-theme="dark"] .border,
 html[data-theme="dark"] .border-slate-100,
 html[data-theme="dark"] .border-slate-200,
+html[data-theme="dark"] .border-slate-300,
 html[data-theme="dark"] .border-gray-100,
 html[data-theme="dark"] .border-gray-200,
 html[data-theme="dark"] .border-gray-300 {
-  border-color: #334155 !important;
+  border-color: var(--border) !important;
+}
+html[data-theme="dark"] .border-t,
+html[data-theme="dark"] .border-b,
+html[data-theme="dark"] .border-l,
+html[data-theme="dark"] .border-r {
+  border-color: var(--border) !important;
 }
 
+/* Form controls */
 html[data-theme="dark"] input,
 html[data-theme="dark"] textarea,
 html[data-theme="dark"] select {
-  background-color: #111827 !important;
-  color: #f8fafc !important;
-  border-color: #475569 !important;
+  background-color: #0f1828 !important;
+  color: var(--text-strong) !important;
+  border-color: var(--border-strong) !important;
 }
-
+html[data-theme="dark"] option {
+  background-color: #0f1828 !important;
+  color: var(--text-strong) !important;
+}
 html[data-theme="dark"] input::placeholder,
 html[data-theme="dark"] textarea::placeholder {
+  color: #8191a8 !important;
+}
+
+/* Semantic status colors — muted backgrounds + readable text for dark mode. */
+html[data-theme="dark"] .bg-green-50,
+html[data-theme="dark"] .bg-green-100,
+html[data-theme="dark"] .bg-green-200 {
+  background-color: var(--green-bg) !important;
+}
+html[data-theme="dark"] .text-green-600,
+html[data-theme="dark"] .text-green-700,
+html[data-theme="dark"] .text-green-800,
+html[data-theme="dark"] .text-green-900 {
+  color: var(--green-text) !important;
+}
+html[data-theme="dark"] .border-green-100,
+html[data-theme="dark"] .border-green-200,
+html[data-theme="dark"] .border-green-300 {
+  border-color: #245b3d !important;
+}
+
+html[data-theme="dark"] .bg-amber-50,
+html[data-theme="dark"] .bg-amber-100,
+html[data-theme="dark"] .bg-amber-200,
+html[data-theme="dark"] .bg-yellow-50,
+html[data-theme="dark"] .bg-yellow-100,
+html[data-theme="dark"] .bg-yellow-200 {
+  background-color: var(--amber-bg) !important;
+}
+html[data-theme="dark"] .text-amber-600,
+html[data-theme="dark"] .text-amber-700,
+html[data-theme="dark"] .text-amber-800,
+html[data-theme="dark"] .text-amber-900,
+html[data-theme="dark"] .text-yellow-600,
+html[data-theme="dark"] .text-yellow-700,
+html[data-theme="dark"] .text-yellow-800,
+html[data-theme="dark"] .text-yellow-900 {
+  color: var(--amber-text) !important;
+}
+html[data-theme="dark"] .border-amber-200,
+html[data-theme="dark"] .border-yellow-200,
+html[data-theme="dark"] .border-yellow-300 {
+  border-color: #6a5515 !important;
+}
+
+html[data-theme="dark"] .bg-orange-50,
+html[data-theme="dark"] .bg-orange-100,
+html[data-theme="dark"] .bg-orange-200 {
+  background-color: var(--orange-bg) !important;
+}
+html[data-theme="dark"] .text-orange-500,
+html[data-theme="dark"] .text-orange-600,
+html[data-theme="dark"] .text-orange-700,
+html[data-theme="dark"] .text-orange-800,
+html[data-theme="dark"] .text-orange-900 {
+  color: var(--orange-text) !important;
+}
+html[data-theme="dark"] .border-orange-100,
+html[data-theme="dark"] .border-orange-200,
+html[data-theme="dark"] .border-orange-300 {
+  border-color: #6b3a17 !important;
+}
+
+html[data-theme="dark"] .bg-red-50,
+html[data-theme="dark"] .bg-red-100,
+html[data-theme="dark"] .bg-red-200 {
+  background-color: var(--red-bg) !important;
+}
+html[data-theme="dark"] .text-red-500,
+html[data-theme="dark"] .text-red-600,
+html[data-theme="dark"] .text-red-700,
+html[data-theme="dark"] .text-red-800,
+html[data-theme="dark"] .text-red-900 {
+  color: var(--red-text) !important;
+}
+html[data-theme="dark"] .border-red-100,
+html[data-theme="dark"] .border-red-200,
+html[data-theme="dark"] .border-red-300 {
+  border-color: #6b2835 !important;
+}
+
+html[data-theme="dark"] .bg-pink-50,
+html[data-theme="dark"] .bg-pink-100,
+html[data-theme="dark"] .bg-pink-200 {
+  background-color: var(--pink-bg) !important;
+}
+html[data-theme="dark"] .text-pink-600,
+html[data-theme="dark"] .text-pink-700,
+html[data-theme="dark"] .text-pink-800,
+html[data-theme="dark"] .text-pink-900 {
+  color: var(--pink-text) !important;
+}
+
+html[data-theme="dark"] .bg-blue-50,
+html[data-theme="dark"] .bg-blue-100,
+html[data-theme="dark"] .bg-blue-200 {
+  background-color: var(--blue-bg) !important;
+}
+html[data-theme="dark"] .text-blue-600,
+html[data-theme="dark"] .text-blue-700,
+html[data-theme="dark"] .text-blue-800 {
+  color: var(--blue-text) !important;
+}
+
+/* Softer shadows on dark surfaces. */
+html[data-theme="dark"] .shadow-sm,
+html[data-theme="dark"] .shadow-md,
+html[data-theme="dark"] .shadow-lg,
+html[data-theme="dark"] .shadow-xl,
+html[data-theme="dark"] .shadow-2xl {
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.28) !important;
+}
+
+/* Keep disabled controls legible. */
+html[data-theme="dark"] .bg-slate-300,
+html[data-theme="dark"] .bg-slate-400 {
+  background-color: #475569 !important;
+  color: #cbd5e1 !important;
+}
+
+/* Tables */
+html[data-theme="dark"] tbody tr.border-b:hover {
+  background-color: var(--surface-2) !important;
+}
+
+/* Mobile bottom navigation */
+html[data-theme="dark"] nav.fixed.bottom-0 {
+  background-color: #0f1828 !important;
+  border-top-color: #2b3a52 !important;
+  box-shadow: 0 -8px 24px rgb(0 0 0 / 0.24) !important;
+}
+html[data-theme="dark"] nav.fixed.bottom-0 a {
   color: #94a3b8 !important;
 }
-
-html[data-theme="dark"] .hover\\:bg-gray-100:hover,
-html[data-theme="dark"] .hover\\:bg-slate-50:hover {
-  background-color: #1e293b !important;
-}
-
-html[data-theme="dark"] .shadow-sm,
-html[data-theme="dark"] .shadow-md {
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25) !important;
-}
-
-html[data-theme="dark"] .bg-blue-50 {
-  background-color: #172554 !important;
-}
-
-html[data-theme="dark"] .text-blue-700,
-html[data-theme="dark"] .text-blue-600 {
+html[data-theme="dark"] nav.fixed.bottom-0 a.mobile-nav-active {
   color: #93c5fd !important;
 }
 
-html[data-theme="dark"] .bg-blue-100 {
-  background-color: #1e3a8a !important;
+/* Additional dark-mode readability tuning */
+html[data-theme="dark"] [class*="bg-[#f4f7fc]"] {
+  background-color: var(--background) !important;
+}
+html[data-theme="dark"] .bg-slate-100 {
+  background-color: var(--surface-2) !important;
+}
+html[data-theme="dark"] .bg-slate-50 {
+  background-color: var(--surface) !important;
+}
+
+html[data-theme="dark"] .bg-orange-500 {
+  background-color: #a65316 !important;
+}
+html[data-theme="dark"] .bg-green-500 {
+  background-color: #167044 !important;
+}
+html[data-theme="dark"] .bg-green-600 {
+  background-color: #17643e !important;
+}
+html[data-theme="dark"] .bg-red-500,
+html[data-theme="dark"] .bg-red-600 {
+  background-color: #8f2638 !important;
+}
+html[data-theme="dark"] .bg-blue-500,
+html[data-theme="dark"] .bg-blue-600 {
+  background-color: #245aa6 !important;
+}
+
+html[data-theme="dark"] .text-green-100 {
+  color: #bbf7d0 !important;
+}
+html[data-theme="dark"] .text-orange-100 {
+  color: #fed7aa !important;
+}
+html[data-theme="dark"] .text-red-100 {
+  color: #fecdd3 !important;
+}
+html[data-theme="dark"] .text-blue-100 {
+  color: #bfdbfe !important;
+}
+html[data-theme="dark"] .text-purple-100 {
+  color: #e9d5ff !important;
+}
+
+/* Table body text should stay comfortable and distinct from the surface. */
+html[data-theme="dark"] table tbody,
+html[data-theme="dark"] table tbody td {
+  color: #dbe4f0;
+}
+
+/* Muted table row colors used by status tables. */
+html[data-theme="dark"] tr.bg-green-100 td,
+html[data-theme="dark"] tr.bg-yellow-50 td,
+html[data-theme="dark"] tr.bg-red-50 td {
+  color: #e2e8f0;
+}
+
+/* Modal surfaces and dropdowns */
+html[data-theme="dark"] .bg-white.rounded-xl,
+html[data-theme="dark"] .bg-white.rounded-2xl,
+html[data-theme="dark"] .bg-white.rounded-3xl {
+  background-color: var(--surface) !important;
+}
+
+/* Mobile shell and page content always sit on the dark canvas. */
+html[data-theme="dark"] .mobile-shell,
+html[data-theme="dark"] .mobile-shell main {
+  background-color: var(--background) !important;
 }
