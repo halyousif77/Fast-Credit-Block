@@ -265,7 +265,7 @@ setSelectedVans(updatedFilters.vans);
       {showFilters && (
         <div className="fixed top-16 right-4 z-50 w-80 rounded-xl border bg-white p-4 shadow-xl">
           <div className="mb-3 text-lg font-semibold">
-            Saudi
+            {t("saudi")}
           </div>
 
           <div className="max-h-[70vh] overflow-y-auto">
@@ -577,7 +577,7 @@ setSelectedVans(updatedFilters.vans);
       setSelectedVans([]);
     }}
   >
-    Clear
+    {t("clearAction")}
   </button>
 
   <button
@@ -614,7 +614,7 @@ setShowFilters(false);
 window.location.reload();
     }}
   >
-    Apply
+    {t("apply")}
   </button>
   
 </div>

@@ -765,7 +765,7 @@ if (!hasAccess) {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <h1 className="text-2xl font-bold text-red-600">
-        You Dont Have Permission To Enter This Page
+        {t("permissionDeniedPage")}
       </h1>
     </div>
   );
@@ -900,7 +900,7 @@ setIsLoggedIn(false);
 }}
     >
       <LogOut size={18} />
-      Logout
+      {t("logout")}
     </div>
 
   ) : (
@@ -910,7 +910,7 @@ setIsLoggedIn(false);
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      Login
+      {t("login")}
     </div>
 
   )}
@@ -923,7 +923,7 @@ setIsLoggedIn(false);
 
       <div className="bg-white rounded-xl border p-5 mb-6">
         <h1 className="text-3xl font-bold">
-          Exceptions Management
+          {t("exceptionsManagement")}
         </h1>
       </div>
 
@@ -937,7 +937,7 @@ setIsLoggedIn(false);
 
    
     <h3 className="font-bold text-lg mb-4">
-      Add Multiple Exceptions
+      {t("addMultipleExceptions")}
     </h3>
 
     <textarea
@@ -960,7 +960,7 @@ P1316600015512`}
           setIsPermanent(e.target.checked)
         }
       />
-      Legal
+      {t("legal")}
     </label>
 
 {!isPermanent && (
@@ -1255,11 +1255,11 @@ await supabase
   <div className="flex justify-between items-center mb-6">
 
     <h3 className="font-bold text-lg">
-      Recent Activity
+      {t("recentActivity")}
     </h3>
 
     <span className="text-xs text-slate-400">
-      Last Actions
+      {t("lastActions")}
     </span>
 
   </div>
@@ -1269,7 +1269,7 @@ await supabase
   <div className="border border-green-200 bg-green-50 rounded-xl p-4">
 
     <div className="text-green-700 font-semibold">
-      Added Exceptions
+      {t("addedExceptions")}
     </div>
 
     <div className="text-3xl font-bold mt-2">
@@ -1277,14 +1277,14 @@ await supabase
     </div>
 
     <div className="text-sm text-slate-500">
-      Total Records    </div>
+      {t("totalRecords")}    </div>
 
   </div>
 
   <div className="border border-amber-200 bg-amber-50 rounded-xl p-4">
 
     <div className="text-amber-700 font-semibold">
-      Legal Exceptions
+      {t("legalExceptions")}
     </div>
 
     <div className="text-3xl font-bold mt-2">
@@ -1292,7 +1292,7 @@ await supabase
     </div>
 
     <div className="text-sm text-slate-500">
-      Total Records
+      {t("totalRecords")}
     </div>
 
   </div>
@@ -1308,7 +1308,7 @@ await supabase
   <div className="flex justify-between items-center mb-4">
 
   <h3 className="font-bold text-xl">
-    Current Exceptions
+    {t("currentExceptions")}
   </h3>
 
   <input
@@ -1401,7 +1401,7 @@ await supabase
           <td className="p-3">
   {item.permanent ? (
     <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
-      Legal
+      {t("legal")}
     </span>
   ) : (
     daysLeft
@@ -1418,7 +1418,7 @@ await supabase
           onClick={() => openEdit(item)}
         >
           <Pencil size={13} />
-          Edit
+          {t("edit")}
         </button>
 
         <button
@@ -1512,7 +1512,7 @@ await supabase
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Invoice #
+                  {t("invoiceNo")}
                 </label>
                 <input
                   type="text"
@@ -1526,7 +1526,7 @@ await supabase
               {!editPermanent && (
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Till Date
+                    {t("tillDateLabel")}
                   </label>
                   <input
                     type="date"
@@ -1554,7 +1554,7 @@ await supabase
                   disabled={isSavingEdit}
                   className="flex-1 border border-slate-300 text-slate-700 px-4 py-3 rounded-lg hover:bg-slate-50 disabled:opacity-50"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   type="button"
@@ -1577,7 +1577,7 @@ await supabase
           <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
             <h2 className="text-3xl font-bold text-slate-800 mb-6">
-              Welcome Back
+              {t("welcomeBack")}
             </h2>
 
             <input
@@ -1637,7 +1637,7 @@ await addLog(
   setShowLoginModal(false);
 
 }}            >
-              Login
+              {t("login")}
             </button>
         <button
           className="w-full mt-3 border py-3 rounded-xl"
@@ -1645,7 +1645,7 @@ await addLog(
             setShowLoginModal(false)
           }
         >
-          Cancel
+          {t("cancel")}
         </button>
           </div>
 
@@ -1673,11 +1673,11 @@ await addLog(
   <div>
 
     <h2 className="text-2xl font-bold">
-      Import Files
+      {t("importFiles")}
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      Upload and process system files
+      {t("importFilesDescription")}
     </p>
 
   </div>
@@ -1723,7 +1723,7 @@ await addLog(
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        Collected Invoices File
+        {t("collectedInvoicesFile")}
       </div>
 
     </div>
@@ -1785,7 +1785,7 @@ await addLog(
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        Credit Block File
+        {t("creditBlockFile")}
       </div>
 
     </div>

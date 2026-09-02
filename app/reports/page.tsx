@@ -823,7 +823,7 @@ return (
       }}
     >
       <LogOut size={18} />
-      Logout
+      {t("logout")}
     </div>
 
   ) : (
@@ -833,7 +833,7 @@ return (
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      Login
+      {t("login")}
     </div>
 
   )}
@@ -844,7 +844,7 @@ return (
   <main className="flex-1 p-6">
 
       <h1 className="text-3xl font-bold mb-6">
-        Reports
+        {t("reports")}
       </h1>
     {missingLoaded && (
   <div
@@ -862,7 +862,7 @@ return (
     <div className="flex justify-between items-center mb-4">
 
       <h2 className="text-xl font-bold text-amber-700">
-        🚨 Disappeared Invoices
+        🚨 {t("reportsDisappearedInvoices")}
       </h2>
 
       <span
@@ -887,23 +887,23 @@ return (
       <tr className="bg-amber-600 text-white">
 
 <th className="w-[110px] p-2 text-left">
-  Organization Code
+  {t("organizationCode")}
 </th>
 
 <th className="w-[200px] p-2 text-left">
-  Organization Name
+  {t("organizationName")}
 </th>
 
 <th className="w-[140px] p-2 text-left">
-  Invoice No
+  {t("invoiceNo")}
 </th>
 
 <th className="w-[100px] p-2 text-left">
-  First Seen
+  {t("firstSeen")}
 </th>
 
         <th className="w-[100px] p-2 text-left">
-          Missing From
+          {t("missingFrom")}
         </th>
 
       </tr>
@@ -921,7 +921,7 @@ return (
         text-slate-500
       "
     >
-      No disappeared invoices found
+      {t("noDisappearedInvoices")}
     </td>
   </tr>
 
@@ -1001,7 +1001,7 @@ return (
             setSelectedTab("credit")
           }
         >
-          Credit File
+          {t("creditFile")}
         </button>
 
         {collections.map(
@@ -1129,11 +1129,11 @@ return (
       <tr className="bg-slate-800 text-white">
 
         <th className="p-3">
-          Invoice
+          {t("invoice")}
         </th>
 
         <th className="p-3">
-          Uploaded By
+          {t("uploadedBy")}
         </th>
 
       </tr>
@@ -1180,7 +1180,7 @@ return (
       <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
         <h2 className="text-3xl font-bold text-slate-800 mb-6">
-          Welcome Back
+          {t("welcomeBack")}
         </h2>
 
         <input
@@ -1241,7 +1241,7 @@ setPassword("");
 
 }}
         >
-          Login
+          {t("login")}
         </button>
 
         <button
@@ -1250,7 +1250,7 @@ setPassword("");
             setShowLoginModal(false)
           }
         >
-          Cancel
+          {t("cancel")}
         </button>
 
       </div>
@@ -1279,11 +1279,11 @@ setPassword("");
   <div>
 
     <h2 className="text-2xl font-bold">
-      Import Files
+      {t("importFiles")}
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      Upload and process system files
+      {t("importFilesDescription")}
     </p>
 
   </div>
@@ -1329,7 +1329,7 @@ setPassword("");
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        Collected Invoices File
+        {t("collectedInvoicesFile")}
       </div>
 
     </div>
@@ -1391,7 +1391,7 @@ setPassword("");
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        Credit Block File
+        {t("creditBlockFile")}
       </div>
 
     </div>

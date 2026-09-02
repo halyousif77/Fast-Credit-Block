@@ -541,7 +541,7 @@ useEffect(() => {
 
         return (
           <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
-            IMPORT CREDIT
+            {t("importCreditLog")}
           </span>
         );
 
@@ -549,7 +549,7 @@ useEffect(() => {
 
         return (
           <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
-            IMPORT COLLECTION
+            {t("importCollectionLog")}
           </span>
         );
 
@@ -557,7 +557,7 @@ useEffect(() => {
 
         return (
           <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-semibold">
-            ADD EXCEPTION
+            {t("addExceptionLog")}
           </span>
         );
 
@@ -565,7 +565,7 @@ useEffect(() => {
 
         return (
           <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
-            DELETE EXCEPTION
+            {t("deleteExceptionLog")}
           </span>
         );
 
@@ -573,7 +573,7 @@ useEffect(() => {
 
         return (
           <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">
-            LOGIN
+            {t("loginLog")}
           </span>
         );
 
@@ -581,7 +581,7 @@ useEffect(() => {
 
         return (
           <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-xs font-semibold">
-            LOGOUT
+            {t("logoutLog")}
           </span>
         );
 
@@ -733,7 +733,7 @@ return (
       }}
     >
       <LogOut size={18} />
-      Logout
+      {t("logout")}
     </div>
 
   ) : (
@@ -743,7 +743,7 @@ return (
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      Login
+      {t("login")}
     </div>
 
   )}
@@ -758,11 +758,11 @@ return (
 
         <h1 className="text-3xl font-bold text-[#071d5c] flex items-center gap-2 dark-logs-title">
           <Activity size={28} />
-          Activity Logs
+          {t("activityLogs")}
         </h1>
 
         <p className="text-slate-500 mt-2">
-          Complete audit history of user actions inside the system.
+          {t("activityLogsDescription")}
         </p>
 
       </div>
@@ -772,7 +772,7 @@ return (
         <div className="bg-white border rounded-xl p-5">
 
           <div className="text-slate-500">
-            Total Activities
+            {t("totalActivities")}
           </div>
 
           <div className="text-4xl font-bold mt-3 text-[#071d5c] dark-logs-total">
@@ -784,7 +784,7 @@ return (
         <div className="bg-white border rounded-xl p-5">
 
           <div className="text-slate-500">
-            Today
+            {t("today")}
           </div>
 
           <div className="text-4xl font-bold mt-3 text-green-600">
@@ -796,7 +796,7 @@ return (
         <div className="bg-white border rounded-xl p-5">
 
           <div className="text-slate-500">
-            Users
+            {t("users")}
           </div>
 
           <div className="text-4xl font-bold mt-3 text-purple-600">
@@ -808,7 +808,7 @@ return (
         <div className="bg-white border rounded-xl p-5">
 
           <div className="text-slate-500">
-            Imports
+            {t("imports")}
           </div>
 
           <div className="text-4xl font-bold mt-3 text-blue-600">
@@ -833,7 +833,7 @@ return (
       className="border rounded-lg px-4 py-2"
     >
       <option value="">
-        All Users
+        {t("allUsers")}
       </option>
 
       {users.map(user => (
@@ -859,7 +859,7 @@ return (
       className="border rounded-lg px-4 py-2"
     >
       <option value="">
-        All Actions
+        {t("allActions")}
       </option>
 
       {actions.map(action => (
@@ -894,7 +894,7 @@ return (
       }}
       className="px-4 py-2 bg-slate-200 rounded-lg hover:bg-slate-300 dark-logs-reset"
     >
-      Reset
+      {t("reset")}
     </button>
 
   </div>
@@ -911,19 +911,19 @@ return (
             <tr className="bg-[#0b2668] text-white">
 
               <th className="p-4 text-left">
-                Date & Time
+                {t("dateTime")}
               </th>
 
               <th className="p-4 text-left">
-                User
+                {t("user")}
               </th>
 
               <th className="p-4 text-left">
-                Action
+                {t("action")}
               </th>
 
               <th className="p-4 text-left">
-                Details
+                {t("details")}
               </th>
 
             </tr>
@@ -973,7 +973,7 @@ return (
                   colSpan={4}
                   className="p-8 text-center text-slate-500"
                 >
-                  No logs found
+                  {t("noLogsFound")}
                 </td>
 
               </tr>
@@ -998,11 +998,11 @@ return (
       <div className="text-center mb-6">
 
         <h2 className="text-3xl font-bold text-slate-800">
-          Welcome Back
+          {t("welcomeBack")}
         </h2>
 
         <p className="text-slate-500 mt-2">
-          Sign in to access management features
+          {t("signInToAccess")}
         </p>
 
       </div>
@@ -1068,14 +1068,14 @@ return (
 
         }}
       >
-        Login
+        {t("login")}
       </button>
 
       <button
         className="w-full mt-3 border py-3 rounded-xl"
         onClick={() => setShowLoginModal(false)}
       >
-        Cancel
+        {t("cancel")}
       </button>
 
     </div>
@@ -1104,11 +1104,11 @@ return (
   <div>
 
     <h2 className="text-2xl font-bold">
-      Import Files
+      {t("importFiles")}
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      Upload and process system files
+      {t("importFilesDescription")}
     </p>
 
   </div>
@@ -1154,7 +1154,7 @@ return (
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        Collected Invoices File
+        {t("collectedInvoicesFile")}
       </div>
 
     </div>
@@ -1216,7 +1216,7 @@ return (
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        Credit Block File
+        {t("creditBlockFile")}
       </div>
 
     </div>

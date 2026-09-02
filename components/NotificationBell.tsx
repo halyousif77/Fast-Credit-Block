@@ -307,7 +307,7 @@ useEffect(() => {
         <div
   className="
     fixed
-    top-16
+    top-[64px]
     w-[min(420px,calc(100vw-2rem))]
     max-w-[calc(100vw-2rem)]
     max-h-[calc(100vh-5rem)]
@@ -319,7 +319,7 @@ useEffect(() => {
     z-[9999]
   "
   style={{
-    [dir === "rtl" ? "right" : "left"]: "1rem",
+    [dir === "rtl" ? "left" : "right"]: "1rem",
   }}
 >
           <div className="p-4 border-b">

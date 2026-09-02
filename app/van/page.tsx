@@ -637,7 +637,7 @@ text-white
 
 
 <th className="p-3">
-Status
+{t("status")}
 </th>
 
 <th className="p-3">
@@ -645,7 +645,7 @@ ID
 </th>
 
 <th className="p-3">
-Van Code
+{t("vanCode")}
 </th>
 
 </tr>

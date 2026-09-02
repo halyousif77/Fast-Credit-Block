@@ -75,7 +75,7 @@ export default function MobileLayout({
       >
         <div className="h-14 flex items-center justify-between px-4">
           <span className="font-bold text-[17px] tracking-tight">
-            Credit Dashboard
+            {t("creditDashboard")}
           </span>
           <span className="text-[11px] px-2 py-1 rounded-full bg-white/15">
             {isLoggedIn ? `${t("loggedInAs")} ${loggedInName}` : t("notLoggedIn")}

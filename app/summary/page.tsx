@@ -782,23 +782,23 @@ const filteredData = data.filter((row) => {
     remaining > 0 &&
     ex > 0
   ) {
-    return `${remaining} Remaining , Ex`;
+    return `${remaining} ${t("remaining")} , ${t("legal")}`;
   }
 
   if (
     remaining > 0
   ) {
-    return `${remaining} Remaining`;
+    return `${remaining} ${t("remaining")}`;
   }
 
   if (
     remaining === 0 &&
     ex > 0
   ) {
-    return "Ex & All Collected";
+    return t("exAndAllCollected");
   }
 
-  return "All Collected";
+  return t("allCollected");
 
 };
 const regionSummaryData = data.filter((row) => {
@@ -1197,7 +1197,7 @@ onClick={async () => {
 }}
     >
       <LogOut size={18} />
-      Logout
+      {t("logout")}
     </div>
 
   ) : (
@@ -1207,7 +1207,7 @@ onClick={async () => {
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      Login
+      {t("login")}
     </div>
 
   )}
@@ -1218,7 +1218,7 @@ onClick={async () => {
       <main className="flex-1 p-6">
 
         <h1 className="text-3xl font-bold mb-6">
-          Summary
+          {t("summary")}
         </h1>
 <div className="grid grid-cols-4 gap-4 mb-6">
 
@@ -1229,7 +1229,7 @@ onClick={async () => {
 
       <div>
         <p className="text-sm text-slate-500">
-          Total Vans
+          {t("vansCount")}
         </p>
 
         <h2 className="text-3xl font-bold mt-2">
@@ -1254,7 +1254,7 @@ onClick={async () => {
 
       <div>
         <p className="text-sm text-pink-600">
-          Remaining Invoices
+          {t("remainingInvoices")}
         </p>
 
         <h2 className="text-3xl font-bold mt-2 text-pink-600">
@@ -1287,7 +1287,7 @@ onClick={async () => {
 
       <div>
         <p className="text-sm text-orange-600 dark-summary-orange">
-          Exception Invoices
+          {t("exceptionInvoices")}
         </p>
 
         <h2 className="text-3xl font-bold mt-2 text-orange-600 dark-summary-orange">
@@ -1320,7 +1320,7 @@ onClick={async () => {
 
       <div>
         <p className="text-sm text-green-600 dark-summary-green">
-          All Collected Vans
+          {t("allCollectedVans")}
         </p>
 
         <h2 className="text-3xl font-bold mt-2 text-green-600 dark-summary-green">
@@ -1367,17 +1367,17 @@ onClick={async () => {
       <div>
 
         <h2 className="text-xl font-bold text-slate-800">
-          Van Performance
+          {t("vanPerformance")}
         </h2>
 
        <p className="text-xs text-slate-500 mt-1">
-          Credit block status by van
+          {t("creditBlockStatusByVan")}
         </p>
 
       </div>
 
       <div className="text-sm text-slate-500">
-        {vans.length} Vans
+        {vans.length} {t("vans")}
       </div>
 
     </div>
@@ -1392,7 +1392,7 @@ onClick={async () => {
 <tr className="bg-[#071d5c] text-white border-b border-blue-900">
 
 <th className="px-4 py-3 text-center text-sm font-semibold border-r border-blue-900">
-  Status
+  {t("status")}
 </th>
 
 <th className="px-4 py-3 text-center text-sm font-semibold border-r border-blue-900">
@@ -1400,11 +1400,11 @@ onClick={async () => {
 </th>
 
 <th className="px-4 py-3 text-center text-sm font-semibold border-r border-blue-900">
-  Van Code
+  {t("vanCode")}
 </th>
 
 <th className="px-4 py-3 text-center text-sm font-semibold">
-  Permission
+  {t("permission")}
 </th>
 
 </tr>
@@ -1603,11 +1603,11 @@ onChange={async (e) => {
 <div className="flex-1 bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col">    <div className="px-5 py-4 border-b border-slate-100">
 
     <h2 className="text-lg font-bold text-slate-800">
-      Region Summary
+      {t("regionSummary")}
     </h2>
 
     <p className="text-xs text-slate-500 mt-1">
-      Outstanding invoices by region
+      {t("outstandingInvoicesByRegion")}
     </p>
 
   </div>
@@ -1695,7 +1695,7 @@ onChange={async (e) => {
   <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
       <h2 className="text-3xl font-bold text-slate-800 mb-6">
-  Welcome Back
+  {t("welcomeBack")}
 </h2>
       <input
         className="w-full border p-3 rounded-xl mb-4"
@@ -1754,7 +1754,7 @@ setUsername("");
 setPassword("");
 }}
         >
-          Login
+          {t("login")}
         </button>
         <button
           className="w-full mt-3 border py-3 rounded-xl"
@@ -1762,7 +1762,7 @@ setPassword("");
             setShowLoginModal(false)
           }
         >
-          Cancel
+          {t("cancel")}
         </button>
       </div>
 
@@ -1791,11 +1791,11 @@ setPassword("");
   <div>
 
     <h2 className="text-2xl font-bold">
-      Import Files
+      {t("importFiles")}
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      Upload and process system files
+      {t("importFilesDescription")}
     </p>
 
   </div>
@@ -1841,7 +1841,7 @@ setPassword("");
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        Collected Invoices File
+        {t("collectedInvoicesFile")}
       </div>
 
     </div>
@@ -1903,7 +1903,7 @@ setPassword("");
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        Credit Block File
+        {t("creditBlockFile")}
       </div>
 
     </div>

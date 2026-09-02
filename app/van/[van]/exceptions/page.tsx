@@ -278,7 +278,7 @@ const temporaryCount = loaded
 
                     {item.permanent ? (
                       <span className="text-red-600 font-semibold">
-                        Legal
+                        {t("legal")}
                       </span>
                     ) : (
                       <span className="text-orange-600 font-semibold">
@@ -300,7 +300,7 @@ const temporaryCount = loaded
 
 {exceptions.length === 0 && (
   <div className="bg-white p-6 rounded-xl text-center text-slate-500">
-    No Exceptions Found
+    {t("noExceptionsFound")}
   </div>
 )}
     </div>

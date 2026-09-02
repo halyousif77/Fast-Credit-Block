@@ -777,7 +777,7 @@ const requestUnblock = async () => {
 
         <div className="bg-white p-6 rounded-xl text-center text-slate-500">
 
-          No block invoices found
+          {t("noBlockInvoicesFound")}
 
         </div>
 

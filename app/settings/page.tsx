@@ -787,7 +787,7 @@ useEffect(() => {
       }}
     >
       <LogOut size={18} />
-      Logout
+      {t("logout")}
     </div>
 
   ) : (
@@ -797,7 +797,7 @@ useEffect(() => {
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      Login
+      {t("login")}
     </div>
 
   )}
@@ -822,7 +822,7 @@ useEffect(() => {
       : "hover:bg-gray-100"
   }`}
 >
-  🔔 Notifications
+  🔔 {t("notifications")}
 </button>
             <button
               onClick={() => setActiveTab("security")}
@@ -832,7 +832,7 @@ useEffect(() => {
                   : "hover:bg-gray-100"
               }`}
             >
-              🔒 Security
+              🔒 {t("security")}
             </button>
             <button
               onClick={() => setActiveTab("theme")}
@@ -853,7 +853,7 @@ useEffect(() => {
       : "hover:bg-gray-100"
   }`}
 >
-  🚫 Credit Block Rules
+  🚫 {t("creditBlockRules")}
 </button>
 
           </div>
@@ -863,18 +863,18 @@ useEffect(() => {
             {activeTab === "dashboardFilters" && (
   <>
     <h2 className="text-2xl font-semibold mb-2">
-      Dashboard Filters
+      {t("dashboardFilters")}
     </h2>
 
     <p className="text-gray-500 mb-8">
-      Configure which invoices appear on the dashboard.
+      {t("dashboardFiltersDescription")}
     </p>
 
     <div className="space-y-8">
 
       <div>
         <h3 className="font-semibold mb-3">
-          Invoice Status
+          {t("invoiceStatus")}
         </h3>
 
         <div className="space-y-3">
@@ -887,7 +887,7 @@ useEffect(() => {
                 setShowOverdue(e.target.checked)
               }
             />
-            Overdue
+            {t("overdue")}
           </label>
 
           <label className="flex gap-3 items-center">
@@ -898,7 +898,7 @@ useEffect(() => {
                 setShowDue(e.target.checked)
               }
             />
-            Due
+            {t("due")}
           </label>
 
           <label className="flex gap-3 items-center">
@@ -909,7 +909,7 @@ useEffect(() => {
                 setShowLegal(e.target.checked)
               }
             />
-            Legal
+            {t("legal")}
           </label>
 
         </div>
@@ -919,7 +919,7 @@ useEffect(() => {
 
       <div>
         <h3 className="font-semibold mb-3">
-          Invoice Type
+          {t("invoiceType")}
         </h3>
 
         <div className="space-y-3">
@@ -934,7 +934,7 @@ useEffect(() => {
                 )
               }
             />
-            Normal Invoices
+            {t("normalInvoices")}
           </label>
 
           <label className="flex gap-3 items-center">
@@ -947,7 +947,7 @@ useEffect(() => {
                 )
               }
             />
-            Exception Invoices
+            {t("exceptionInvoices")}
           </label>
 
         </div>
@@ -957,7 +957,7 @@ useEffect(() => {
 
       <div>
         <h3 className="font-semibold mb-3">
-          Invoice Visibility
+          {t("invoiceVisibility")}
         </h3>
 
         <div className="space-y-3">
@@ -972,7 +972,7 @@ useEffect(() => {
                 )
               }
             />
-            Hide Fully Collected Invoices
+            {t("hideFullyCollectedInvoices")}
           </label>
 
           <label className="flex gap-3 items-center">
@@ -985,7 +985,7 @@ useEffect(() => {
                 )
               }
             />
-            Hide User Block
+            {t("hideUserBlock")}
           </label>
 
         </div>
@@ -1068,11 +1068,11 @@ useEffect(() => {
             {activeTab === "notifications" && (
               <>
                 <h2 className="text-2xl font-semibold mb-2">
-                  Notifications
+                  {t("notifications")}
                 </h2>
 
                 <p className="text-gray-500 mb-6">
-                  Manage your notification preferences
+                  {t("manageNotificationPreferences")}
                 </p>
 
                 <div className="space-y-4">
@@ -1084,7 +1084,7 @@ useEffect(() => {
     setInvoiceAlert(e.target.checked)
   }
 />
-                    Invoice Disappeared Alerts
+                    {t("invoiceDisappearedAlerts")}
                   </label>
 <label className="flex items-center gap-3">
   <input
@@ -1096,7 +1096,7 @@ useEffect(() => {
       )
     }
   />
-  Exception Expired Alerts
+  {t("exceptionExpiredAlerts")}
 </label>
                   <label className="flex items-center gap-3">
                     <input
@@ -1106,7 +1106,7 @@ useEffect(() => {
     setExceptionAlert(e.target.checked)
   }
 />
-                    Exception Add Alerts
+                    {t("exceptionAddAlerts")}
                   </label>
 
 <label className="flex items-center gap-3">
@@ -1117,7 +1117,7 @@ useEffect(() => {
       setExceptionDeleteAlert(e.target.checked)
     }
   />
-  Exception Delete Alerts
+  {t("exceptionDeleteAlerts")}
 </label>
                   <label className="flex items-center gap-3">
                     <input
@@ -1127,7 +1127,7 @@ useEffect(() => {
     setCreditImportAlert(e.target.checked)
   }
 />
-                    Credit Import Alerts
+                    {t("creditImportAlerts")}
                   </label>
 
                   <label className="flex items-center gap-3">
@@ -1138,7 +1138,7 @@ useEffect(() => {
     setCollectionImportAlert(e.target.checked)
   }
 />
-                    Collection Import Alerts
+                    {t("collectionImportAlerts")}
                   </label>
                 </div>
 
@@ -1244,16 +1244,16 @@ collection_disabled_at:
             {activeTab === "security" && (
               <>
                 <h2 className="text-2xl font-semibold mb-2">
-                  Security
+                  {t("security")}
                 </h2>
 
                 <p className="text-gray-500 mb-6">
-                  Manage your security settings
+                  {t("manageSecuritySettings")}
                 </p>
 
 <div className="mb-8">
   <h3 className="text-lg font-semibold mb-4">
-    Profile Information
+    {t("profileInformation")}
   </h3>
 
   <div className="space-y-4">
@@ -1340,7 +1340,7 @@ collection_disabled_at:
   );
 }}
   >
-    Save Profile
+    {t("saveProfile")}
   </button>
 </div>
 
@@ -1460,11 +1460,11 @@ collection_disabled_at:
 {activeTab === "creditRules" && (
   <>
     <h2 className="text-2xl font-semibold mb-2">
-      Credit Block Rules
+      {t("creditBlockRules")}
     </h2>
 
     <p className="text-gray-500 mb-6">
-      Configure invoice block thresholds.
+      {t("configureBlockThresholds")}
     </p>
 
     {loadingRules ? (
@@ -1619,7 +1619,7 @@ if (isSavingRules || isResettingRules)
     <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
       <h2 className="text-3xl font-bold text-slate-800 mb-6">
-        Welcome Back
+        {t("welcomeBack")}
       </h2>
 
       <input
@@ -1676,7 +1676,7 @@ if (isSavingRules || isResettingRules)
   
   }}
 >
-  Login
+  {t("login")}
 </button>
 
       <button
@@ -1685,7 +1685,7 @@ if (isSavingRules || isResettingRules)
           setShowLoginModal(false)
         }
       >
-        Cancel
+        {t("cancel")}
       </button>
 
     </div>
@@ -1714,11 +1714,11 @@ if (isSavingRules || isResettingRules)
   <div>
 
     <h2 className="text-2xl font-bold">
-      Import Files
+      {t("importFiles")}
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      Upload and process system files
+      {t("importFilesDescription")}
     </p>
 
   </div>
@@ -1764,7 +1764,7 @@ if (isSavingRules || isResettingRules)
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        Collected Invoices File
+        {t("collectedInvoicesFile")}
       </div>
 
     </div>
@@ -1826,7 +1826,7 @@ if (isSavingRules || isResettingRules)
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        Credit Block File
+        {t("creditBlockFile")}
       </div>
 
     </div>

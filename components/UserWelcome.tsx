@@ -36,11 +36,11 @@ export default function UserWelcome() {
 
         <div>
           <p className="text-xs text-blue-100">
-            Not Signed In
+            {t("notSignedIn")}
           </p>
 
           <p className="font-semibold">
-            Guest User
+            {t("guestUser")}
           </p>
         </div>
       </div>
@@ -55,7 +55,7 @@ export default function UserWelcome() {
 
       <div>
         <p className="text-xs text-blue-100">
-          Welcome Back
+          {t("welcomeBack")}
         </p>
 
         <p className="font-semibold text-base">

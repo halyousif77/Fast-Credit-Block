@@ -747,12 +747,12 @@ setPassword("");
   {isLoggedIn ? (
     <>
       <LogOut size={18} />
-      Logout
+      {t("logout")}
     </>
   ) : (
     <>
       <Users size={18} />
-      Login
+      {t("login")}
     </>
   )}
 </div>
@@ -762,7 +762,7 @@ setPassword("");
   onClick={() => setShowLoginModal(true)}
 >
   <Users size={18} />
-  Login
+  {t("login")}
 </div>
   )}
 
@@ -775,7 +775,7 @@ setPassword("");
       <div className="flex justify-between mb-6">
 
         <h1 className="text-3xl font-bold">
-          Users
+          {t("users")}
         </h1>
 
         {isLoggedIn && (
@@ -823,7 +823,7 @@ setPassword("");
           className="border rounded p-2"
         >
           <option value="">
-            Region
+            {t("region")}
           </option>
 
           {[...new Set(
@@ -850,7 +850,7 @@ setPassword("");
           className="border rounded p-2"
         >
           <option value="">
-            City
+            {t("city")}
           </option>
 
           {[...new Set(
@@ -877,7 +877,7 @@ setPassword("");
           className="border rounded p-2"
         >
           <option value="">
-            Organization Code
+            {t("organizationCode")}
           </option>
 
           {[...new Set(
@@ -905,7 +905,7 @@ setPassword("");
           className="border rounded p-2"
         >
           <option value="">
-            Van Sub Inventory
+            {t("vanSubInventory")}
           </option>
 
           {[...new Set(
@@ -934,35 +934,35 @@ setPassword("");
             <tr className="bg-slate-800 text-white">
 
               <th className="p-3">
-                Region
+                {t("region")}
               </th>
 
               <th className="p-3">
-                City
+                {t("city")}
               </th>
 
               <th className="p-3">
-                Organization Code
+                {t("organizationCode")}
               </th>
 
               <th className="p-3">
-                User Code
+                {t("userCode")}
               </th>
 
               <th className="p-3">
-                Organization Name
+                {t("organizationName")}
               </th>
 
               <th className="p-3">
-                Van Sub Inventory
+                {t("vanSubInventory")}
               </th>
 
               <th className="p-3">
-                Contact
+                {t("organizationContact")}
               </th>
 
               <th className="p-3">
-                Actions
+                {t("actions")}
               </th>
 
             </tr>
@@ -1177,7 +1177,7 @@ setPassword("");
       <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
         <h2 className="text-3xl font-bold text-center mb-6">
-          Login
+          {t("login")}
         </h2>
 
         <input
@@ -1235,14 +1235,14 @@ setUsername("");
 setPassword("");
           }}
         >
-          Login
+          {t("login")}
         </button>
 
         <button
           className="w-full mt-3 border py-3 rounded-xl"
           onClick={() => setShowLoginModal(false)}
         >
-          Cancel
+          {t("cancel")}
         </button>
 
       </div>
@@ -1270,11 +1270,11 @@ setPassword("");
   <div>
 
     <h2 className="text-2xl font-bold">
-      Import Files
+      {t("importFiles")}
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      Upload and process system files
+      {t("importFilesDescription")}
     </p>
 
   </div>
@@ -1320,7 +1320,7 @@ setPassword("");
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        Collected Invoices File
+        {t("collectedInvoicesFile")}
       </div>
 
     </div>
@@ -1382,7 +1382,7 @@ setPassword("");
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        Credit Block File
+        {t("creditBlockFile")}
       </div>
 
     </div>

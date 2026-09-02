@@ -113,7 +113,7 @@ export default function WhatsAppReport({
             fontWeight: 700,
           }}
         >
-          CREDIT BLOCK REPORT
+          {t("creditBlockReportTitle")}
         </span>
       </div>
 
@@ -197,7 +197,7 @@ export default function WhatsAppReport({
       fontSize: "10px",
     }}
   >
-    Date
+    {t("date")}
   </div>
 
   <div
@@ -312,7 +312,7 @@ export default function WhatsAppReport({
         </span>
 
         <span>
-          Page 1 of 1
+          {t("pageOneOfOne")}
         </span>
       </div>
     </div>
