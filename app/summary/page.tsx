@@ -1424,6 +1424,7 @@ onClick={async () => {
       <tr
   key={van}
   className={`
+  dark-summary-row
   transition-all
   duration-200
   ${

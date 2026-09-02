@@ -989,7 +989,7 @@ return (
       <div className="flex gap-2 mb-6">
 
         <button
-          className={`px-4 py-2 rounded ${
+          className={`dark-report-tab px-4 py-2 rounded ${
             selectedTab === "credit"
               ? "bg-blue-600 text-white"
               : "bg-slate-200"
@@ -1006,7 +1006,7 @@ return (
 
             <button
               key={item.id}
-              className={`px-4 py-2 rounded ${
+              className={`dark-report-tab px-4 py-2 rounded ${
                 selectedTab ===
                 String(item.id)
                   ? "bg-blue-600 text-white"

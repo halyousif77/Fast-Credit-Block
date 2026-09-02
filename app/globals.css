@@ -442,3 +442,54 @@ html[data-theme="dark"] .mobile-bottom-nav {
   background-color: #0e1726 !important;
   border-top-color: #2d3d55 !important;
 }
+
+
+/* Final dark-mode polish for desktop accent cards, report tabs, and navigation hovers. */
+html[data-theme="dark"] .dark-dashboard-orange .dark-dashboard-label,
+html[data-theme="dark"] .dark-dashboard-green .dark-dashboard-label {
+  color: #9aa8b8 !important;
+}
+html[data-theme="dark"] .dark-dashboard-orange .dark-dashboard-number-orange {
+  color: #d8ad7c !important;
+}
+html[data-theme="dark"] .dark-dashboard-green .dark-dashboard-number-green {
+  color: #9bc7ae !important;
+}
+html[data-theme="dark"] .dark-dashboard-orange-bar {
+  background-color: #9b6335 !important;
+}
+html[data-theme="dark"] .dark-dashboard-green-bar {
+  background-color: #34795a !important;
+}
+
+html[data-theme="dark"] .dark-report-tab {
+  background-color: #1d2a3d !important;
+  color: #cbd5e1 !important;
+  border: 1px solid #34445b !important;
+}
+html[data-theme="dark"] .dark-report-tab:hover {
+  background-color: #273750 !important;
+  color: #e2e8f0 !important;
+}
+html[data-theme="dark"] .dark-report-tab.bg-blue-600 {
+  background-color: #245aa6 !important;
+  color: #f1f5f9 !important;
+  border-color: #376fb9 !important;
+}
+
+html[data-theme="dark"] .dark-summary-row:hover {
+  background-color: #1b2940 !important;
+}
+html[data-theme="dark"] .dark-summary-row.bg-green-100:hover,
+html[data-theme="dark"] .dark-summary-row.bg-yellow-50:hover {
+  background-color: #23344a !important;
+}
+
+html[data-theme="dark"] .dark-settings-menu button:hover {
+  background-color: #1d2a3d !important;
+  color: #dbe7f5 !important;
+}
+html[data-theme="dark"] .dark-settings-menu button.bg-blue-100 {
+  background-color: #19345d !important;
+  color: #a9ccff !important;
+}

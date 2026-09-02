@@ -1726,7 +1726,7 @@ onClick={async () => {
     className="absolute right-4 top-1/2 -translate-y-1/2 text-orange-500/5"
   />
 
-  <p className="text-slate-500 text-sm relative z-10">
+  <p className="text-slate-500 text-sm relative z-10 dark-dashboard-label">
   Exceptions
 </p>
 
@@ -1750,7 +1750,7 @@ onClick={async () => {
     className="absolute right-4 top-1/2 -translate-y-1/2 text-green-500/5"
   />
 
-  <p className="text-slate-500 text-sm relative z-10">
+  <p className="text-slate-500 text-sm relative z-10 dark-dashboard-label">
     Active
   </p>
 

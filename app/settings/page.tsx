@@ -808,7 +808,7 @@ useEffect(() => {
 
         <div className="flex gap-6">
           {/* Left Menu */}
-          <div className="w-64 border rounded-lg p-3 bg-white">
+          <div className="dark-settings-menu w-64 border rounded-lg p-3 bg-white">
 
 
 <button
