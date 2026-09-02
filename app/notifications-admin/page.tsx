@@ -1,6 +1,6 @@
+import { useI18n } from "@/lib/i18n";
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
-import { useI18n } from "@/lib/i18n";
 
 
 import { useEffect, useState } from "react";
@@ -63,7 +63,7 @@ setEnabled(false);
         permission !== "granted"
       ) {
         alert(
-          "Notifications permission denied"
+          t("notificationsPermissionDenied")
         );
         return;
       }
@@ -122,7 +122,7 @@ setEnabled(false);
       console.error(error);
 
       alert(
-        "Failed to enable notifications"
+        t("failedEnableNotifications")
       );
     }
   };

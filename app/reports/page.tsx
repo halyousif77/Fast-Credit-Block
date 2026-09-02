@@ -1,6 +1,6 @@
+import { useI18n } from "@/lib/i18n";
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
-import { useI18n } from "@/lib/i18n";
 
 import { addLog } from "@/lib/activityLog";
 import * as XLSX from "xlsx";
@@ -86,7 +86,7 @@ const a1 = String(
 if (a1 !== "User Account") {
 
   toast.error(
-    t("invalidUsersFile")
+    "Invalid Users File"
   );
 
   return;
@@ -514,7 +514,7 @@ useEffect(() => {
         appUser?.role === "user"
       ) {
         alert(
-          "You do not have permission to access this page"
+          t("permissionDeniedPage")
         );
 
         window.location.href =
@@ -822,7 +822,7 @@ return (
       }}
     >
       <LogOut size={18} />
-      {t("logout")}
+      Logout
     </div>
 
   ) : (
@@ -832,7 +832,7 @@ return (
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      {t("login")}
+      Login
     </div>
 
   )}
@@ -843,7 +843,7 @@ return (
   <main className="flex-1 p-6">
 
       <h1 className="text-3xl font-bold mb-6">
-        {t("reports")}
+        Reports
       </h1>
     {missingLoaded && (
   <div
@@ -861,7 +861,7 @@ return (
     <div className="flex justify-between items-center mb-4">
 
       <h2 className="text-xl font-bold text-amber-700">
-        🚨 {t("disappearedInvoices")}
+        🚨 Disappeared Invoices
       </h2>
 
       <span
@@ -886,23 +886,23 @@ return (
       <tr className="bg-amber-600 text-white">
 
 <th className="w-[110px] p-2 text-left">
-  {t("organizationCode")}
+  Organization Code
 </th>
 
 <th className="w-[200px] p-2 text-left">
-  {t("organizationName")}
+  Organization Name
 </th>
 
 <th className="w-[140px] p-2 text-left">
-  {t("invoiceNo")}
+  Invoice No
 </th>
 
 <th className="w-[100px] p-2 text-left">
-  {t("firstSeen")}
+  First Seen
 </th>
 
         <th className="w-[100px] p-2 text-left">
-          {t("missingFrom")}
+          Missing From
         </th>
 
       </tr>
@@ -920,7 +920,7 @@ return (
         text-slate-500
       "
     >
-      {t("noDisappearedInvoices")}
+      No disappeared invoices found
     </td>
   </tr>
 
@@ -1000,7 +1000,7 @@ return (
             setSelectedTab("credit")
           }
         >
-          {t("creditFile")}
+          Credit File
         </button>
 
         {collections.map(
@@ -1027,7 +1027,7 @@ return (
 
               }}
             >
-              {t("collection")} {item.id}
+              Collection {item.id}
             </button>
 
           )
@@ -1128,11 +1128,11 @@ return (
       <tr className="bg-slate-800 text-white">
 
         <th className="p-3">
-          {t("invoice")}
+          Invoice
         </th>
 
         <th className="p-3">
-          {t("uploadedBy")}
+          Uploaded By
         </th>
 
       </tr>
@@ -1179,7 +1179,7 @@ return (
       <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
         <h2 className="text-3xl font-bold text-slate-800 mb-6">
-          {t("welcomeBack")}
+          Welcome Back
         </h2>
 
         <input
@@ -1215,12 +1215,12 @@ return (
   .single();
 
 if (!user) {
-  alert(t("invalidUsername"));
+  alert(t("invalidUsernameAlert"));
   return;
 }
 
 if (user.password !== password) {
-  alert(t("invalidPassword"));
+  alert(t("invalidPasswordAlert"));
   return;
 }
 
@@ -1240,7 +1240,7 @@ setPassword("");
 
 }}
         >
-          {t("login")}
+          Login
         </button>
 
         <button
@@ -1249,7 +1249,7 @@ setPassword("");
             setShowLoginModal(false)
           }
         >
-          {t("cancel")}
+          Cancel
         </button>
 
       </div>
@@ -1323,8 +1323,8 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isUploadingCollection
-          ? t("uploadingCollection")
-          : t("importCollection")}
+          ? t("uploadingCollectionShort")
+          : "Import Collection"}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
@@ -1354,8 +1354,8 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isImportingUsers
-          ? t("importingUsers")
-          : t("importUsers")}
+          ? t("importingUsersShort")
+          : "Import Users"}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1385,8 +1385,8 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isUploadingCredit
-          ? t("uploadingCredit")
-          : t("importCredit")}
+          ? t("uploadingCreditShort")
+          : "Import Credit"}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">

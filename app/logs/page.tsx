@@ -1,6 +1,6 @@
+import { useI18n } from "@/lib/i18n";
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
-import { useI18n } from "@/lib/i18n";
 
 import * as XLSX from "xlsx";
 import { toast } from "sonner";
@@ -88,7 +88,7 @@ const a1 = String(
 if (a1 !== "User Account") {
 
   toast.error(
-    t("invalidUsersFile")
+    "Invalid Users File"
   );
 
   return;
@@ -732,7 +732,7 @@ return (
       }}
     >
       <LogOut size={18} />
-      {t("logout")}
+      Logout
     </div>
 
   ) : (
@@ -742,7 +742,7 @@ return (
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      {t("login")}
+      Login
     </div>
 
   )}
@@ -757,11 +757,11 @@ return (
 
         <h1 className="text-3xl font-bold text-[#071d5c] flex items-center gap-2 dark-logs-title">
           <Activity size={28} />
-          {t("activityLogs")}
+          Activity Logs
         </h1>
 
         <p className="text-slate-500 mt-2">
-          {t("auditHistory")}
+          Complete audit history of user actions inside the system.
         </p>
 
       </div>
@@ -771,7 +771,7 @@ return (
         <div className="bg-white border rounded-xl p-5">
 
           <div className="text-slate-500">
-            {t("totalActivities")}
+            Total Activities
           </div>
 
           <div className="text-4xl font-bold mt-3 text-[#071d5c] dark-logs-total">
@@ -783,7 +783,7 @@ return (
         <div className="bg-white border rounded-xl p-5">
 
           <div className="text-slate-500">
-            {t("today")}
+            Today
           </div>
 
           <div className="text-4xl font-bold mt-3 text-green-600">
@@ -795,7 +795,7 @@ return (
         <div className="bg-white border rounded-xl p-5">
 
           <div className="text-slate-500">
-            {t("users")}
+            Users
           </div>
 
           <div className="text-4xl font-bold mt-3 text-purple-600">
@@ -807,7 +807,7 @@ return (
         <div className="bg-white border rounded-xl p-5">
 
           <div className="text-slate-500">
-            {t("imports")}
+            Imports
           </div>
 
           <div className="text-4xl font-bold mt-3 text-blue-600">
@@ -832,7 +832,7 @@ return (
       className="border rounded-lg px-4 py-2"
     >
       <option value="">
-        {t("allUsers")}
+        All Users
       </option>
 
       {users.map(user => (
@@ -858,7 +858,7 @@ return (
       className="border rounded-lg px-4 py-2"
     >
       <option value="">
-        {t("allActions")}
+        All Actions
       </option>
 
       {actions.map(action => (
@@ -893,7 +893,7 @@ return (
       }}
       className="px-4 py-2 bg-slate-200 rounded-lg hover:bg-slate-300 dark-logs-reset"
     >
-      {t("reset")}
+      Reset
     </button>
 
   </div>
@@ -972,7 +972,7 @@ return (
                   colSpan={4}
                   className="p-8 text-center text-slate-500"
                 >
-                  {t("noLogsFound")}
+                  No logs found
                 </td>
 
               </tr>
@@ -1037,12 +1037,12 @@ return (
             .single();
 
           if (!user) {
-            alert(t("invalidUsername"));
+            alert(t("invalidUsernameAlert"));
             return;
           }
 
           if (user.password !== password) {
-            alert(t("invalidPassword"));
+            alert(t("invalidPasswordAlert"));
             return;
           }
 
@@ -1067,14 +1067,14 @@ return (
 
         }}
       >
-        {t("login")}
+        Login
       </button>
 
       <button
         className="w-full mt-3 border py-3 rounded-xl"
         onClick={() => setShowLoginModal(false)}
       >
-        {t("cancel")}
+        Cancel
       </button>
 
     </div>
@@ -1148,8 +1148,8 @@ return (
 
       <div className="text-lg font-bold">
         {isUploadingCollection
-          ? t("uploadingCollection")
-          : t("importCollection")}
+          ? t("uploadingCollectionShort")
+          : "Import Collection"}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
@@ -1179,8 +1179,8 @@ return (
 
       <div className="text-lg font-bold">
         {isImportingUsers
-          ? t("importingUsers")
-          : t("importUsers")}
+          ? t("importingUsersShort")
+          : "Import Users"}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1210,8 +1210,8 @@ return (
 
       <div className="text-lg font-bold">
         {isUploadingCredit
-          ? t("uploadingCredit")
-          : t("importCredit")}
+          ? t("uploadingCreditShort")
+          : "Import Credit"}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">

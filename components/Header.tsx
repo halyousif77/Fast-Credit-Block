@@ -33,7 +33,7 @@ export default function Header() {
 <button
   type="button"
   onClick={() => {
-  window.location.href = "/van";
+  window.location.href = "/m";
 }}
   className="h-9 w-9 rounded-lg bg-blue-900 text-white hover:bg-blue-800 flex items-center justify-center"
   title={t("van")}

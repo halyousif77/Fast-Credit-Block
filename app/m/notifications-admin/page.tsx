@@ -16,6 +16,7 @@ function urlBase64ToUint8Array(base64String: string) {
 }
 
 export default function MobileNotificationsAdminPage() {
+  const { t } = useI18n();
   const { t, dir } = useI18n();
   const router = useRouter();
   const Back = dir === "rtl" ? ArrowRight : ArrowLeft;
@@ -36,7 +37,7 @@ export default function MobileNotificationsAdminPage() {
     try {
       const permission = await Notification.requestPermission();
       if (permission !== "granted") {
-        toast.error("Notifications permission denied");
+        toast.error(t("notificationsPermissionDenied"));
         return;
       }
 
@@ -62,10 +63,10 @@ export default function MobileNotificationsAdminPage() {
       if (!response.ok) throw new Error("Failed to subscribe");
 
       setEnabled(true);
-      toast.success("Admin notifications enabled");
+      toast.success(t("adminNotificationsEnabled"));
     } catch (err) {
       console.error(err);
-      toast.error("Failed to enable notifications");
+      toast.error(t("failedEnableNotifications"));
     }
   };
 

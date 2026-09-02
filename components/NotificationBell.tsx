@@ -5,8 +5,10 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BellDot } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { useI18n } from "@/lib/i18n";
 
 export default function NotificationBell() {
+  const { t } = useI18n();
 
   const [open, setOpen] = useState(false);
 
@@ -262,9 +264,11 @@ useEffect(() => {
         <div
   className="
     absolute
-    right-0
-    top-8
-    w-[420px]
+    left-1/2
+    -translate-x-1/2
+    top-12
+    w-[min(420px,calc(100vw-1rem))]
+    max-w-[calc(100vw-1rem)]
     bg-white
     border
     rounded-xl
@@ -274,7 +278,7 @@ useEffect(() => {
 >
           <div className="p-4 border-b">
             <h3 className="font-bold">
-  Notifications (
+  {t("notifications")} (
   {notifications.length +
     (creditAlert ? 1 : 0)}
 )
@@ -286,18 +290,18 @@ useEffect(() => {
   {creditAlert && (
     <div className="p-4 border-b bg-red-50 sticky top-0 z-10">
       <div className="font-bold text-red-700">
-        🚨 Credit File Not Updated Today
+        {t("creditFileNotUpdated")}
       </div>
 
       <div className="text-sm text-red-600 mt-1">
-        Please upload today's Credit file.
+        {t("uploadTodayCredit")}
       </div>
     </div>
   )}
 
   {notifications.length === 0 ? (
               <p className="p-4 text-gray-500">
-                No notifications
+                {t("noNotifications")}
               </p>
 
             ) : (

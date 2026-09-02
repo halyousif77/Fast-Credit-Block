@@ -1,6 +1,6 @@
+import { useI18n } from "@/lib/i18n";
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
-import { useI18n } from "@/lib/i18n";
 
 import { addLog } from "@/lib/activityLog";
 import * as XLSX from "xlsx";
@@ -88,7 +88,7 @@ const a1 = String(
 if (a1 !== "User Account") {
 
   toast.error(
-    t("invalidUsersFile")
+    "Invalid Users File"
   );
 
   return;
@@ -586,7 +586,7 @@ useEffect(() => {
 
       if (appUser?.role === "user") {
         alert(
-          "You do not have permission to access this page"
+          t("permissionDeniedPage")
         );
         window.location.href =
           "/van";
@@ -786,7 +786,7 @@ useEffect(() => {
       }}
     >
       <LogOut size={18} />
-      {t("logout")}
+      Logout
     </div>
 
   ) : (
@@ -796,7 +796,7 @@ useEffect(() => {
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      {t("login")}
+      Login
     </div>
 
   )}
@@ -806,7 +806,7 @@ useEffect(() => {
 
       {/* Content */}
       <main className="flex-1 p-6">
-        <h1 className="text-3xl font-bold mb-6">{t("settingsTitle")}</h1>
+        <h1 className="text-3xl font-bold mb-6">{t("settings")}</h1>
 
         <div className="flex gap-6">
           {/* Left Menu */}
@@ -821,7 +821,7 @@ useEffect(() => {
       : "hover:bg-gray-100"
   }`}
 >
-  {"🔔 " + t("notifications")}
+  🔔 Notifications
 </button>
             <button
               onClick={() => setActiveTab("security")}
@@ -831,7 +831,7 @@ useEffect(() => {
                   : "hover:bg-gray-100"
               }`}
             >
-              {"🔒 " + t("security")}
+              🔒 Security
             </button>
             <button
               onClick={() => setActiveTab("theme")}
@@ -841,7 +841,7 @@ useEffect(() => {
                   : "hover:bg-gray-100"
               }`}
             >
-              {"🎨 " + t("siteAppearance")}
+              🎨 Site Appearance
             </button>
 
             <button
@@ -852,7 +852,7 @@ useEffect(() => {
       : "hover:bg-gray-100"
   }`}
 >
-  {"🚫 " + t("creditBlockRules")}
+  🚫 Credit Block Rules
 </button>
 
           </div>
@@ -862,18 +862,18 @@ useEffect(() => {
             {activeTab === "dashboardFilters" && (
   <>
     <h2 className="text-2xl font-semibold mb-2">
-      {t("dashboardFilters")}
+      Dashboard Filters
     </h2>
 
     <p className="text-gray-500 mb-8">
-      {t("configureDashboard")}
+      Configure which invoices appear on the dashboard.
     </p>
 
     <div className="space-y-8">
 
       <div>
         <h3 className="font-semibold mb-3">
-          {t("invoiceStatus")}
+          Invoice Status
         </h3>
 
         <div className="space-y-3">
@@ -886,7 +886,7 @@ useEffect(() => {
                 setShowOverdue(e.target.checked)
               }
             />
-            {t("overdue")}
+            Overdue
           </label>
 
           <label className="flex gap-3 items-center">
@@ -897,7 +897,7 @@ useEffect(() => {
                 setShowDue(e.target.checked)
               }
             />
-            {t("due")}
+            Due
           </label>
 
           <label className="flex gap-3 items-center">
@@ -908,7 +908,7 @@ useEffect(() => {
                 setShowLegal(e.target.checked)
               }
             />
-            {t("legal")}
+            Legal
           </label>
 
         </div>
@@ -918,7 +918,7 @@ useEffect(() => {
 
       <div>
         <h3 className="font-semibold mb-3">
-          {t("invoiceType")}
+          Invoice Type
         </h3>
 
         <div className="space-y-3">
@@ -933,7 +933,7 @@ useEffect(() => {
                 )
               }
             />
-            {t("normalInvoices")}
+            Normal Invoices
           </label>
 
           <label className="flex gap-3 items-center">
@@ -946,7 +946,7 @@ useEffect(() => {
                 )
               }
             />
-            {t("exceptionInvoices")}
+            Exception Invoices
           </label>
 
         </div>
@@ -956,7 +956,7 @@ useEffect(() => {
 
       <div>
         <h3 className="font-semibold mb-3">
-          {t("invoiceVisibility")}
+          Invoice Visibility
         </h3>
 
         <div className="space-y-3">
@@ -971,7 +971,7 @@ useEffect(() => {
                 )
               }
             />
-            {t("hideFullyCollected")}
+            Hide Fully Collected Invoices
           </label>
 
           <label className="flex gap-3 items-center">
@@ -984,7 +984,7 @@ useEffect(() => {
                 )
               }
             />
-            {t("hideUserBlock")}
+            Hide User Block
           </label>
 
         </div>
@@ -1027,7 +1027,7 @@ useEffect(() => {
 >
   {isSavingRules
     ? "Saving..."
-    : "Save Changes"}
+    : t("saveChanges")}
 </button>
 
     </div>
@@ -1036,7 +1036,7 @@ useEffect(() => {
             {activeTab === "theme" && (
               <div>
                 <h2 className="text-2xl font-semibold mb-2">{t("siteAppearance")}</h2>
-                <p className="text-gray-500 mb-8">{t("appearanceDesc")}</p>
+                <p className="text-gray-500 mb-8">{t("themeDescription")}</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
                   <button
                     onClick={() => setTheme("light")}
@@ -1046,8 +1046,8 @@ useEffect(() => {
                       <div className="h-3 w-2/3 rounded bg-slate-200 mb-2" />
                       <div className="h-8 rounded bg-slate-100" />
                     </div>
-                    <div className="font-semibold">{t("lightTheme")}</div>
-                    <div className="text-sm text-gray-500">{t("currentWhite")}</div>
+                    <div className="font-semibold">{t("light")}</div>
+                    <div className="text-sm text-gray-500">{t("currentWhiteAppearance")}</div>
                   </button>
                   <button
                     onClick={() => setTheme("dark")}
@@ -1057,8 +1057,8 @@ useEffect(() => {
                       <div className="h-3 w-2/3 rounded bg-slate-600 mb-2" />
                       <div className="h-8 rounded bg-slate-800" />
                     </div>
-                    <div className={theme === "dark" ? "font-semibold text-white" : "font-semibold"}>{t("darkTheme")}</div>
-                    <div className={theme === "dark" ? "text-sm text-slate-300" : "text-sm text-gray-500"}>{t("darkNavy")}</div>
+                    <div className={theme === "dark" ? "font-semibold text-white" : "font-semibold"}>{t("dark")}</div>
+                    <div className={theme === "dark" ? "text-sm text-slate-300" : "text-sm text-gray-500"}>{t("darkNavySlate")}</div>
                   </button>
                 </div>
               </div>
@@ -1067,11 +1067,11 @@ useEffect(() => {
             {activeTab === "notifications" && (
               <>
                 <h2 className="text-2xl font-semibold mb-2">
-                  {t("notifications")}
+                  Notifications
                 </h2>
 
                 <p className="text-gray-500 mb-6">
-                  {t("notificationPreferences")}
+                  Manage your notification preferences
                 </p>
 
                 <div className="space-y-4">
@@ -1083,7 +1083,7 @@ useEffect(() => {
     setInvoiceAlert(e.target.checked)
   }
 />
-                    {t("invoiceDisappearedAlerts")}
+                    Invoice Disappeared Alerts
                   </label>
 <label className="flex items-center gap-3">
   <input
@@ -1095,7 +1095,7 @@ useEffect(() => {
       )
     }
   />
-  {t("exceptionExpiredAlerts")}
+  Exception Expired Alerts
 </label>
                   <label className="flex items-center gap-3">
                     <input
@@ -1105,7 +1105,7 @@ useEffect(() => {
     setExceptionAlert(e.target.checked)
   }
 />
-                    {t("exceptionAddAlerts")}
+                    Exception Add Alerts
                   </label>
 
 <label className="flex items-center gap-3">
@@ -1116,7 +1116,7 @@ useEffect(() => {
       setExceptionDeleteAlert(e.target.checked)
     }
   />
-  {t("exceptionDeleteAlerts")}
+  Exception Delete Alerts
 </label>
                   <label className="flex items-center gap-3">
                     <input
@@ -1126,7 +1126,7 @@ useEffect(() => {
     setCreditImportAlert(e.target.checked)
   }
 />
-                    {t("creditImportAlerts")}
+                    Credit Import Alerts
                   </label>
 
                   <label className="flex items-center gap-3">
@@ -1137,7 +1137,7 @@ useEffect(() => {
     setCollectionImportAlert(e.target.checked)
   }
 />
-                    {t("collectionImportAlerts")}
+                    Collection Import Alerts
                   </label>
                 </div>
 
@@ -1235,9 +1235,7 @@ collection_disabled_at:
 
     alert(t("settingsSaved"));
   }}
->
-  {t("saveChanges")}
-</button>
+>{t("saveChanges")}</button>
               </>
             )}
             
@@ -1245,16 +1243,16 @@ collection_disabled_at:
             {activeTab === "security" && (
               <>
                 <h2 className="text-2xl font-semibold mb-2">
-                  {t("security")}
+                  Security
                 </h2>
 
                 <p className="text-gray-500 mb-6">
-                  {t("manageSecuritySettings")}
+                  Manage your security settings
                 </p>
 
 <div className="mb-8">
   <h3 className="text-lg font-semibold mb-4">
-    {t("profileInformation")}
+    Profile Information
   </h3>
 
   <div className="space-y-4">
@@ -1337,11 +1335,11 @@ collection_disabled_at:
   setCurrentUser(username);
 
   alert(
-    t("profileUpdated")
+    "Profile Updated Successfully"
   );
 }}
   >
-    {t("saveProfile")}
+    Save Profile
   </button>
 </div>
 
@@ -1362,7 +1360,7 @@ collection_disabled_at:
 />
   <input
   type="password"
-  placeholder={t("confirmPassword")}
+  placeholder={t("confirmNewPassword")}
   value={confirmPassword}
   onChange={(e) => setConfirmPassword(e.target.value)}
   className="w-full border rounded-lg p-3"
@@ -1452,7 +1450,7 @@ collection_disabled_at:
   }}
 >
   {isUpdatingPassword
-    ? "Updating..."
+    ? t("updating")
     : "Update Password"}
 </button>
               </>
@@ -1469,7 +1467,7 @@ collection_disabled_at:
     </p>
 
     {loadingRules ? (
-      <div>{t("loadingDots")}</div>
+      <div>{t("loading")}</div>
     ) : (
       <>
         <div className="space-y-3">
@@ -1552,7 +1550,7 @@ collection_disabled_at:
 >
   {isSavingRules
     ? "Saving..."
-    : "Save Changes"}
+    : t("saveChanges")}
 </button>
 
 <button
@@ -1597,7 +1595,7 @@ if (isSavingRules || isResettingRules)
   }}
 >
   {isResettingRules
-    ? "Resetting..."
+    ? t("resetting")
     : "Reset To Default"}
 </button>
 
@@ -1660,7 +1658,7 @@ if (isSavingRules || isResettingRules)
     }
 
     if (user.password !== loginPassword) {
-      alert(t("invalidPassword"));
+      alert(t("invalidPasswordAlert"));
       return;
     }
 
@@ -1677,7 +1675,7 @@ if (isSavingRules || isResettingRules)
   
   }}
 >
-  {t("login")}
+  Login
 </button>
 
       <button
@@ -1686,7 +1684,7 @@ if (isSavingRules || isResettingRules)
           setShowLoginModal(false)
         }
       >
-        {t("cancel")}
+        Cancel
       </button>
 
     </div>
@@ -1760,8 +1758,8 @@ if (isSavingRules || isResettingRules)
 
       <div className="text-lg font-bold">
         {isUploadingCollection
-          ? t("uploadingCollection")
-          : t("importCollection")}
+          ? t("uploadingCollectionShort")
+          : "Import Collection"}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
@@ -1791,8 +1789,8 @@ if (isSavingRules || isResettingRules)
 
       <div className="text-lg font-bold">
         {isImportingUsers
-          ? t("importingUsers")
-          : t("importUsers")}
+          ? t("importingUsersShort")
+          : "Import Users"}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1822,8 +1820,8 @@ if (isSavingRules || isResettingRules)
 
       <div className="text-lg font-bold">
         {isUploadingCredit
-          ? t("uploadingCredit")
-          : t("importCredit")}
+          ? t("uploadingCreditShort")
+          : "Import Credit"}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">

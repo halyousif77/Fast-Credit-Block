@@ -2,6 +2,7 @@
 
 "use client";
 import { useI18n } from "@/lib/i18n";
+
 import {
   Truck,
   FileText,
@@ -145,7 +146,7 @@ export default function WhatsAppReport({
           color="#60a5fa"
         />
       }
-      title="Total Invoices"
+      title={t("totalInvoicesLabel")}
       value={data.length}
     />
 
@@ -156,7 +157,7 @@ export default function WhatsAppReport({
           color="#4ade80"
         />
       }
-      title="Total Credit Amount"
+      title={t("totalCreditAmount")}
       value={totalAmount.toLocaleString()}
     />
 
@@ -167,7 +168,7 @@ export default function WhatsAppReport({
           color="#93c5fd"
         />
       }
-      title="Oldest Credit Days"
+      title={t("oldestCreditDays")}
       value={oldestDays}
     />
 
@@ -178,7 +179,7 @@ export default function WhatsAppReport({
           color="#f87171"
         />
       }
-      title="Total Rejected"
+      title={t("totalRejected")}
       value={totalRejected}
     />
 
@@ -224,15 +225,15 @@ export default function WhatsAppReport({
               color: "#fff",
             }}
           >
-            <th style={th}>{t("vanCode")}.</th>
+            <th style={th}>{t("vanCode")}</th>
             <th style={th}>{t("customerCode")}</th>
             <th style={th}>{t("customerName")}</th>
             <th style={th}>{t("paymentTerm")}</th>
-            <th style={th}>{t("invoice")} #</th>
+            <th style={th}>{t("invoiceNumber")}</th>
             <th style={th}>{t("trxDate")}</th>
             <th style={th}>{t("pendingCim")}</th>
-            <th style={th}>{t("creditDays")}</th>
-            <th style={th}>{t("rejectedCount")}</th>
+            <th style={th}>{t("creditDaysUnderscore")}</th>
+            <th style={th}>{t("totalRejectedCount")}</th>
           </tr>
         </thead>
 

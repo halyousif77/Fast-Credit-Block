@@ -1,6 +1,5 @@
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
-import { useI18n } from "@/lib/i18n";
 
 import { ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -8,7 +7,6 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 
 export default function VanExceptionsPage() {
-  const { t } = useI18n();
   const params = useParams();
 
   const token = String(params.van || "");
@@ -147,7 +145,7 @@ const temporaryCount = loaded
   href={`/van/${token}`}
   className="text-blue-600 text-sm"
 >
-  ← {t("backToVan")}
+  ← Back To Van
 </Link>
 
 </div>
@@ -171,7 +169,7 @@ const temporaryCount = loaded
               font-semibold
             "
           >
-            ⚠️ {t("exceptions")}
+            ⚠️ Exceptions
           </span>
         </div>
 
@@ -179,15 +177,15 @@ const temporaryCount = loaded
   <div className="mt-3 space-y-1 text-sm">
 
     <div>
-      {t("totalExceptions")}: {exceptions.length}
+      Total Exceptions: {exceptions.length}
     </div>
 
     <div>
-      {t("temporary")}: {temporaryCount}
+      Temporary: {temporaryCount}
     </div>
 
     <div>
-      {t("legal")}: {legalCount}
+      Legal: {legalCount}
     </div>
 
   </div>
@@ -252,21 +250,21 @@ const temporaryCount = loaded
                 <div className="mt-3 pt-3 border-t border-orange-100 grid grid-cols-2 gap-2 text-sm">
                   <div>
                     <span className="text-slate-500">
-                      {t("employeeName")}:
+                      Employee:
                     </span>{" "}
                     {item.employee_name}
                   </div>
 
                   <div>
                     <span className="text-slate-500">
-                      {t("employeeId")}:
+                      ID:
                     </span>{" "}
                     {item.ats_code}
                   </div>
 
                   <div>
                     <span className="text-slate-500">
-                      {t("tillDate")}:
+                      Till Date:
                     </span>{" "}
                     {item.permanent
                       ? "-"
@@ -275,16 +273,16 @@ const temporaryCount = loaded
 
                   <div>
                     <span className="text-slate-500">
-                      {t("expiresIn")}:
+                      Expires In:
                     </span>{" "}
 
                     {item.permanent ? (
                       <span className="text-red-600 font-semibold">
-                        {t("legal")}
+                        Legal
                       </span>
                     ) : (
                       <span className="text-orange-600 font-semibold">
-                        {daysLeft} {t("days")}
+                        {daysLeft} Days
                       </span>
                     )}
                   </div>
@@ -302,7 +300,7 @@ const temporaryCount = loaded
 
 {exceptions.length === 0 && (
   <div className="bg-white p-6 rounded-xl text-center text-slate-500">
-    {t("noExceptionsFound")}
+    No Exceptions Found
   </div>
 )}
     </div>

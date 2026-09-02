@@ -373,7 +373,7 @@ export default function MobileExceptionsPage() {
         <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-4">
           <div className="bg-white w-full max-w-sm rounded-3xl p-5 max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <p className="font-bold text-base">Edit Exception</p>
+              <p className="font-bold text-base">{t("editException")}</p>
               <button onClick={() => setEditingException(null)} disabled={savingEdit}>
                 <X size={20} className="text-slate-400" />
               </button>

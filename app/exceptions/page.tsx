@@ -1,7 +1,7 @@
 
+import { useI18n } from "@/lib/i18n";
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
-import { useI18n } from "@/lib/i18n";
 
 import * as XLSX from "xlsx";
 import { toast } from "sonner";
@@ -69,7 +69,7 @@ const a1 = String(
 if (a1 !== "User Account") {
 
   toast.error(
-    t("invalidUsersFile")
+    "Invalid Users File"
   );
 
   return;
@@ -706,7 +706,7 @@ const saveEdit = async () => {
     const result = await response.json();
 
     if (!response.ok || !result.success) {
-      throw new Error(result.error || t("failedUpdateException"));
+      throw new Error(result.error || "Failed to update exception");
     }
 
     setExceptions(prev =>
@@ -731,7 +731,7 @@ const saveEdit = async () => {
     toast.success(t("exceptionUpdated"));
     closeEdit();
   } catch (error: any) {
-    toast.error(error?.message || t("failedUpdateException"));
+    toast.error(error?.message || "Failed to update exception");
   } finally {
     setIsSavingEdit(false);
   }
@@ -899,7 +899,7 @@ setIsLoggedIn(false);
 }}
     >
       <LogOut size={18} />
-      {t("logout")}
+      Logout
     </div>
 
   ) : (
@@ -909,7 +909,7 @@ setIsLoggedIn(false);
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      {t("login")}
+      Login
     </div>
 
   )}
@@ -1043,7 +1043,7 @@ P1316600015512`}
       if (!invoiceText.trim()) {
 
         alert(
-          t("pleaseEnterInvoice")
+          "Please Enter Invoice Number"
         );
 
         return;
@@ -1056,7 +1056,7 @@ P1316600015512`}
       ) {
 
         alert(
-          t("pleaseSelectTillDate")
+          "Please Select Till Date"
         );
 
         return;
@@ -1153,7 +1153,7 @@ const saveResponse =
 if (!saveResponse.ok) {
 
   alert(
-    t("failedSaveException")
+    "Failed To Save Exception"
   );
 
   return;
@@ -1208,7 +1208,7 @@ await supabase
   .from("notifications")
   .insert({
     username: null,
-    title: "⚠️ Exceptions Added",
+    title: t("exceptionAdded"),
     message: `${user?.full_name || currentUser} added ${invoices.length} exception invoice(s).`,
   });
       const response =
@@ -1230,7 +1230,7 @@ await supabase
       console.error(error);
 
       alert(
-        t("unexpectedError")
+        "Unexpected Error"
       );
 
     } finally {
@@ -1245,7 +1245,7 @@ await supabase
 >
   
   {isAddingExceptions
-    ? "Processing..."
+    ? t("processing")
     : "Add Exceptions"}
 </button>
       </div>
@@ -1333,9 +1333,9 @@ await supabase
               <th className="p-3 text-left">{t("atsCode")}</th>
               <th className="p-3 text-left">{t("customerCode")}</th>
               <th className="p-3 text-left">{t("customerName")}</th>
-              <th className="p-3 text-left">{t("invoice")} #</th>
+              <th className="p-3 text-left">{t("invoiceNumber")}</th>
               <th className="p-3 text-left">{t("tillDate")}</th>
-              <th className="p-3 text-left">{t("creditDays")}</th>
+              <th className="p-3 text-left">{t("days")}</th>
 {isLoggedIn && (
   <th className="p-3 text-left">{t("actions")}</th>
 )}
@@ -1476,7 +1476,7 @@ await supabase
                   .from("notifications")
                   .insert({
                     username: null,
-                    title: "🗑️ Exception Deleted",
+                    title: t("exceptionDeleted"),
                     message: `${user?.full_name || currentUser} removed invoice ${item.invoice}.`,
                   });
               }
@@ -1486,7 +1486,7 @@ await supabase
           }}
         >
           {deletingId === item.id
-            ? "Deleting..."
+            ? t("deleting")
             : "Delete"}
         </button>
       </div>
@@ -1506,9 +1506,7 @@ await supabase
       {editingId !== null && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
           <div className="bg-white w-[420px] max-w-full rounded-2xl shadow-2xl p-8">
-            <h2 className="text-2xl font-bold text-slate-800 mb-6">
-              Edit Exception
-            </h2>
+            <h2 className="text-2xl font-bold text-slate-800 mb-6">{t("editException")}</h2>
 
             <div className="space-y-4">
               <div>
@@ -1555,7 +1553,7 @@ await supabase
                   disabled={isSavingEdit}
                   className="flex-1 border border-slate-300 text-slate-700 px-4 py-3 rounded-lg hover:bg-slate-50 disabled:opacity-50"
                 >
-                  {t("cancel")}
+                  Cancel
                 </button>
                 <button
                   type="button"
@@ -1563,7 +1561,7 @@ await supabase
                   disabled={isSavingEdit}
                   className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 disabled:bg-slate-400"
                 >
-                  {isSavingEdit ? "Saving..." : "Save Changes"}
+                  {isSavingEdit ? t("saving") : t("saveChanges")}
                 </button>
               </div>
             </div>
@@ -1613,7 +1611,7 @@ await supabase
     .single();
 
   if (error || !data) {
-    alert(t("invalidCredentials"));
+    alert(t("invalidUsernamePassword"));
     return;
   }
 
@@ -1638,7 +1636,7 @@ await addLog(
   setShowLoginModal(false);
 
 }}            >
-              {t("login")}
+              Login
             </button>
         <button
           className="w-full mt-3 border py-3 rounded-xl"
@@ -1646,7 +1644,7 @@ await addLog(
             setShowLoginModal(false)
           }
         >
-          {t("cancel")}
+          Cancel
         </button>
           </div>
 
@@ -1719,8 +1717,8 @@ await addLog(
 
       <div className="text-lg font-bold">
         {isUploadingCollection
-          ? t("uploadingCollection")
-          : t("importCollection")}
+          ? t("uploadingCollectionShort")
+          : "Import Collection"}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
@@ -1750,8 +1748,8 @@ await addLog(
 
       <div className="text-lg font-bold">
         {isImportingUsers
-          ? t("importingUsers")
-          : t("importUsers")}
+          ? t("importingUsersShort")
+          : "Import Users"}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1781,8 +1779,8 @@ await addLog(
 
       <div className="text-lg font-bold">
         {isUploadingCredit
-          ? t("uploadingCredit")
-          : t("importCredit")}
+          ? t("uploadingCreditShort")
+          : "Import Credit"}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">

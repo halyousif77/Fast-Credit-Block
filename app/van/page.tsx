@@ -1,6 +1,5 @@
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
-import { useI18n } from "@/lib/i18n";
 
 
 import Link from "next/link";
@@ -13,7 +12,6 @@ import { usePathname } from "next/navigation";
 import { storage as localStorage } from "@/utils/storage";
 
 export default function MobileSummaryPage() {
-  const { t } = useI18n();
   const pathname = usePathname();  
   const [whatsAppVan, setWhatsAppVan] =
   useState("");

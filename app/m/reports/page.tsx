@@ -8,6 +8,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 export default function MobileReportsPage() {
+  const { t } = useI18n();
   const { t, dir } = useI18n();
   const router = useRouter();
   const Back = dir === "rtl" ? ArrowRight : ArrowLeft;
@@ -75,7 +76,7 @@ export default function MobileReportsPage() {
             </p>
           </div>
           <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 col-span-2">
-            <p className="text-xs text-slate-500 mb-1">Collections</p>
+            <p className="text-xs text-slate-500 mb-1">{t("collections")}</p>
             <p className="text-xl font-bold text-green-700">
               {totals.collectionsTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}
             </p>

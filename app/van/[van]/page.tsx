@@ -1,6 +1,5 @@
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
-import { useI18n } from "@/lib/i18n";
 
 import { AlertCircle } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -10,7 +9,6 @@ import { supabase } from "@/lib/supabase";
 import { storage as localStorage } from "@/utils/storage";
 
 export default function VanReportPage() {
-  const { t } = useI18n();
   const [isSubscribed,setIsSubscribed] =
   useState(false);
   const [hideSubscribeButton,
@@ -62,7 +60,7 @@ async () => {
 
   try {
 if (!("serviceWorker" in navigator)) {
-  alert(t("serviceWorkerUnsupported"));
+  alert("Service Worker not supported");
   return;
 }
     const permission =
@@ -549,7 +547,7 @@ const requestUnblock = async () => {
       href="/van"
       className="text-blue-600 text-sm"
     >
-      ← {t("back")}
+      ← Back
     </Link>
   )}
 
@@ -557,7 +555,7 @@ const requestUnblock = async () => {
   href={`/van/${vanCode}/exceptions`}
   className="text-red-600 text-sm ml-auto"
 >
-  {t("exceptions")} →
+  Exceptions →
 </Link>
 
 </div>
@@ -633,16 +631,16 @@ const requestUnblock = async () => {
           {!isLoading && (
   <>
     <div>
-      {t("invoices")}: {reportData.length}
+      Invoices: {reportData.length}
     </div>
 
     <div>
-      {t("creditAmount")}:{" "}
+      Credit Amount:{" "}
       {totalAmount.toLocaleString()}
     </div>
 
     <div>
-      {t("creditDays")}:{" "}
+      Oldest Credit Days:{" "}
       {oldestDays}
     </div>
   </>
@@ -729,7 +727,7 @@ const requestUnblock = async () => {
 
               <div>
                 <span className="text-slate-500">
-                  {t("creditDays")}:
+                  Days:
                 </span>{" "}
                 {row["Credit_Days"]}
               </div>
@@ -738,7 +736,7 @@ const requestUnblock = async () => {
 
               <div>
                 <span className="text-slate-500">
-                  {t("pendingCim")}:
+                  CIM:
                 </span>{" "}
                 {row["Pending CIM"]}
               </div>
@@ -747,7 +745,7 @@ const requestUnblock = async () => {
 
               <div>
                 <span className="text-slate-500">
-                  {t("paymentTerm")}:
+                  Payment:
                 </span>{" "}
                 {row["Payment Term"]}
               </div>
@@ -756,7 +754,7 @@ const requestUnblock = async () => {
 
               <div>
                 <span className="text-slate-500">
-                  {t("rejectedCount")}:
+                  Rejected:
                 </span>{" "}
                 {row["Total Rejected Count"]}
               </div>
@@ -779,7 +777,7 @@ const requestUnblock = async () => {
 
         <div className="bg-white p-6 rounded-xl text-center text-slate-500">
 
-          {t("noBlockInvoices")}
+          No block invoices found
 
         </div>
 

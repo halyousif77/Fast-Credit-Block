@@ -1,6 +1,6 @@
+import { useI18n } from "@/lib/i18n";
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
-import { useI18n } from "@/lib/i18n";
 
 import { addLog } from "@/lib/activityLog";
 import { toast } from "sonner";
@@ -133,7 +133,7 @@ if (
 setShowImportModal(false);
 
 toast.success(
-  t("creditUploadStarted")
+  "Credit file uploaded. Processing started."
 );
 await supabase
   .from("van_permissions")
@@ -264,7 +264,7 @@ if (!jobResponse.ok || !jobResult.success) {
 setShowImportModal(false);
 
 toast.success(
-  t("collectionUploadStarted")
+  "Collection file uploaded. Processing started."
 );    
     let fullName = "";
 
@@ -425,7 +425,7 @@ const a1 = String(
 if (a1 !== "User Account") {
 
   toast.error(
-    t("invalidUsersFile")
+    "Invalid Users File"
   );
 
   return;
@@ -746,12 +746,12 @@ setPassword("");
   {isLoggedIn ? (
     <>
       <LogOut size={18} />
-      {t("logout")}
+      Logout
     </>
   ) : (
     <>
       <Users size={18} />
-      {t("login")}
+      Login
     </>
   )}
 </div>
@@ -761,7 +761,7 @@ setPassword("");
   onClick={() => setShowLoginModal(true)}
 >
   <Users size={18} />
-  {t("login")}
+  Login
 </div>
   )}
 
@@ -774,7 +774,7 @@ setPassword("");
       <div className="flex justify-between mb-6">
 
         <h1 className="text-3xl font-bold">
-          {t("users")}
+          Users
         </h1>
 
         {isLoggedIn && (
@@ -786,8 +786,8 @@ setPassword("");
   }`}
 >
   {isImportingUsers
-    ? "Importing..."
-    : t("importUsers")}
+    ? t("importing")
+    : "Import Users"}
     <input
       type="file"
       accept=".xlsx,.xls"
@@ -822,7 +822,7 @@ setPassword("");
           className="border rounded p-2"
         >
           <option value="">
-            {t("regionFilter")}
+            Region
           </option>
 
           {[...new Set(
@@ -849,7 +849,7 @@ setPassword("");
           className="border rounded p-2"
         >
           <option value="">
-            {t("city")}
+            City
           </option>
 
           {[...new Set(
@@ -876,7 +876,7 @@ setPassword("");
           className="border rounded p-2"
         >
           <option value="">
-            {t("organizationCode")}
+            Organization Code
           </option>
 
           {[...new Set(
@@ -904,7 +904,7 @@ setPassword("");
           className="border rounded p-2"
         >
           <option value="">
-            {t("vanSubInventory")}
+            Van Sub Inventory
           </option>
 
           {[...new Set(
@@ -933,35 +933,35 @@ setPassword("");
             <tr className="bg-slate-800 text-white">
 
               <th className="p-3">
-                {t("regionFilter")}
+                Region
               </th>
 
               <th className="p-3">
-                {t("city")}
+                City
               </th>
 
               <th className="p-3">
-                {t("organizationCode")}
+                Organization Code
               </th>
 
               <th className="p-3">
-                {t("userCode")}
+                User Code
               </th>
 
               <th className="p-3">
-                {t("organizationName")}
+                Organization Name
               </th>
 
               <th className="p-3">
-                {t("vanSubInventory")}
+                Van Sub Inventory
               </th>
 
               <th className="p-3">
-                {t("contact")}
+                Contact
               </th>
 
               <th className="p-3">
-                {t("actions")}
+                Actions
               </th>
 
             </tr>
@@ -1120,7 +1120,7 @@ setPassword("");
   }`}
   onClick={handleSave}
 >
-  {saving ? t("saving") : t("save")}
+  {saving ? "Saving..." : "Save"}
 </button>
   ) : (
 <button
@@ -1134,7 +1134,7 @@ setPassword("");
 >
   {editingUserId === user.id
     ? t("editing")
-    : t("edit")}
+    : "Edit"}
 </button>
   ))}
 
@@ -1150,7 +1150,7 @@ setPassword("");
 >
   {deletingUserId === user.id
     ? t("deleting")
-    : t("delete")}
+    : "Delete"}
 </button>
 )}
 
@@ -1176,7 +1176,7 @@ setPassword("");
       <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
         <h2 className="text-3xl font-bold text-center mb-6">
-          {t("login")}
+          Login
         </h2>
 
         <input
@@ -1206,12 +1206,12 @@ setPassword("");
   .single();
 
 if (!user) {
-  alert(t("invalidUsername"));
+  alert(t("invalidUsernameAlert"));
   return;
 }
 
 if (user.password !== password) {
-  alert(t("invalidPassword"));
+  alert(t("invalidPasswordAlert"));
   return;
 }
 
@@ -1234,14 +1234,14 @@ setUsername("");
 setPassword("");
           }}
         >
-          {t("login")}
+          Login
         </button>
 
         <button
           className="w-full mt-3 border py-3 rounded-xl"
           onClick={() => setShowLoginModal(false)}
         >
-          {t("cancel")}
+          Cancel
         </button>
 
       </div>
@@ -1314,8 +1314,8 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isUploadingCollection
-          ? t("uploadingCollection")
-          : t("importCollection")}
+          ? t("uploadingCollectionShort")
+          : "Import Collection"}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
@@ -1345,8 +1345,8 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isImportingUsers
-          ? t("importingUsers")
-          : t("importUsers")}
+          ? t("importingUsersShort")
+          : "Import Users"}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1376,8 +1376,8 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isUploadingCredit
-          ? t("uploadingCredit")
-          : t("importCredit")}
+          ? t("uploadingCreditShort")
+          : "Import Credit"}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">

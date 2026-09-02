@@ -1,6 +1,6 @@
+import { useI18n } from "@/lib/i18n";
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
-import { useI18n } from "@/lib/i18n";
 
 import WhatsAppReport from "@/components/WhatsAppReport";
 import html2canvas from "html2canvas";
@@ -99,7 +99,7 @@ const a1 = String(
 ).trim();
 
 if (a1 !== "User Account") {
-  toast.error(t("invalidUsersFile"));
+  toast.error("Invalid Users File");
   setIsImportingUsers(false);
   return;
 }
@@ -451,7 +451,7 @@ const { data: appUser } =
 if (
   appUser?.role === "user"
 ) {
-  alert("You do not have permission to access this page");
+  alert(t("permissionDeniedPage"));
   window.location.href = "/van";
   return;
 }
@@ -972,7 +972,7 @@ const sendWhatsApp = async (
     if (!report) {
 
       alert(
-        "Report Not Found"
+        t("reportNotFound")
       );
 
       return;
@@ -1196,7 +1196,7 @@ onClick={async () => {
 }}
     >
       <LogOut size={18} />
-      {t("logout")}
+      Logout
     </div>
 
   ) : (
@@ -1206,7 +1206,7 @@ onClick={async () => {
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      {t("login")}
+      Login
     </div>
 
   )}
@@ -1217,7 +1217,7 @@ onClick={async () => {
       <main className="flex-1 p-6">
 
         <h1 className="text-3xl font-bold mb-6">
-          {t("summaryTitle")}
+          Summary
         </h1>
 <div className="grid grid-cols-4 gap-4 mb-6">
 
@@ -1228,7 +1228,7 @@ onClick={async () => {
 
       <div>
         <p className="text-sm text-slate-500">
-          {t("totalVans")}
+          Total Vans
         </p>
 
         <h2 className="text-3xl font-bold mt-2">
@@ -1253,7 +1253,7 @@ onClick={async () => {
 
       <div>
         <p className="text-sm text-pink-600">
-          {t("remainingInvoices")}
+          Remaining Invoices
         </p>
 
         <h2 className="text-3xl font-bold mt-2 text-pink-600">
@@ -1286,7 +1286,7 @@ onClick={async () => {
 
       <div>
         <p className="text-sm text-orange-600 dark-summary-orange">
-          {t("exceptionInvoicesCount")}
+          Exception Invoices
         </p>
 
         <h2 className="text-3xl font-bold mt-2 text-orange-600 dark-summary-orange">
@@ -1319,7 +1319,7 @@ onClick={async () => {
 
       <div>
         <p className="text-sm text-green-600 dark-summary-green">
-          {t("allCollectedVans")}
+          All Collected Vans
         </p>
 
         <h2 className="text-3xl font-bold mt-2 text-green-600 dark-summary-green">
@@ -1366,11 +1366,11 @@ onClick={async () => {
       <div>
 
         <h2 className="text-xl font-bold text-slate-800">
-          {t("vanPerformance")}
+          Van Performance
         </h2>
 
        <p className="text-xs text-slate-500 mt-1">
-          {t("creditBlockStatusByVan")}
+          Credit block status by van
         </p>
 
       </div>
@@ -1391,7 +1391,7 @@ onClick={async () => {
 <tr className="bg-[#071d5c] text-white border-b border-blue-900">
 
 <th className="px-4 py-3 text-center text-sm font-semibold border-r border-blue-900">
-  {t("status")}
+  Status
 </th>
 
 <th className="px-4 py-3 text-center text-sm font-semibold border-r border-blue-900">
@@ -1399,11 +1399,11 @@ onClick={async () => {
 </th>
 
 <th className="px-4 py-3 text-center text-sm font-semibold border-r border-blue-900">
-  {t("vanCode")}
+  Van Code
 </th>
 
 <th className="px-4 py-3 text-center text-sm font-semibold">
-  {t("permission")}
+  Permission
 </th>
 
 </tr>
@@ -1602,11 +1602,11 @@ onChange={async (e) => {
 <div className="flex-1 bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col">    <div className="px-5 py-4 border-b border-slate-100">
 
     <h2 className="text-lg font-bold text-slate-800">
-      {t("regionSummary")}
+      Region Summary
     </h2>
 
     <p className="text-xs text-slate-500 mt-1">
-      {t("outstandingInvoicesByRegion")}
+      Outstanding invoices by region
     </p>
 
   </div>
@@ -1646,7 +1646,7 @@ onChange={async (e) => {
                   <span className="text-slate-500">
                     {info.invoices}
                     {" "}
-                    {t("invoices")}
+                    Invoices
                   </span>
 
                 </div>
@@ -1694,7 +1694,7 @@ onChange={async (e) => {
   <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
       <h2 className="text-3xl font-bold text-slate-800 mb-6">
-  {t("welcomeBack")}
+  Welcome Back
 </h2>
       <input
         className="w-full border p-3 rounded-xl mb-4"
@@ -1725,7 +1725,7 @@ onChange={async (e) => {
   .single();
 
 if (error || !data) {
-  alert(t("invalidCredentials"));
+  alert(t("invalidUsernamePassword"));
   return;
 }
 
@@ -1753,7 +1753,7 @@ setUsername("");
 setPassword("");
 }}
         >
-          {t("login")}
+          Login
         </button>
         <button
           className="w-full mt-3 border py-3 rounded-xl"
@@ -1761,7 +1761,7 @@ setPassword("");
             setShowLoginModal(false)
           }
         >
-          {t("cancel")}
+          Cancel
         </button>
       </div>
 
@@ -1835,8 +1835,8 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isUploadingCollection
-          ? t("uploadingCollection")
-          : t("importCollection")}
+          ? t("uploadingCollectionShort")
+          : "Import Collection"}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
@@ -1866,8 +1866,8 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isImportingUsers
-          ? t("importingUsers")
-          : t("importUsers")}
+          ? t("importingUsersShort")
+          : "Import Users"}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1897,8 +1897,8 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isUploadingCredit
-          ? t("uploadingCredit")
-          : t("importCredit")}
+          ? t("uploadingCreditShort")
+          : "Import Credit"}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">

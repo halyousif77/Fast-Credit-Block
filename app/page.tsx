@@ -1,6 +1,6 @@
+import { useI18n } from "@/lib/i18n";
 "use client";
 import { apiFetch as fetch } from "@/lib/apiCache";
-import { useI18n } from "@/lib/i18n";
 
 
 import {
@@ -121,7 +121,7 @@ const a1 = String(
 if (a1 !== "User Account") {
 
   toast.error(
-    t("invalidUsersFile")
+    "Invalid Users File"
   );
 
   return;
@@ -423,7 +423,7 @@ useEffect(() => {
         user?.role === "user"
       ) {
         alert(
-          "You do not have permission to access this page"
+          t("permissionDeniedPage")
         );
 
         window.location.href =
@@ -1661,7 +1661,7 @@ onClick={async () => {
 }}
     >
       <LogOut size={18} />
-      {t("logout")}
+      Logout
     </div>
 
   ) : (
@@ -1671,7 +1671,7 @@ onClick={async () => {
       onClick={() => setShowLoginModal(true)}
     >
       <Users size={18} />
-      {t("login")}
+      Login
     </div>
 
   )}
@@ -1686,7 +1686,7 @@ onClick={async () => {
         <div className="bg-white rounded-xl border border-slate-200 p-5 mb-6 flex justify-between items-center">
 
           <h2 className="text-3xl font-bold">
-            {t("dashboard")}
+            Dashboard
           </h2>
 
           <div className="flex gap-8">
@@ -1709,7 +1709,7 @@ onClick={async () => {
   />
 
   <p className="text-slate-500 text-sm relative z-10">
-    {t("blockedInvoices")}
+    Blocked Invoices
   </p>
 
   <h2 className="text-4xl font-bold text-slate-900 mt-2 relative z-10">
@@ -1729,7 +1729,7 @@ onClick={async () => {
   />
 
   <p className="text-slate-500 text-sm relative z-10 dark-dashboard-label">
-  {t("exceptions")}
+  Exceptions
 </p>
 
 <h2 className="text-4xl font-bold text-slate-900 mt-2 relative z-10 dark-dashboard-number-orange">
@@ -1753,7 +1753,7 @@ onClick={async () => {
   />
 
   <p className="text-slate-500 text-sm relative z-10 dark-dashboard-label">
-    {t("active")}
+    Active
   </p>
 
   <h2 className="text-4xl font-bold text-slate-900 mt-2 relative z-10 dark-dashboard-number-green">
@@ -1771,7 +1771,7 @@ onClick={async () => {
   />
 
   <p className="text-slate-500 text-sm relative z-10">
-    {t("employees")}
+    Employees
   </p>
 
   <h2 className="text-4xl font-bold text-slate-900 mt-2 relative z-10">
@@ -1941,11 +1941,11 @@ onClick={async () => {
               <div>
 
                 <h4 className="font-bold text-lg">
-                  {t("collectionData")}
+                  Collection Data
                 </h4>
 
                 <p className="text-sm text-slate-500">
-                  {t("collectionReport")}
+                  Collection Report
                 </p>
 
               </div>
@@ -1966,7 +1966,7 @@ onClick={async () => {
           <div className="bg-slate-50 rounded-2xl p-4">
 
             <p className="text-xs uppercase tracking-wide text-slate-400 mb-1">
-              {t("latestFile")}
+              Latest File
             </p>
 
             <p className="text-sm text-slate-700 break-words">
@@ -1992,7 +1992,7 @@ onClick={async () => {
             <div className="flex justify-between items-center mb-5">
 
   <h3 className="font-bold text-xl">
-    {t("activeCreditBlocks")}
+    Active Credit Blocks
   </h3>
 
   <div className="flex gap-2 items-center">
@@ -2021,7 +2021,7 @@ onClick={async () => {
     >
 
       <option value="">
-        {t("selectVan")}
+        Select Van
       </option>
 
       {whatsappVanCodes.map(
@@ -2050,7 +2050,7 @@ onClick={async () => {
   }`}
 >
   {isSendingWhatsApp
-    ? "Processing..."
+    ? t("processing")
     : "WhatsApp"}
 </button>
 
@@ -2073,7 +2073,7 @@ onClick={async () => {
 <th className="p-3">{t("customerName")}</th>
 <th className="p-3">{t("centralInvoice")}</th>
 <th className="p-3">{t("paymentTerm")}</th>
-<th className="p-3">{t("invoice")} #</th>
+<th className="p-3">{t("invoiceNumber")}</th>
 <th className="p-3">{t("trxDate")}</th>
 <th className="p-3">{t("creditAmount")}</th>
 <th className="p-3">{t("pendingCim")}</th>
@@ -2327,7 +2327,7 @@ await addLog(
   }}
 >
   {isAddingException
-  ? "Processing..."
+  ? t("processing")
   : "Add Exception"}
   </button>
 )}
@@ -2518,7 +2518,7 @@ item.created_by === currentUser && (
   <div className="col-span-1 bg-white rounded-xl border shadow-sm p-5">
 
   <h3 className="font-bold mb-4">
-    {t("employees")} Cleared Today
+    Employees Cleared Today
   </h3>
 
   <table className="w-full text-sm">
@@ -2725,12 +2725,12 @@ item.created_by === currentUser && (
   .single();
 
 if (!user) {
-  alert(t("invalidUsername"));
+  alert(t("invalidUsernameAlert"));
   return;
 }
 
 if (user.password !== password) {
-  alert(t("invalidPassword"));
+  alert(t("invalidPasswordAlert"));
   return;
 }
 
@@ -2755,7 +2755,7 @@ localStorage.setItem(
 setShowLoginModal(false);
             }}
           >
-            {t("login")}
+            Login
           </button>
 
           <button
@@ -2764,7 +2764,7 @@ setShowLoginModal(false);
               setShowLoginModal(false)
             }
           >
-            {t("cancel")}
+            Cancel
           </button>
 
         </div>
@@ -2840,8 +2840,8 @@ setShowLoginModal(false);
 
       <div className="text-lg font-bold">
         {isUploadingCollection
-          ? t("uploadingCollection")
-          : t("importCollection")}
+          ? t("uploadingCollectionShort")
+          : "Import Collection"}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
@@ -2871,8 +2871,8 @@ setShowLoginModal(false);
 
       <div className="text-lg font-bold">
         {isImportingUsers
-          ? t("importingUsers")
-          : t("importUsers")}
+          ? t("importingUsersShort")
+          : "Import Users"}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -2902,8 +2902,8 @@ setShowLoginModal(false);
 
       <div className="text-lg font-bold">
         {isUploadingCredit
-          ? t("uploadingCredit")
-          : t("importCredit")}
+          ? t("uploadingCreditShort")
+          : "Import Credit"}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">

@@ -10,6 +10,7 @@ import { useI18n } from "@/lib/i18n";
 import { fetchCreditRows } from "@/lib/creditData";
 
 export default function MobileVanDetailPage() {
+  const { t } = useI18n();
   const params = useParams();
   const router = useRouter();
   const { t, dir } = useI18n();
@@ -178,7 +179,7 @@ export default function MobileVanDetailPage() {
             className="w-full p-3.5 flex items-center justify-between gap-3 text-start"
           >
             <div>
-              <p className="text-sm font-bold text-orange-800">Exceptions</p>
+              <p className="text-sm font-bold text-orange-800">{t("exceptions")}</p>
               <p className="text-xs text-orange-700 mt-0.5">
                 {exceptions.length} exception{exceptions.length === 1 ? "" : "s"} for this van
               </p>
