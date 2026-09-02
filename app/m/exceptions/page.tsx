@@ -20,7 +20,6 @@ export default function MobileExceptionsPage() {
   const [editingException, setEditingException] = useState<any | null>(null);
   const [savingEdit, setSavingEdit] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
-  const canAddException = Boolean(currentUser.trim()) && currentUser.trim().toLowerCase() !== "yasser";
 
   const [form, setForm] = useState({
     invoice: "",
@@ -88,10 +87,6 @@ export default function MobileExceptionsPage() {
   }, [form.invoice, rows]);
 
   const handleAdd = async () => {
-    if (!canAddException) {
-      toast.error(t("yasserCannotAddExceptions"));
-      return;
-    }
     if (!form.invoice) {
       toast.error(t("noData"));
       return;
@@ -214,15 +209,13 @@ export default function MobileExceptionsPage() {
           />
         </div>
 
-        {canAddException && (
-          <button
-            onClick={() => setShowAdd(true)}
-            className="h-10 w-10 shrink-0 rounded-xl text-white flex items-center justify-center"
-            style={{ background: "#071d5c" }}
-          >
-            <Plus size={20} />
-          </button>
-        )}
+        <button
+          onClick={() => setShowAdd(true)}
+          className="h-10 w-10 shrink-0 rounded-xl text-white flex items-center justify-center"
+          style={{ background: "#071d5c" }}
+        >
+          <Plus size={20} />
+        </button>
       </div>
 
       {loading && (

@@ -25,6 +25,27 @@ export default function MobileVanDetailPage() {
   const [isUnblocked, setIsUnblocked] = useState(false);
   const [search, setSearch] = useState("");
   const [showExceptions, setShowExceptions] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const copyInvoices = async () => {
+    if (!filtered.length) return;
+
+    const header = "Customer No | Customer Name | Invoice Number | Amount";
+    const lines = filtered.map((r) => {
+      const amount = Number(r.amount || 0).toLocaleString(undefined, {
+        maximumFractionDigits: 0,
+      });
+      return `${r.customerCode || ""} | ${r.customerName || ""} | ${r.invoice || ""} | ${amount} SAR`;
+    });
+
+    try {
+      await navigator.clipboard.writeText([header, ...lines].join("\n"));
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setCopied(false);
+    }
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -75,25 +96,7 @@ export default function MobileVanDetailPage() {
       setLoading(false);
     })();
 
-    const copyInvoices = async () => {
-    const header = "Customer No | Customer Name | Invoice Number | Amount";
-    const lines = filtered.map((r) => {
-      const amount = Number(r.amount || 0).toLocaleString(undefined, {
-        maximumFractionDigits: 0,
-      });
-      return `${r.customerCode || "—"} | ${r.customerName || "—"} | ${r.invoice || "—"} | ${amount} SAR`;
-    });
-    const text = [header, ...lines].join("\n");
-    try {
-      await navigator.clipboard.writeText(text);
-      // Keep the confirmation short so it works well on mobile/WhatsApp.
-      alert(t("copied"));
-    } catch {
-      // Clipboard may be unavailable in an insecure browser context.
-    }
-  };
-
-  return () => {
+    return () => {
       cancelled = true;
     };
   }, [vanCode]);
@@ -176,17 +179,6 @@ export default function MobileVanDetailPage() {
         />
       </div>
 
-      {!loading && filtered.length > 0 && (
-        <button
-          type="button"
-          onClick={copyInvoices}
-          className="w-full rounded-xl border border-slate-200 bg-white py-2.5 text-sm font-semibold text-slate-700 flex items-center justify-center gap-2 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100"
-        >
-          <Copy size={16} />
-          {t("copyInvoices")}
-        </button>
-      )}
-
       {loading && (
         <p className="text-center text-sm text-slate-400 py-10">
           {t("loading")}
@@ -197,6 +189,17 @@ export default function MobileVanDetailPage() {
         <p className="text-center text-sm text-slate-400 py-10">
           {t("noData")}
         </p>
+      )}
+
+      {filtered.length > 0 && (
+        <button
+          type="button"
+          onClick={copyInvoices}
+          className="w-full rounded-xl border border-slate-200 bg-white py-2.5 text-sm font-semibold text-slate-700 flex items-center justify-center gap-2 shadow-sm active:scale-[0.99]"
+        >
+          <Copy size={16} />
+          {copied ? t("copied") : t("copyInvoices")}
+        </button>
       )}
 
       {exceptions.length > 0 && (
@@ -276,7 +279,7 @@ export default function MobileVanDetailPage() {
           >
             <div className="flex items-center justify-between mb-1">
               <p className="font-semibold text-sm">{r.invoice}</p>
-              <p className="text-sm font-bold mobile-van-amount">
+              <p className="text-sm font-bold text-blue-700 dark:text-blue-300">
                 {r.amount.toLocaleString(undefined, {
                   maximumFractionDigits: 0,
                 })} SAR

@@ -184,7 +184,6 @@ export default function MobileVanSummaryPage() {
   };
 
   const togglePermission = async (vanCode: string, checked: boolean) => {
-    if (!isLoggedIn) return;
     setPermissions((prev) => ({ ...prev, [vanCode]: checked }));
     await supabase
       .from("van_permissions")

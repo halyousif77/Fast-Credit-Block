@@ -146,34 +146,13 @@ export async function POST(
   request: Request
 ) {
 
-  const body = await request.json();
-  const createdBy = String(body?.created_by || "").trim();
+  const body =
+    await request.json();
 
-  // Adding exceptions requires a logged-in account, but the Yasser account
-  // is explicitly not allowed to create them. Other valid app users can add.
-  if (!createdBy || createdBy.toLowerCase() === "yasser") {
-    return NextResponse.json(
-      { success: false, error: "The Yasser account cannot add exceptions" },
-      { status: 403 }
-    );
-  }
-
-  const { data: allowedUser } = await supabase
-    .from("app_users")
-    .select("username")
-    .ilike("username", createdBy)
-    .maybeSingle();
-
-  if (!allowedUser) {
-    return NextResponse.json(
-      { success: false, error: "You must be logged in to add exceptions" },
-      { status: 403 }
-    );
-  }
-
-  const { error } = await supabase
-    .from("exceptions")
-    .insert({ ...body, created_by: allowedUser.username });
+  const { error } =
+    await supabase
+      .from("exceptions")
+      .insert(body);
 
   return NextResponse.json({
     success: !error,
