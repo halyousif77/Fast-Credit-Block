@@ -62,7 +62,7 @@ async () => {
 
   try {
 if (!("serviceWorker" in navigator)) {
-  alert("Service Worker not supported");
+  alert(t("serviceWorkerUnsupported"));
   return;
 }
     const permission =
@@ -549,7 +549,7 @@ const requestUnblock = async () => {
       href="/van"
       className="text-blue-600 text-sm"
     >
-      ← Back
+      ← {t("back")}
     </Link>
   )}
 
@@ -557,7 +557,7 @@ const requestUnblock = async () => {
   href={`/van/${vanCode}/exceptions`}
   className="text-red-600 text-sm ml-auto"
 >
-  Exceptions →
+  {t("exceptions")} →
 </Link>
 
 </div>
@@ -633,16 +633,16 @@ const requestUnblock = async () => {
           {!isLoading && (
   <>
     <div>
-      Invoices: {reportData.length}
+      {t("invoices")}: {reportData.length}
     </div>
 
     <div>
-      Credit Amount:{" "}
+      {t("creditAmount")}:{" "}
       {totalAmount.toLocaleString()}
     </div>
 
     <div>
-      Oldest Credit Days:{" "}
+      {t("creditDays")}:{" "}
       {oldestDays}
     </div>
   </>
@@ -729,7 +729,7 @@ const requestUnblock = async () => {
 
               <div>
                 <span className="text-slate-500">
-                  Days:
+                  {t("creditDays")}:
                 </span>{" "}
                 {row["Credit_Days"]}
               </div>
@@ -738,7 +738,7 @@ const requestUnblock = async () => {
 
               <div>
                 <span className="text-slate-500">
-                  CIM:
+                  {t("pendingCim")}:
                 </span>{" "}
                 {row["Pending CIM"]}
               </div>
@@ -747,7 +747,7 @@ const requestUnblock = async () => {
 
               <div>
                 <span className="text-slate-500">
-                  Payment:
+                  {t("paymentTerm")}:
                 </span>{" "}
                 {row["Payment Term"]}
               </div>
@@ -756,7 +756,7 @@ const requestUnblock = async () => {
 
               <div>
                 <span className="text-slate-500">
-                  Rejected:
+                  {t("rejectedCount")}:
                 </span>{" "}
                 {row["Total Rejected Count"]}
               </div>

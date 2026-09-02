@@ -88,7 +88,7 @@ const a1 = String(
 if (a1 !== "User Account") {
 
   toast.error(
-    "Invalid Users File"
+    t("invalidUsersFile")
   );
 
   return;
@@ -211,7 +211,7 @@ const handleCreditImport = async (
     if (b6 !== "Region") {
 
       toast.error(
-        "Invalid Credit File"
+        t("invalidCreditFile")
       );
 
       return;
@@ -317,7 +317,7 @@ const handleCollectionImport = async (
     ) {
 
       toast.error(
-        "Invalid Collection File"
+        t("invalidCollectionFile")
       );
 
       return;
@@ -683,7 +683,7 @@ useEffect(() => {
 
         <div className="p-4">
           <h1 className="text-xl font-bold leading-tight">
-            {t("creditWithRouteBlock")}
+            Credit With Route Block
           </h1>
         </div>
 
@@ -806,7 +806,7 @@ useEffect(() => {
 
       {/* Content */}
       <main className="flex-1 p-6">
-        <h1 className="text-3xl font-bold mb-6">{t("settings")}</h1>
+        <h1 className="text-3xl font-bold mb-6">{t("settingsTitle")}</h1>
 
         <div className="flex gap-6">
           {/* Left Menu */}
@@ -821,7 +821,7 @@ useEffect(() => {
       : "hover:bg-gray-100"
   }`}
 >
-  🔔 Notifications
+  {"🔔 " + t("notifications")}
 </button>
             <button
               onClick={() => setActiveTab("security")}
@@ -831,7 +831,7 @@ useEffect(() => {
                   : "hover:bg-gray-100"
               }`}
             >
-              🔒 Security
+              {"🔒 " + t("security")}
             </button>
             <button
               onClick={() => setActiveTab("theme")}
@@ -841,7 +841,7 @@ useEffect(() => {
                   : "hover:bg-gray-100"
               }`}
             >
-              🎨 Site Appearance
+              {"🎨 " + t("siteAppearance")}
             </button>
 
             <button
@@ -852,7 +852,7 @@ useEffect(() => {
       : "hover:bg-gray-100"
   }`}
 >
-  🚫 Credit Block Rules
+  {"🚫 " + t("creditBlockRules")}
 </button>
 
           </div>
@@ -866,7 +866,7 @@ useEffect(() => {
     </h2>
 
     <p className="text-gray-500 mb-8">
-      {t("configureInvoiceVisibility")}
+      {t("configureDashboard")}
     </p>
 
     <div className="space-y-8">
@@ -971,7 +971,7 @@ useEffect(() => {
                 )
               }
             />
-            {t("hideFullyCollectedInvoices")}
+            {t("hideFullyCollected")}
           </label>
 
           <label className="flex gap-3 items-center">
@@ -1036,7 +1036,7 @@ useEffect(() => {
             {activeTab === "theme" && (
               <div>
                 <h2 className="text-2xl font-semibold mb-2">{t("siteAppearance")}</h2>
-                <p className="text-gray-500 mb-8">Choose a clean light or dark color scheme for the entire site.</p>
+                <p className="text-gray-500 mb-8">{t("appearanceDesc")}</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
                   <button
                     onClick={() => setTheme("light")}
@@ -1046,8 +1046,8 @@ useEffect(() => {
                       <div className="h-3 w-2/3 rounded bg-slate-200 mb-2" />
                       <div className="h-8 rounded bg-slate-100" />
                     </div>
-                    <div className="font-semibold">{t("light")}</div>
-                    <div className="text-sm text-gray-500">{t("currentWhiteAppearance")}</div>
+                    <div className="font-semibold">{t("lightTheme")}</div>
+                    <div className="text-sm text-gray-500">{t("currentWhite")}</div>
                   </button>
                   <button
                     onClick={() => setTheme("dark")}
@@ -1057,8 +1057,8 @@ useEffect(() => {
                       <div className="h-3 w-2/3 rounded bg-slate-600 mb-2" />
                       <div className="h-8 rounded bg-slate-800" />
                     </div>
-                    <div className={theme === "dark" ? "font-semibold text-white" : "font-semibold"}>{t("dark")}</div>
-                    <div className={theme === "dark" ? "text-sm text-slate-300" : "text-sm text-gray-500"}>{t("darkNavySlate")}</div>
+                    <div className={theme === "dark" ? "font-semibold text-white" : "font-semibold"}>{t("darkTheme")}</div>
+                    <div className={theme === "dark" ? "text-sm text-slate-300" : "text-sm text-gray-500"}>{t("darkNavy")}</div>
                   </button>
                 </div>
               </div>
@@ -1071,7 +1071,7 @@ useEffect(() => {
                 </h2>
 
                 <p className="text-gray-500 mb-6">
-                  {t("manageNotificationPreferences")}
+                  {t("notificationPreferences")}
                 </p>
 
                 <div className="space-y-4">
@@ -1149,7 +1149,7 @@ useEffect(() => {
       localStorage.getItem("currentUser");
 
     if (!currentUser) {
-      alert("Please Login First");
+      alert(t("pleaseLoginFirst"));
       return;
     }
 const { data: currentSettings } =
@@ -1229,11 +1229,11 @@ collection_disabled_at:
   .eq("username", currentUser);
 
     if (error) {
-      alert("Failed To Save Settings");
+      alert(t("failedSaveSettings"));
       return;
     }
 
-    alert("Settings Saved Successfully");
+    alert(t("settingsSaved"));
   }}
 >
   {t("saveChanges")}
@@ -1289,7 +1289,7 @@ collection_disabled_at:
     localStorage.getItem("currentUser");
 
   if (!currentUser) {
-    alert("Please Login First");
+    alert(t("pleaseLoginFirst"));
     return;
   }
 
@@ -1304,7 +1304,7 @@ collection_disabled_at:
     .maybeSingle();
 
     if (existingUser) {
-      alert("Username Already Exists");
+      alert(t("usernameExists"));
       return;
     }
   }
@@ -1318,7 +1318,7 @@ collection_disabled_at:
     .eq("username", currentUser);
 
   if (error) {
-    alert("Failed To Update Profile");
+    alert(t("failedUpdateProfile"));
     return;
   }
 
@@ -1337,7 +1337,7 @@ collection_disabled_at:
   setCurrentUser(username);
 
   alert(
-    "Profile Updated Successfully"
+    t("profileUpdated")
   );
 }}
   >
@@ -1362,7 +1362,7 @@ collection_disabled_at:
 />
   <input
   type="password"
-  placeholder={t("confirmNewPassword")}
+  placeholder={t("confirmPassword")}
   value={confirmPassword}
   onChange={(e) => setConfirmPassword(e.target.value)}
   className="w-full border rounded-lg p-3"
@@ -1390,22 +1390,22 @@ collection_disabled_at:
         localStorage.getItem("currentUser");
 
       if (!username) {
-        alert("Please Login First");
+        alert(t("pleaseLoginFirst"));
         return;
       }
 
       if (!currentPassword) {
-        alert("Enter Current Password");
+        alert(t("enterCurrentPassword"));
         return;
       }
 
       if (!newPassword) {
-        alert("Enter New Password");
+        alert(t("enterNewPassword"));
         return;
       }
 
       if (newPassword !== confirmPassword) {
-        alert("Passwords Do Not Match");
+        alert(t("passwordsDoNotMatch"));
         return;
       }
 
@@ -1416,12 +1416,12 @@ collection_disabled_at:
         .single();
 
       if (!user) {
-        alert("User Not Found");
+        alert(t("userNotFound"));
         return;
       }
 
       if (user.password !== currentPassword) {
-        alert("Current Password Is Incorrect");
+        alert(t("currentPasswordIncorrect"));
         return;
       }
 
@@ -1433,7 +1433,7 @@ collection_disabled_at:
         .eq("username", username);
 
       if (error) {
-        alert("Failed To Update Password");
+        alert(t("failedUpdatePassword"));
         return;
       }
 
@@ -1441,7 +1441,7 @@ collection_disabled_at:
       setNewPassword("");
       setConfirmPassword("");
 
-      alert("Password Updated Successfully");
+      alert(t("passwordUpdated"));
 
     } finally {
 
@@ -1461,15 +1461,15 @@ collection_disabled_at:
 {activeTab === "creditRules" && (
   <>
     <h2 className="text-2xl font-semibold mb-2">
-      {t("creditBlockRules")}
+      Credit Block Rules
     </h2>
 
     <p className="text-gray-500 mb-6">
-      {t("configureInvoiceThresholds")}
+      Configure invoice block thresholds.
     </p>
 
     {loadingRules ? (
-      <div>{t("loading")}</div>
+      <div>{t("loadingDots")}</div>
     ) : (
       <>
         <div className="space-y-3">
@@ -1620,7 +1620,7 @@ if (isSavingRules || isResettingRules)
     <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
       <h2 className="text-3xl font-bold text-slate-800 mb-6">
-        {t("welcomeBack")}
+        Welcome Back
       </h2>
 
       <input
@@ -1644,7 +1644,7 @@ if (isSavingRules || isResettingRules)
   onClick={async () => {
 
     if (!currentUser || !loginPassword) {
-      alert("Enter Username And Password");
+      alert(t("enterUsernamePassword"));
       return;
     }
 
@@ -1655,12 +1655,12 @@ if (isSavingRules || isResettingRules)
       .single();
 
     if (error || !user) {
-      alert("User Not Found");
+      alert(t("userNotFound"));
       return;
     }
 
     if (user.password !== loginPassword) {
-      alert("Invalid Password");
+      alert(t("invalidPassword"));
       return;
     }
 
@@ -1715,11 +1715,11 @@ if (isSavingRules || isResettingRules)
   <div>
 
     <h2 className="text-2xl font-bold">
-      {t("importFiles")}
+      Import Files
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      {t("uploadSystemFiles")}
+      Upload and process system files
     </p>
 
   </div>
@@ -1760,12 +1760,12 @@ if (isSavingRules || isResettingRules)
 
       <div className="text-lg font-bold">
         {isUploadingCollection
-          ? "Uploading Collection..."
-          : "Import Collection"}
+          ? t("uploadingCollection")
+          : t("importCollection")}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        {t("collectedInvoicesFile")}
+        Collected Invoices File
       </div>
 
     </div>
@@ -1791,8 +1791,8 @@ if (isSavingRules || isResettingRules)
 
       <div className="text-lg font-bold">
         {isImportingUsers
-          ? "Importing Users..."
-          : "Import Users"}
+          ? t("importingUsers")
+          : t("importUsers")}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1822,12 +1822,12 @@ if (isSavingRules || isResettingRules)
 
       <div className="text-lg font-bold">
         {isUploadingCredit
-          ? "Uploading Credit..."
-          : "Import Credit"}
+          ? t("uploadingCredit")
+          : t("importCredit")}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        {t("creditBlockFile")}
+        Credit Block File
       </div>
 
     </div>

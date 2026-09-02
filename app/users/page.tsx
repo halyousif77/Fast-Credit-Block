@@ -83,7 +83,7 @@ const workbook =
     if (b6 !== "Region") {
 
       toast.error(
-        "Invalid Credit File"
+        t("invalidCreditFile")
       );
 
       return;
@@ -133,7 +133,7 @@ if (
 setShowImportModal(false);
 
 toast.success(
-  "Credit file uploaded. Processing started."
+  t("creditUploadStarted")
 );
 await supabase
   .from("van_permissions")
@@ -215,7 +215,7 @@ const handleCollectionImport = async (
     ) {
 
       toast.error(
-        "Invalid Collection File"
+        t("invalidCollectionFile")
       );
 
       return;
@@ -264,7 +264,7 @@ if (!jobResponse.ok || !jobResult.success) {
 setShowImportModal(false);
 
 toast.success(
-  "Collection file uploaded. Processing started."
+  t("collectionUploadStarted")
 );    
     let fullName = "";
 
@@ -425,7 +425,7 @@ const a1 = String(
 if (a1 !== "User Account") {
 
   toast.error(
-    "Invalid Users File"
+    t("invalidUsersFile")
   );
 
   return;
@@ -632,7 +632,7 @@ return (
 
     <div className="p-4">
       <h1 className="text-xl font-bold leading-tight">
-        {t("creditWithRouteBlock")}
+        Credit With Route Block
       </h1>
     </div>
 
@@ -787,7 +787,7 @@ setPassword("");
 >
   {isImportingUsers
     ? "Importing..."
-    : "Import Users"}
+    : t("importUsers")}
     <input
       type="file"
       accept=".xlsx,.xls"
@@ -802,7 +802,7 @@ setPassword("");
       <div className="grid grid-cols-5 gap-3 mb-5">
 
         <input
-          placeholder="Search"
+          placeholder={t("search")}
           value={search}
           onChange={(e) =>
             setSearch(
@@ -822,7 +822,7 @@ setPassword("");
           className="border rounded p-2"
         >
           <option value="">
-            {t("region")}
+            {t("regionFilter")}
           </option>
 
           {[...new Set(
@@ -933,7 +933,7 @@ setPassword("");
             <tr className="bg-slate-800 text-white">
 
               <th className="p-3">
-                {t("region")}
+                {t("regionFilter")}
               </th>
 
               <th className="p-3">
@@ -1120,7 +1120,7 @@ setPassword("");
   }`}
   onClick={handleSave}
 >
-  {saving ? "Saving..." : "Save"}
+  {saving ? t("saving") : t("save")}
 </button>
   ) : (
 <button
@@ -1133,8 +1133,8 @@ setPassword("");
   onClick={() => handleEdit(user)}
 >
   {editingUserId === user.id
-    ? "Editing..."
-    : "Edit"}
+    ? t("editing")
+    : t("edit")}
 </button>
   ))}
 
@@ -1149,8 +1149,8 @@ setPassword("");
   onClick={() => handleDelete(user.id)}
 >
   {deletingUserId === user.id
-    ? "Deleting..."
-    : "Delete"}
+    ? t("deleting")
+    : t("delete")}
 </button>
 )}
 
@@ -1206,12 +1206,12 @@ setPassword("");
   .single();
 
 if (!user) {
-  alert("Invalid Username");
+  alert(t("invalidUsername"));
   return;
 }
 
 if (user.password !== password) {
-  alert("Invalid Password");
+  alert(t("invalidPassword"));
   return;
 }
 
@@ -1269,11 +1269,11 @@ setPassword("");
   <div>
 
     <h2 className="text-2xl font-bold">
-      {t("importFiles")}
+      Import Files
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      {t("uploadSystemFiles")}
+      Upload and process system files
     </p>
 
   </div>
@@ -1314,12 +1314,12 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isUploadingCollection
-          ? "Uploading Collection..."
-          : "Import Collection"}
+          ? t("uploadingCollection")
+          : t("importCollection")}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        {t("collectedInvoicesFile")}
+        Collected Invoices File
       </div>
 
     </div>
@@ -1345,8 +1345,8 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isImportingUsers
-          ? "Importing Users..."
-          : "Import Users"}
+          ? t("importingUsers")
+          : t("importUsers")}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1376,12 +1376,12 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isUploadingCredit
-          ? "Uploading Credit..."
-          : "Import Credit"}
+          ? t("uploadingCredit")
+          : t("importCredit")}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        {t("creditBlockFile")}
+        Credit Block File
       </div>
 
     </div>

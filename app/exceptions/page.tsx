@@ -69,7 +69,7 @@ const a1 = String(
 if (a1 !== "User Account") {
 
   toast.error(
-    "Invalid Users File"
+    t("invalidUsersFile")
   );
 
   return;
@@ -228,7 +228,7 @@ await supabase
 
     setShowImportModal(false);
 
-    toast.success("Import Completed");
+    toast.success(t("importCompleted"));
 
   } finally {
 
@@ -276,7 +276,7 @@ const handleCollectionImport = async (
     ) {
 
       toast.error(
-        "Invalid Collection File"
+        t("invalidCollectionFile")
       );
 
       return;
@@ -678,12 +678,12 @@ const saveEdit = async () => {
     .toUpperCase();
 
   if (!normalizedInvoice) {
-    toast.error("Invoice number is required");
+    toast.error(t("invoiceRequired"));
     return;
   }
 
   if (!editPermanent && !editTillDate) {
-    toast.error("Till Date is required");
+    toast.error(t("tillDateRequired"));
     return;
   }
 
@@ -706,7 +706,7 @@ const saveEdit = async () => {
     const result = await response.json();
 
     if (!response.ok || !result.success) {
-      throw new Error(result.error || "Failed to update exception");
+      throw new Error(result.error || t("failedUpdateException"));
     }
 
     setExceptions(prev =>
@@ -728,10 +728,10 @@ const saveEdit = async () => {
       `${normalizedInvoice} | Till Date: ${editTillDate}`
     );
 
-    toast.success("Exception updated successfully");
+    toast.success(t("exceptionUpdated"));
     closeEdit();
   } catch (error: any) {
-    toast.error(error?.message || "Failed to update exception");
+    toast.error(error?.message || t("failedUpdateException"));
   } finally {
     setIsSavingEdit(false);
   }
@@ -764,7 +764,7 @@ if (!hasAccess) {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <h1 className="text-2xl font-bold text-red-600">
-        {t("noPermissionPage")}
+        You Dont Have Permission To Enter This Page
       </h1>
     </div>
   );
@@ -776,7 +776,7 @@ return (
 
         <div className="p-4">
           <h1 className="text-xl font-bold leading-tight">
-            {t("creditWithRouteBlock")}
+            Credit With Route Block
           </h1>
         </div>
 
@@ -922,7 +922,7 @@ setIsLoggedIn(false);
 
       <div className="bg-white rounded-xl border p-5 mb-6">
         <h1 className="text-3xl font-bold">
-          {t("exceptionsManagement")}
+          Exceptions Management
         </h1>
       </div>
 
@@ -936,7 +936,7 @@ setIsLoggedIn(false);
 
    
     <h3 className="font-bold text-lg mb-4">
-      {t("addMultipleExceptions")}
+      Add Multiple Exceptions
     </h3>
 
     <textarea
@@ -959,7 +959,7 @@ P1316600015512`}
           setIsPermanent(e.target.checked)
         }
       />
-      {t("legal")}
+      Legal
     </label>
 
 {!isPermanent && (
@@ -1033,7 +1033,7 @@ P1316600015512`}
       if (!currentUser) {
 
         alert(
-          "Please Login First"
+          t("pleaseLoginFirst")
         );
 
         return;
@@ -1043,7 +1043,7 @@ P1316600015512`}
       if (!invoiceText.trim()) {
 
         alert(
-          "Please Enter Invoice Number"
+          t("pleaseEnterInvoice")
         );
 
         return;
@@ -1056,7 +1056,7 @@ P1316600015512`}
       ) {
 
         alert(
-          "Please Select Till Date"
+          t("pleaseSelectTillDate")
         );
 
         return;
@@ -1153,7 +1153,7 @@ const saveResponse =
 if (!saveResponse.ok) {
 
   alert(
-    "Failed To Save Exception"
+    t("failedSaveException")
   );
 
   return;
@@ -1230,7 +1230,7 @@ await supabase
       console.error(error);
 
       alert(
-        "Unexpected Error"
+        t("unexpectedError")
       );
 
     } finally {
@@ -1254,11 +1254,11 @@ await supabase
   <div className="flex justify-between items-center mb-6">
 
     <h3 className="font-bold text-lg">
-      {t("recentActivity")}
+      Recent Activity
     </h3>
 
     <span className="text-xs text-slate-400">
-      {t("lastActions")}
+      Last Actions
     </span>
 
   </div>
@@ -1268,7 +1268,7 @@ await supabase
   <div className="border border-green-200 bg-green-50 rounded-xl p-4">
 
     <div className="text-green-700 font-semibold">
-      {t("addedExceptions")}
+      Added Exceptions
     </div>
 
     <div className="text-3xl font-bold mt-2">
@@ -1276,14 +1276,14 @@ await supabase
     </div>
 
     <div className="text-sm text-slate-500">
-      {t("totalRecords")}    </div>
+      Total Records    </div>
 
   </div>
 
   <div className="border border-amber-200 bg-amber-50 rounded-xl p-4">
 
     <div className="text-amber-700 font-semibold">
-      {t("legalExceptions")}
+      Legal Exceptions
     </div>
 
     <div className="text-3xl font-bold mt-2">
@@ -1291,7 +1291,7 @@ await supabase
     </div>
 
     <div className="text-sm text-slate-500">
-      {t("totalRecords")}
+      Total Records
     </div>
 
   </div>
@@ -1307,7 +1307,7 @@ await supabase
   <div className="flex justify-between items-center mb-4">
 
   <h3 className="font-bold text-xl">
-    {t("currentExceptions")}
+    Current Exceptions
   </h3>
 
   <input
@@ -1333,9 +1333,9 @@ await supabase
               <th className="p-3 text-left">{t("atsCode")}</th>
               <th className="p-3 text-left">{t("customerCode")}</th>
               <th className="p-3 text-left">{t("customerName")}</th>
-              <th className="p-3 text-left">{t("invoiceNo")}</th>
+              <th className="p-3 text-left">{t("invoice")} #</th>
               <th className="p-3 text-left">{t("tillDate")}</th>
-              <th className="p-3 text-left">{t("days")}</th>
+              <th className="p-3 text-left">{t("creditDays")}</th>
 {isLoggedIn && (
   <th className="p-3 text-left">{t("actions")}</th>
 )}
@@ -1400,7 +1400,7 @@ await supabase
           <td className="p-3">
   {item.permanent ? (
     <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
-      {t("legal")}
+      Legal
     </span>
   ) : (
     daysLeft
@@ -1417,7 +1417,7 @@ await supabase
           onClick={() => openEdit(item)}
         >
           <Pencil size={13} />
-          {t("edit")}
+          Edit
         </button>
 
         <button
@@ -1507,13 +1507,13 @@ await supabase
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
           <div className="bg-white w-[420px] max-w-full rounded-2xl shadow-2xl p-8">
             <h2 className="text-2xl font-bold text-slate-800 mb-6">
-              {t("editException")}
+              Edit Exception
             </h2>
 
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  {t("invoiceNo")}
+                  Invoice #
                 </label>
                 <input
                   type="text"
@@ -1527,7 +1527,7 @@ await supabase
               {!editPermanent && (
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    {t("tillDate")}
+                    Till Date
                   </label>
                   <input
                     type="date"
@@ -1578,7 +1578,7 @@ await supabase
           <div className="bg-white w-[420px] rounded-2xl shadow-2xl p-8">
 
             <h2 className="text-3xl font-bold text-slate-800 mb-6">
-              {t("welcomeBack")}
+              Welcome Back
             </h2>
 
             <input
@@ -1613,7 +1613,7 @@ await supabase
     .single();
 
   if (error || !data) {
-    alert("Invalid Username or Password");
+    alert(t("invalidCredentials"));
     return;
   }
 
@@ -1674,11 +1674,11 @@ await addLog(
   <div>
 
     <h2 className="text-2xl font-bold">
-      {t("importFiles")}
+      Import Files
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      {t("uploadSystemFiles")}
+      Upload and process system files
     </p>
 
   </div>
@@ -1719,12 +1719,12 @@ await addLog(
 
       <div className="text-lg font-bold">
         {isUploadingCollection
-          ? "Uploading Collection..."
-          : "Import Collection"}
+          ? t("uploadingCollection")
+          : t("importCollection")}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        {t("collectedInvoicesFile")}
+        Collected Invoices File
       </div>
 
     </div>
@@ -1750,8 +1750,8 @@ await addLog(
 
       <div className="text-lg font-bold">
         {isImportingUsers
-          ? "Importing Users..."
-          : "Import Users"}
+          ? t("importingUsers")
+          : t("importUsers")}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1781,12 +1781,12 @@ await addLog(
 
       <div className="text-lg font-bold">
         {isUploadingCredit
-          ? "Uploading Credit..."
-          : "Import Credit"}
+          ? t("uploadingCredit")
+          : t("importCredit")}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        {t("creditBlockFile")}
+        Credit Block File
       </div>
 
     </div>

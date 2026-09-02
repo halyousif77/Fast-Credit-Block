@@ -131,7 +131,7 @@ setEnabled(false);
     <div className="min-h-screen flex items-center justify-center bg-slate-100">
       <div className="bg-white p-8 rounded-2xl shadow-xl text-center">
         <h1 className="text-2xl font-bold mb-6">
-          {t("adminNotifications")}
+          Admin Notifications
         </h1>
 
         <button

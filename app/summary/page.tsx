@@ -99,7 +99,7 @@ const a1 = String(
 ).trim();
 
 if (a1 !== "User Account") {
-  toast.error("Invalid Users File");
+  toast.error(t("invalidUsersFile"));
   setIsImportingUsers(false);
   return;
 }
@@ -224,7 +224,7 @@ const handleCreditImport = async (
     ).trim();
 
     if (b6 !== "Region") {
-  toast.error("Invalid Credit File");
+  toast.error(t("invalidCreditFile"));
   setIsUploadingCredit(false);
   return;
 }
@@ -319,7 +319,7 @@ const handleCollectionImport = async (
     ).trim();
 
 if (a1 !== "Collection Submit Time") {
-  toast.error("Invalid Collection File");
+  toast.error(t("invalidCollectionFile"));
   setIsUploadingCollection(false);
   return;
 }
@@ -1077,7 +1077,7 @@ const sendWhatsApp = async (
 
         <div className="p-4">
           <h1 className="text-xl font-bold leading-tight">
-            {t("creditWithRouteBlock")}
+            Credit With Route Block
           </h1>
         </div>
 
@@ -1217,7 +1217,7 @@ onClick={async () => {
       <main className="flex-1 p-6">
 
         <h1 className="text-3xl font-bold mb-6">
-          {t("summary")}
+          {t("summaryTitle")}
         </h1>
 <div className="grid grid-cols-4 gap-4 mb-6">
 
@@ -1286,7 +1286,7 @@ onClick={async () => {
 
       <div>
         <p className="text-sm text-orange-600 dark-summary-orange">
-          {t("exceptionInvoices")}
+          {t("exceptionInvoicesCount")}
         </p>
 
         <h2 className="text-3xl font-bold mt-2 text-orange-600 dark-summary-orange">
@@ -1455,7 +1455,7 @@ onClick={async () => {
           hover:text-green-700
           transition
         "
-        title="Send WhatsApp Report"
+        title={t("sendWhatsAppReport")}
       >
         <FaWhatsapp size={22} />
       </button>
@@ -1646,7 +1646,7 @@ onChange={async (e) => {
                   <span className="text-slate-500">
                     {info.invoices}
                     {" "}
-                    Invoices
+                    {t("invoices")}
                   </span>
 
                 </div>
@@ -1725,7 +1725,7 @@ onChange={async (e) => {
   .single();
 
 if (error || !data) {
-  alert("Invalid Username or Password");
+  alert(t("invalidCredentials"));
   return;
 }
 
@@ -1790,11 +1790,11 @@ setPassword("");
   <div>
 
     <h2 className="text-2xl font-bold">
-      {t("importFiles")}
+      Import Files
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      {t("uploadSystemFiles")}
+      Upload and process system files
     </p>
 
   </div>
@@ -1835,12 +1835,12 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isUploadingCollection
-          ? "Uploading Collection..."
-          : "Import Collection"}
+          ? t("uploadingCollection")
+          : t("importCollection")}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        {t("collectedInvoicesFile")}
+        Collected Invoices File
       </div>
 
     </div>
@@ -1866,8 +1866,8 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isImportingUsers
-          ? "Importing Users..."
-          : "Import Users"}
+          ? t("importingUsers")
+          : t("importUsers")}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1897,12 +1897,12 @@ setPassword("");
 
       <div className="text-lg font-bold">
         {isUploadingCredit
-          ? "Uploading Credit..."
-          : "Import Credit"}
+          ? t("uploadingCredit")
+          : t("importCredit")}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        {t("creditBlockFile")}
+        Credit Block File
       </div>
 
     </div>

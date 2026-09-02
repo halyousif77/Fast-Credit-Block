@@ -121,7 +121,7 @@ const a1 = String(
 if (a1 !== "User Account") {
 
   toast.error(
-    "Invalid Users File"
+    t("invalidUsersFile")
   );
 
   return;
@@ -185,7 +185,7 @@ setShowImportModal(false);
 window.location.reload();
         } catch (error) {
           console.error(error);
-          toast.error("Failed to import users");
+          toast.error(t("failedImportUsers"));
         } finally {
   setIsImportingUsers(false);
 }
@@ -195,7 +195,7 @@ window.location.reload();
     } catch (error) {
       console.error(error);
       setIsImportingUsers(false);
-      toast.error("Failed to import users");
+      toast.error(t("failedImportUsers"));
     }
   };
 
@@ -607,7 +607,7 @@ const b6 = String(
 
 if (b6 !== "Region") {
 
-  toast.error("Invalid Credit File", {
+  toast.error(t("invalidCreditFile"), {
     description:
       "The selected file is not a valid Credit report. Please upload the correct file.",
   });
@@ -748,7 +748,7 @@ const a1 = String(
 
 if (a1 !== "Collection Submit Time") {
 
-  toast.error("Invalid Collection File", {
+  toast.error(t("invalidCollectionFile"), {
     description:
       "The selected file is not a valid Collection report. Please upload the correct file.",
   });
@@ -1440,7 +1440,7 @@ const generateReportImage =
         );
 
       if (!report) {
-        alert("Report Not Found");
+        alert(t("reportNotFound"));
         return;
       }
 
@@ -1546,7 +1546,7 @@ return (
 
     <div className="p-4">
       <h1 className="text-xl font-bold leading-tight">
-        {t("creditWithRouteBlock")}
+        Credit With Route Block
       </h1>
     </div>
 
@@ -1848,7 +1848,7 @@ onClick={async () => {
                 : ""
             }`}
           >
-            {t("creditData")}
+            Credit Data
           </h4>
 
           <p
@@ -1858,7 +1858,7 @@ onClick={async () => {
                 : "text-slate-500"
             }`}
           >
-            {t("creditBlockReport")}
+            Credit Block Report
           </p>
 
         </div>
@@ -1891,7 +1891,7 @@ onClick={async () => {
             : "text-slate-400"
         }`}
       >
-        {t("latestFile")}
+        Latest File
       </p>
 
       <p
@@ -2073,7 +2073,7 @@ onClick={async () => {
 <th className="p-3">{t("customerName")}</th>
 <th className="p-3">{t("centralInvoice")}</th>
 <th className="p-3">{t("paymentTerm")}</th>
-<th className="p-3">{t("invoiceNo")}</th>
+<th className="p-3">{t("invoice")} #</th>
 <th className="p-3">{t("trxDate")}</th>
 <th className="p-3">{t("creditAmount")}</th>
 <th className="p-3">{t("pendingCim")}</th>
@@ -2161,13 +2161,13 @@ onClick={async () => {
   {isBlockedInvoice(row) ? (
 
     <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
-      {t("block")}
+      Block
     </span>
 
   ) : (
 
     <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
-      {t("open")}
+      Open
     </span>
 
   )}
@@ -2188,7 +2188,7 @@ onClick={async () => {
           <div className="bg-white rounded-xl border shadow-sm p-5">
 
             <h3 className="font-bold text-xl mb-5">
-              {t("exceptionInvoices")}
+              Exception Invoices
             </h3>
 
 {isLoggedIn && (
@@ -2198,7 +2198,7 @@ onClick={async () => {
       onChange={(e) =>
         setInvoiceNo(e.target.value)
       }
-      placeholder={t("invoiceNoDot")}
+      placeholder={t("invoiceNo")}
       className="w-full border rounded-lg p-3 mb-3"
     />
 
@@ -2334,7 +2334,7 @@ await addLog(
             <div className="mt-8">
 
   <h4 className="font-bold mb-4">
-    {t("currentExceptions")}
+    Current Exceptions
   </h4>
 
   <div className="max-h-[350px] overflow-y-auto border rounded-lg">
@@ -2346,21 +2346,21 @@ await addLog(
         <tr className="border-b">
 
           <th className="text-left p-2">
-            {t("invoice")}
+            Invoice
           </th>
 
           <th className="text-left p-2">
-            {t("tillDate")}
+            Till Date
           </th>
 
           <th className="text-left p-2">
-            {t("days")}
+            Days
           </th>
 
           {isLoggedIn && (
 
             <th className="text-left p-2">
-              {t("delete")}
+              Delete
             </th>
 
           )}
@@ -2518,7 +2518,7 @@ item.created_by === currentUser && (
   <div className="col-span-1 bg-white rounded-xl border shadow-sm p-5">
 
   <h3 className="font-bold mb-4">
-    {t("employeesClearedToday")}
+    {t("employees")} Cleared Today
   </h3>
 
   <table className="w-full text-sm">
@@ -2526,11 +2526,11 @@ item.created_by === currentUser && (
     <thead>
       <tr className="border-b">
         <th className="text-left p-2">
-  {t("vanCode")}
+  Van Code
 </th>
 
         <th className="text-left p-2">
-          {t("cleared")}
+          Cleared
         </th>
       </tr>
     </thead>
@@ -2562,7 +2562,7 @@ item.created_by === currentUser && (
 <div className="bg-white rounded-xl border shadow-sm p-5">
 
   <h3 className="font-bold mb-4">
-    {t("topVansWithBlocks")}
+    Top Vans With Blocks
   </h3>
 
   <div className="space-y-4">
@@ -2607,14 +2607,14 @@ item.created_by === currentUser && (
     <div className="bg-white rounded-xl border shadow-sm p-5">
 
   <h3 className="font-bold mb-4">
-    {t("collectionProgress")}
+    Collection Progress
   </h3>
 
   <div className="flex justify-between mb-4">
 
     <div>
       <p className="text-sm text-slate-500">
-        {t("cleared")}
+        Cleared
       </p>
 
       <h2 className="text-3xl font-bold text-green-600">
@@ -2635,7 +2635,7 @@ item.created_by === currentUser && (
 
     <div>
       <p className="text-sm text-slate-500">
-        {t("remaining")}
+        Remaining
       </p>
 
       <h2 className="text-3xl font-bold text-red-600">
@@ -2685,11 +2685,11 @@ item.created_by === currentUser && (
           <div className="text-center mb-6">
 
             <h2 className="text-3xl font-bold text-slate-800">
-              {t("welcomeBack")}
+              Welcome Back
             </h2>
 
             <p className="text-slate-500 mt-2">
-              {t("signInManagement")}
+              Sign in to access management features
             </p>
 
           </div>
@@ -2725,12 +2725,12 @@ item.created_by === currentUser && (
   .single();
 
 if (!user) {
-  alert("Invalid Username");
+  alert(t("invalidUsername"));
   return;
 }
 
 if (user.password !== password) {
-  alert("Invalid Password");
+  alert(t("invalidPassword"));
   return;
 }
 
@@ -2795,11 +2795,11 @@ setShowLoginModal(false);
   <div>
 
     <h2 className="text-2xl font-bold">
-      {t("importFiles")}
+      Import Files
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      {t("uploadSystemFiles")}
+      Upload and process system files
     </p>
 
   </div>
@@ -2840,12 +2840,12 @@ setShowLoginModal(false);
 
       <div className="text-lg font-bold">
         {isUploadingCollection
-          ? "Uploading Collection..."
-          : "Import Collection"}
+          ? t("uploadingCollection")
+          : t("importCollection")}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        {t("collectedInvoicesFile")}
+        Collected Invoices File
       </div>
 
     </div>
@@ -2871,8 +2871,8 @@ setShowLoginModal(false);
 
       <div className="text-lg font-bold">
         {isImportingUsers
-          ? "Importing Users..."
-          : "Import Users"}
+          ? t("importingUsers")
+          : t("importUsers")}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -2902,12 +2902,12 @@ setShowLoginModal(false);
 
       <div className="text-lg font-bold">
         {isUploadingCredit
-          ? "Uploading Credit..."
-          : "Import Credit"}
+          ? t("uploadingCredit")
+          : t("importCredit")}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        {t("creditBlockFile")}
+        Credit Block File
       </div>
 
     </div>

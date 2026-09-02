@@ -88,7 +88,7 @@ const a1 = String(
 if (a1 !== "User Account") {
 
   toast.error(
-    "Invalid Users File"
+    t("invalidUsersFile")
   );
 
   return;
@@ -210,7 +210,7 @@ const handleCreditImport = async (
     if (b6 !== "Region") {
 
       toast.error(
-        "Invalid Credit File"
+        t("invalidCreditFile")
       );
 
       return;
@@ -316,7 +316,7 @@ const handleCollectionImport = async (
     ) {
 
       toast.error(
-        "Invalid Collection File"
+        t("invalidCollectionFile")
       );
 
       return;
@@ -540,7 +540,7 @@ useEffect(() => {
 
         return (
           <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
-            {t("importCreditLog")}
+            IMPORT CREDIT
           </span>
         );
 
@@ -548,7 +548,7 @@ useEffect(() => {
 
         return (
           <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
-            {t("importCollectionLog")}
+            IMPORT COLLECTION
           </span>
         );
 
@@ -556,7 +556,7 @@ useEffect(() => {
 
         return (
           <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-semibold">
-            {t("addExceptionLog")}
+            ADD EXCEPTION
           </span>
         );
 
@@ -564,7 +564,7 @@ useEffect(() => {
 
         return (
           <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
-            {t("deleteExceptionLog")}
+            DELETE EXCEPTION
           </span>
         );
 
@@ -572,7 +572,7 @@ useEffect(() => {
 
         return (
           <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">
-            {t("loginLog")}
+            LOGIN
           </span>
         );
 
@@ -580,7 +580,7 @@ useEffect(() => {
 
         return (
           <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-xs font-semibold">
-            {t("logoutLog")}
+            LOGOUT
           </span>
         );
 
@@ -618,7 +618,7 @@ return (
 
       <div className="p-4">
         <h1 className="text-xl font-bold leading-tight">
-          {t("creditWithRouteBlock")}
+          Credit With Route Block
         </h1>
       </div>
 
@@ -761,7 +761,7 @@ return (
         </h1>
 
         <p className="text-slate-500 mt-2">
-          Complete audit history of user actions inside the system.
+          {t("auditHistory")}
         </p>
 
       </div>
@@ -910,19 +910,19 @@ return (
             <tr className="bg-[#0b2668] text-white">
 
               <th className="p-4 text-left">
-                {t("dateTime")}
+                Date & Time
               </th>
 
               <th className="p-4 text-left">
-                {t("user")}
+                User
               </th>
 
               <th className="p-4 text-left">
-                {t("action")}
+                Action
               </th>
 
               <th className="p-4 text-left">
-                {t("details")}
+                Details
               </th>
 
             </tr>
@@ -997,11 +997,11 @@ return (
       <div className="text-center mb-6">
 
         <h2 className="text-3xl font-bold text-slate-800">
-          {t("welcomeBack")}
+          Welcome Back
         </h2>
 
         <p className="text-slate-500 mt-2">
-          {t("signInManagement")}
+          Sign in to access management features
         </p>
 
       </div>
@@ -1037,12 +1037,12 @@ return (
             .single();
 
           if (!user) {
-            alert("Invalid Username");
+            alert(t("invalidUsername"));
             return;
           }
 
           if (user.password !== password) {
-            alert("Invalid Password");
+            alert(t("invalidPassword"));
             return;
           }
 
@@ -1103,11 +1103,11 @@ return (
   <div>
 
     <h2 className="text-2xl font-bold">
-      {t("importFiles")}
+      Import Files
     </h2>
 
     <p className="text-blue-100 text-sm mt-1">
-      {t("uploadSystemFiles")}
+      Upload and process system files
     </p>
 
   </div>
@@ -1148,12 +1148,12 @@ return (
 
       <div className="text-lg font-bold">
         {isUploadingCollection
-          ? "Uploading Collection..."
-          : "Import Collection"}
+          ? t("uploadingCollection")
+          : t("importCollection")}
       </div>
 
       <div className="text-sm text-green-100 mt-1">
-        {t("collectedInvoicesFile")}
+        Collected Invoices File
       </div>
 
     </div>
@@ -1179,8 +1179,8 @@ return (
 
       <div className="text-lg font-bold">
         {isImportingUsers
-          ? "Importing Users..."
-          : "Import Users"}
+          ? t("importingUsers")
+          : t("importUsers")}
       </div>
 
       <div className="text-sm text-purple-100 mt-1">
@@ -1210,12 +1210,12 @@ return (
 
       <div className="text-lg font-bold">
         {isUploadingCredit
-          ? "Uploading Credit..."
-          : "Import Credit"}
+          ? t("uploadingCredit")
+          : t("importCredit")}
       </div>
 
       <div className="text-sm text-blue-100 mt-1">
-        {t("creditBlockFile")}
+        Credit Block File
       </div>
 
     </div>

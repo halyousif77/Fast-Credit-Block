@@ -36,7 +36,7 @@ export default function Header() {
   window.location.href = "/van";
 }}
   className="h-9 w-9 rounded-lg bg-blue-900 text-white hover:bg-blue-800 flex items-center justify-center"
-  title="Van"
+  title={t("van")}
 >
   <Smartphone size={20} strokeWidth={2} />
 </button>
@@ -49,7 +49,7 @@ export default function Header() {
                     );
                   }}
                   className="h-9 w-9 rounded-lg bg-blue-900 text-white hover:bg-blue-800 flex items-center justify-center"
-                  title="Filters"
+                  title={t("filters")}
                 >
                   <Filter size={20} strokeWidth={2} />
                 </button>

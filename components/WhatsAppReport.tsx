@@ -1,6 +1,7 @@
 
 
 "use client";
+import { useI18n } from "@/lib/i18n";
 import {
   Truck,
   FileText,
@@ -18,6 +19,7 @@ export default function WhatsAppReport({
   vanCode,
   data,
 }: Props) {
+  const { t } = useI18n();
   const totalAmount = data.reduce(
     (sum, row) =>
       sum +
@@ -222,15 +224,15 @@ export default function WhatsAppReport({
               color: "#fff",
             }}
           >
-            <th style={th}>Van Code.</th>
-            <th style={th}>Customer Code</th>
-            <th style={th}>Customer Name</th>
-            <th style={th}>Payment Term</th>
-            <th style={th}>Invoice #</th>
-            <th style={th}>Trx Date</th>
-            <th style={th}>Pending CIM</th>
-            <th style={th}>Credit_Days</th>
-            <th style={th}>Total Rejected Count</th>
+            <th style={th}>{t("vanCode")}.</th>
+            <th style={th}>{t("customerCode")}</th>
+            <th style={th}>{t("customerName")}</th>
+            <th style={th}>{t("paymentTerm")}</th>
+            <th style={th}>{t("invoice")} #</th>
+            <th style={th}>{t("trxDate")}</th>
+            <th style={th}>{t("pendingCim")}</th>
+            <th style={th}>{t("creditDays")}</th>
+            <th style={th}>{t("rejectedCount")}</th>
           </tr>
         </thead>
 

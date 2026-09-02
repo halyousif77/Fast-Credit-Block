@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { useI18n } from "@/lib/i18n";
 
 export default function UserWelcome() {
+  const { t } = useI18n();
   const [fullName, setFullName] = useState("");
 
   useEffect(() => {
@@ -36,11 +38,11 @@ export default function UserWelcome() {
 
         <div>
           <p className="text-xs text-blue-100">
-            Not Signed In
+            {t("notSignedIn")}
           </p>
 
           <p className="font-semibold">
-            Guest User
+            {t("guestUser")}
           </p>
         </div>
       </div>
@@ -55,7 +57,7 @@ export default function UserWelcome() {
 
       <div>
         <p className="text-xs text-blue-100">
-          Welcome Back
+          {t("welcomeBack")}
         </p>
 
         <p className="font-semibold text-base">
