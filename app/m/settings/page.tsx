@@ -174,7 +174,7 @@ export default function MobileSettingsPage() {
                       <MapPin size={15} className="text-slate-400" />
                       {region}
                     </span>
-                    {regionChecked && <Check size={18} style={{ color: "#071d5c" }} />}
+                    {regionChecked && <Check size={18} className="text-[#071d5c] dark:text-blue-300" />}
                   </button>
                 </div>
 
@@ -196,7 +196,7 @@ export default function MobileSettingsPage() {
                           className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-start"
                         >
                           <span className="text-sm text-slate-600">{city}</span>
-                          {checked && <Check size={17} style={{ color: "#071d5c" }} />}
+                          {checked && <Check size={17} className="text-[#071d5c] dark:text-blue-300" />}
                         </button>
                       );
                     })}

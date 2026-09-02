@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import { storage as localStorage } from "@/utils/storage";
 
 export default function GlobalFilter() {
-  const { t } = useI18n();
+  const { t, dir } = useI18n();
   const pathname = usePathname();
   const isMobile = pathname.startsWith("/m");
 
@@ -265,7 +265,10 @@ setSelectedVans(updatedFilters.vans);
   return (
     <>
       {showFilters && (
-        <div className="fixed top-16 right-4 z-50 w-80 rounded-xl border bg-white p-4 shadow-xl">
+        <div
+          className="fixed top-16 z-50 w-80 rounded-xl border bg-white p-4 shadow-xl"
+          style={{ [dir === "rtl" ? "left" : "right"]: "1rem" }}
+        >
           <div className="mb-3 text-lg font-semibold">
             {t("saudi")}
           </div>

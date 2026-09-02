@@ -778,15 +778,11 @@ const filteredData = data.filter((row) => {
   ex: number
 ) => {
 
-  if (
-    remaining > 0
-  ) {
-    return `${remaining} ${t("remaining")}`;
+  if (remaining > 0 && ex > 0) {
+    return `${remaining} ${t("remainingEx")}`;
   }
 
-  if (
-    remaining > 0
-  ) {
+  if (remaining > 0) {
     return `${remaining} ${t("remaining")}`;
   }
 
@@ -1432,8 +1428,7 @@ onClick={async () => {
   ${
   permissions[van]
     ? "bg-green-100"
-    : status === "All Collected" ||
-      status === "Ex & All Collected"
+    : info.remaining === 0
     ? "bg-yellow-50"
     : "hover:bg-slate-50"
 }
