@@ -5,6 +5,7 @@ import MobileRedirect from "@/components/MobileRedirect";
 import { Toaster } from "sonner";
 import { Geist, Geist_Mono } from "next/font/google";
 import { I18nProvider } from "@/lib/i18n";
+import { ThemeProvider } from "@/lib/theme";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -46,7 +47,8 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-screen bg-slate-100">
-        <I18nProvider>
+        <ThemeProvider>
+          <I18nProvider>
           <Toaster
             position="top-right"
             richColors
@@ -60,7 +62,8 @@ export default function RootLayout({
           <GlobalFilter />
 
           {children}
-        </I18nProvider>
+          </I18nProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

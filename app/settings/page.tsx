@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 
 export default function SettingsPage() {
+  const { theme, setTheme } = useTheme();
   const [isSavingRules, setIsSavingRules] = useState(false);
 const [isResettingRules, setIsResettingRules] = useState(false);
   const [userSettings, setUserSettings] = useState<any>(null);
@@ -830,6 +831,17 @@ useEffect(() => {
               🔒 Security
             </button>
             <button
+              onClick={() => setActiveTab("theme")}
+              className={`w-full text-left px-4 py-3 rounded-lg mb-2 ${
+                activeTab === "theme"
+                  ? "bg-blue-100 text-blue-600"
+                  : "hover:bg-gray-100"
+              }`}
+            >
+              🎨 Site Appearance
+            </button>
+
+            <button
   onClick={() => setActiveTab("creditRules")}
   className={`w-full text-left px-4 py-3 rounded-lg ${
     activeTab === "creditRules"
@@ -1018,6 +1030,37 @@ useEffect(() => {
     </div>
   </>
 )}
+            {activeTab === "theme" && (
+              <div>
+                <h2 className="text-2xl font-semibold mb-2">Site Appearance</h2>
+                <p className="text-gray-500 mb-8">Choose a clean light or dark color scheme for the entire site.</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
+                  <button
+                    onClick={() => setTheme("light")}
+                    className={`text-left rounded-2xl border-2 p-5 transition ${theme === "light" ? "border-blue-600 bg-blue-50" : "border-gray-200 bg-white"}`}
+                  >
+                    <div className="h-24 rounded-xl border border-slate-200 bg-white p-3 shadow-sm mb-3">
+                      <div className="h-3 w-2/3 rounded bg-slate-200 mb-2" />
+                      <div className="h-8 rounded bg-slate-100" />
+                    </div>
+                    <div className="font-semibold">Light</div>
+                    <div className="text-sm text-gray-500">Current white appearance</div>
+                  </button>
+                  <button
+                    onClick={() => setTheme("dark")}
+                    className={`text-left rounded-2xl border-2 p-5 transition ${theme === "dark" ? "border-blue-600 bg-slate-800" : "border-gray-200 bg-white"}`}
+                  >
+                    <div className="h-24 rounded-xl border border-slate-600 bg-slate-900 p-3 shadow-sm mb-3">
+                      <div className="h-3 w-2/3 rounded bg-slate-600 mb-2" />
+                      <div className="h-8 rounded bg-slate-800" />
+                    </div>
+                    <div className={theme === "dark" ? "font-semibold text-white" : "font-semibold"}>Dark</div>
+                    <div className={theme === "dark" ? "text-sm text-slate-300" : "text-sm text-gray-500"}>Dark navy/slate, high contrast</div>
+                  </button>
+                </div>
+              </div>
+            )}
+
             {activeTab === "notifications" && (
               <>
                 <h2 className="text-2xl font-semibold mb-2">

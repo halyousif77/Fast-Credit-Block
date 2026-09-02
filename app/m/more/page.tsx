@@ -58,7 +58,7 @@ export default function MobileMorePage() {
       const a1 = String(sheet["A1"]?.v || "").trim();
 
       if (a1 !== "User Account") {
-        toast.error("Invalid Users File");
+        toast.error(t("invalidUsersFile"));
         return;
       }
 
@@ -81,7 +81,7 @@ export default function MobileMorePage() {
       const result = await response.json();
 
       if (!response.ok || result.success === false) {
-        throw new Error(result.error || "Failed to import users");
+        throw new Error(result.error || t("failedImportUsers"));
       }
 
       const fullName = await getFullName();
@@ -92,12 +92,12 @@ export default function MobileMorePage() {
         `${usersData.length} users`
       );
 
-      toast.success("Users imported successfully");
+      toast.success(t("usersImported"));
       setShowImportModal(false);
       window.location.reload();
     } catch (error) {
       console.error(error);
-      toast.error("Failed to import users");
+      toast.error(t("failedImportUsers"));
     } finally {
       setIsImportingUsers(false);
     }
@@ -118,8 +118,8 @@ export default function MobileMorePage() {
       const b6 = String(worksheet["B6"]?.v || "").trim();
 
       if (b6 !== "Region") {
-        toast.error("Invalid Credit File", {
-          description: "Please upload the correct Credit report.",
+        toast.error(t("invalidCreditFile"), {
+          description: t("correctCreditReport"),
         });
         return;
       }
@@ -149,12 +149,12 @@ export default function MobileMorePage() {
       localStorage.removeItem("collectedInvoices");
       localStorage.removeItem("collectionFileInfo");
 
-      toast.success("Credit file imported successfully");
+      toast.success(t("creditImported"));
       setShowImportModal(false);
       window.location.reload();
     } catch (error) {
       console.error(error);
-      toast.error("Failed to import credit file");
+      toast.error(t("failedImportCredit"));
     } finally {
       setIsUploadingCredit(false);
     }
@@ -175,8 +175,8 @@ export default function MobileMorePage() {
       const a1 = String(worksheet["A1"]?.v || "").trim();
 
       if (a1 !== "Collection Submit Time") {
-        toast.error("Invalid Collection File", {
-          description: "Please upload the correct Collection report.",
+        toast.error(t("invalidCollectionFile"), {
+          description: t("correctCollectionReport"),
         });
         return;
       }
@@ -206,12 +206,12 @@ export default function MobileMorePage() {
       const fullName = await getFullName();
       await addLog(currentUser, fullName, "IMPORT_COLLECTION", file.name);
 
-      toast.success("Collection file imported successfully");
+      toast.success(t("collectionImported"));
       setShowImportModal(false);
       window.location.reload();
     } catch (error) {
       console.error(error);
-      toast.error("Failed to import collection file");
+      toast.error(t("failedImportCollection"));
     } finally {
       setIsUploadingCollection(false);
     }
@@ -256,7 +256,7 @@ export default function MobileMorePage() {
           <div className="h-10 w-10 rounded-xl flex items-center justify-center text-white" style={{ background: "#071d5c" }}>
             <Upload size={19} />
           </div>
-          <p className="font-semibold text-sm">{dir === "rtl" ? "استيراد الملفات" : "Import Files"}</p>
+          <p className="font-semibold text-sm">{t("importFiles")}</p>
         </div>
         <Chevron size={18} className="text-slate-400" />
       </button>
@@ -272,8 +272,8 @@ export default function MobileMorePage() {
           >
             <div className="bg-[#071d5c] text-white px-5 py-4 flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-bold">{dir === "rtl" ? "استيراد الملفات" : "Import Files"}</h2>
-                <p className="text-blue-100 text-xs mt-1">Upload and process system files</p>
+                <h2 className="text-xl font-bold">{t("importFiles")}</h2>
+                <p className="text-blue-100 text-xs mt-1">{t("uploadSystemFiles")}</p>
               </div>
               <button
                 disabled={isBusy}
@@ -287,24 +287,24 @@ export default function MobileMorePage() {
             <div className="p-4 space-y-3">
               <label className={`block rounded-2xl ${isUploadingCollection ? "bg-slate-300" : "bg-green-600 active:scale-[0.98]"}`}>
                 <div className="p-5 text-white text-center">
-                  <div className="font-bold">{isUploadingCollection ? "Uploading Collection..." : "Import Collection"}</div>
-                  <div className="text-xs text-green-100 mt-1">Collected Invoices File</div>
+                  <div className="font-bold">{isUploadingCollection ? t("uploadingCollection") : t("importCollection")}</div>
+                  <div className="text-xs text-green-100 mt-1">{t("collectedInvoicesFile")}</div>
                 </div>
                 <input type="file" accept=".xlsx,.xls" className="hidden" onChange={handleCollectionImport} disabled={isBusy} />
               </label>
 
               <label className={`block rounded-2xl ${isImportingUsers ? "bg-slate-300" : "bg-purple-600 active:scale-[0.98]"}`}>
                 <div className="p-5 text-white text-center">
-                  <div className="font-bold">{isImportingUsers ? "Importing Users..." : "Import Users"}</div>
-                  <div className="text-xs text-purple-100 mt-1">Users &amp; Van Mapping File</div>
+                  <div className="font-bold">{isImportingUsers ? t("importingUsers") : t("importUsers")}</div>
+                  <div className="text-xs text-purple-100 mt-1">{t("usersVanMappingFile")}</div>
                 </div>
                 <input type="file" accept=".xlsx,.xls" className="hidden" onChange={handleImport} disabled={isBusy} />
               </label>
 
               <label className={`block rounded-2xl ${isUploadingCredit ? "bg-slate-300" : "bg-blue-600 active:scale-[0.98]"}`}>
                 <div className="p-5 text-white text-center">
-                  <div className="font-bold">{isUploadingCredit ? "Uploading Credit..." : "Import Credit"}</div>
-                  <div className="text-xs text-blue-100 mt-1">Credit Block File</div>
+                  <div className="font-bold">{isUploadingCredit ? t("uploadingCredit") : t("importCredit")}</div>
+                  <div className="text-xs text-blue-100 mt-1">{t("creditBlockFile")}</div>
                 </div>
                 <input type="file" accept=".xlsx,.xls" className="hidden" onChange={handleCreditImport} disabled={isBusy} />
               </label>

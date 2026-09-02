@@ -16,10 +16,12 @@ import {
 import { supabase } from "@/lib/supabase";
 import { storage } from "@/utils/storage";
 import { useI18n, LANGUAGES } from "@/lib/i18n";
+import { useTheme } from "@/lib/theme";
 import { useRegionFilter } from "@/lib/regionFilter";
 
 export default function MobileSettingsPage() {
   const { t, lang, setLang, dir } = useI18n();
+  const { theme, setTheme } = useTheme();
   const Chevron = dir === "rtl" ? ChevronLeft : ChevronRight;
   const {
     allRegions,
@@ -234,6 +236,27 @@ export default function MobileSettingsPage() {
               )}
             </button>
           ))}
+        </div>
+      </section>
+
+      {/* Theme */}
+      <section className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <p className="px-4 pt-4 pb-2 text-xs font-semibold text-slate-400 uppercase">
+          {t("theme")}
+        </p>
+        <div className="grid grid-cols-2 gap-2 p-3 border-t border-slate-50">
+          <button
+            onClick={() => setTheme("light")}
+            className={`rounded-xl border px-3 py-3 text-sm font-medium ${theme === "light" ? "border-blue-600 bg-blue-50 text-blue-700" : "border-slate-200"}`}
+          >
+            {t("lightTheme")}
+          </button>
+          <button
+            onClick={() => setTheme("dark")}
+            className={`rounded-xl border px-3 py-3 text-sm font-medium ${theme === "dark" ? "border-blue-600 bg-blue-50 text-blue-700" : "border-slate-200"}`}
+          >
+            {t("darkTheme")}
+          </button>
         </div>
       </section>
 

@@ -152,31 +152,31 @@ export default function MobileHomePage() {
       <div className="grid grid-cols-2 gap-3">
         <StatCard
           icon={<FileText size={18} />}
-          label="Blocked Invoices"
+          label={t("blockedInvoices")}
           value={loading ? "—" : stats.blockedCount.toLocaleString()}
           tone="red"
         />
         <StatCard
           icon={<ShieldOff size={18} />}
-          label="Exceptions"
+          label={t("exceptions")}
           value={loading ? "—" : stats.exceptionCount.toLocaleString()}
         />
         <StatCard
           icon={<ShieldCheck size={18} />}
-          label="Active"
+          label={t("active")}
           value={loading ? "—" : stats.activeEmployees.toLocaleString()}
           tone="green"
         />
         <StatCard
           icon={<Truck size={18} />}
-          label="Employees"
+          label={t("employees")}
           value={loading ? "—" : stats.employeeCount.toLocaleString()}
         />
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-xs text-slate-500">Legal</p>
+          <p className="text-xs text-slate-500">{t("legal")}</p>
           <p className="text-xl font-bold" style={{ color: "#071d5c" }}>
             {loading ? "—" : stats.legalCount.toLocaleString()}
           </p>

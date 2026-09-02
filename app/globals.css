@@ -36,3 +36,86 @@ body {
   animation: shake 1s infinite;
 }
 
+
+/* Site theme */
+html[data-theme="dark"] {
+  --background: #0f172a;
+  --foreground: #e5e7eb;
+}
+
+html[data-theme="dark"] body,
+html[data-theme="dark"] .bg-slate-100,
+html[data-theme="dark"] .bg-slate-50 {
+  background-color: #0f172a !important;
+  color: #e5e7eb;
+}
+
+html[data-theme="dark"] .bg-white {
+  background-color: #172033 !important;
+}
+
+html[data-theme="dark"] .text-slate-900,
+html[data-theme="dark"] .text-gray-900,
+html[data-theme="dark"] .text-black {
+  color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .text-slate-800,
+html[data-theme="dark"] .text-gray-800,
+html[data-theme="dark"] .text-slate-700,
+html[data-theme="dark"] .text-gray-700,
+html[data-theme="dark"] .text-slate-600,
+html[data-theme="dark"] .text-gray-600 {
+  color: #d1d5db !important;
+}
+
+html[data-theme="dark"] .text-slate-500,
+html[data-theme="dark"] .text-gray-500,
+html[data-theme="dark"] .text-slate-400,
+html[data-theme="dark"] .text-gray-400 {
+  color: #9ca3af !important;
+}
+
+html[data-theme="dark"] .border-slate-100,
+html[data-theme="dark"] .border-slate-200,
+html[data-theme="dark"] .border-gray-100,
+html[data-theme="dark"] .border-gray-200,
+html[data-theme="dark"] .border-gray-300 {
+  border-color: #334155 !important;
+}
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select {
+  background-color: #111827 !important;
+  color: #f8fafc !important;
+  border-color: #475569 !important;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .hover\\:bg-gray-100:hover,
+html[data-theme="dark"] .hover\\:bg-slate-50:hover {
+  background-color: #1e293b !important;
+}
+
+html[data-theme="dark"] .shadow-sm,
+html[data-theme="dark"] .shadow-md {
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25) !important;
+}
+
+html[data-theme="dark"] .bg-blue-50 {
+  background-color: #172554 !important;
+}
+
+html[data-theme="dark"] .text-blue-700,
+html[data-theme="dark"] .text-blue-600 {
+  color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .bg-blue-100 {
+  background-color: #1e3a8a !important;
+}
