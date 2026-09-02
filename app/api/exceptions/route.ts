@@ -146,13 +146,33 @@ export async function POST(
   request: Request
 ) {
 
-  const body =
-    await request.json();
+  const body = await request.json();
+  const createdBy = String(body?.created_by || "").trim();
 
-  const { error } =
-    await supabase
-      .from("exceptions")
-      .insert(body);
+  // Only the Yasser account is allowed to create new exceptions.
+  if (!createdBy || createdBy.toLowerCase() !== "yasser") {
+    return NextResponse.json(
+      { success: false, error: "Only the Yasser account can add exceptions" },
+      { status: 403 }
+    );
+  }
+
+  const { data: allowedUser } = await supabase
+    .from("app_users")
+    .select("username")
+    .ilike("username", "yasser")
+    .maybeSingle();
+
+  if (!allowedUser) {
+    return NextResponse.json(
+      { success: false, error: "Yasser account was not found" },
+      { status: 403 }
+    );
+  }
+
+  const { error } = await supabase
+    .from("exceptions")
+    .insert({ ...body, created_by: allowedUser.username });
 
   return NextResponse.json({
     success: !error,

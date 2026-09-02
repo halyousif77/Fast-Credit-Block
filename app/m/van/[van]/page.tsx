@@ -4,7 +4,7 @@ import { apiFetch as fetch } from "@/lib/apiCache";
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Search, ShieldCheck, ShieldOff, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowLeft, ArrowRight, Search, ShieldCheck, ShieldOff, ChevronDown, ChevronUp, Copy } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useI18n } from "@/lib/i18n";
 import { fetchCreditRows } from "@/lib/creditData";
@@ -75,7 +75,25 @@ export default function MobileVanDetailPage() {
       setLoading(false);
     })();
 
-    return () => {
+    const copyInvoices = async () => {
+    const header = "Customer No | Customer Name | Invoice Number | Amount";
+    const lines = filtered.map((r) => {
+      const amount = Number(r.amount || 0).toLocaleString(undefined, {
+        maximumFractionDigits: 0,
+      });
+      return `${r.customerCode || "—"} | ${r.customerName || "—"} | ${r.invoice || "—"} | ${amount} SAR`;
+    });
+    const text = [header, ...lines].join("\n");
+    try {
+      await navigator.clipboard.writeText(text);
+      // Keep the confirmation short so it works well on mobile/WhatsApp.
+      alert(t("copied"));
+    } catch {
+      // Clipboard may be unavailable in an insecure browser context.
+    }
+  };
+
+  return () => {
       cancelled = true;
     };
   }, [vanCode]);
@@ -157,6 +175,17 @@ export default function MobileVanDetailPage() {
           className="w-full bg-white border border-slate-200 rounded-xl py-2.5 ps-9 pe-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
         />
       </div>
+
+      {!loading && filtered.length > 0 && (
+        <button
+          type="button"
+          onClick={copyInvoices}
+          className="w-full rounded-xl border border-slate-200 bg-white py-2.5 text-sm font-semibold text-slate-700 flex items-center justify-center gap-2 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100"
+        >
+          <Copy size={16} />
+          {t("copyInvoices")}
+        </button>
+      )}
 
       {loading && (
         <p className="text-center text-sm text-slate-400 py-10">
@@ -247,10 +276,10 @@ export default function MobileVanDetailPage() {
           >
             <div className="flex items-center justify-between mb-1">
               <p className="font-semibold text-sm">{r.invoice}</p>
-              <p className="text-sm font-bold" style={{ color: "#071d5c" }}>
+              <p className="text-sm font-bold mobile-van-amount">
                 {r.amount.toLocaleString(undefined, {
                   maximumFractionDigits: 0,
-                })}
+                })} SAR
               </p>
             </div>
             <p className="text-xs text-slate-500 truncate">
