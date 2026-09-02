@@ -5,8 +5,10 @@ import { ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { useI18n } from "@/lib/i18n";
 
 export default function VanExceptionsPage() {
+  const { t } = useI18n();
   const params = useParams();
 
   const token = String(params.van || "");
