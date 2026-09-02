@@ -2090,18 +2090,13 @@ onClick={async () => {
   .map((row, index) => (
                           <tr
   key={index}
-  className="border-b"
-  style={{
-  backgroundColor: collectedSet.has(
-    normalizeInvoice(row["Invoice #"])
-  )
-    ? "#C6EFCE"
-    : exceptionSet.has(
-        normalizeInvoice(row["Invoice #"])
-      )
-    ? "#FFCB96"
-    : "",
-}}
+  className={`border-b transition-colors ${
+    collectedSet.has(normalizeInvoice(row["Invoice #"]))
+      ? "bg-[#C6EFCE] text-slate-800 dark:!bg-[#173B2A] dark:!text-[#D1FAE5]"
+      : exceptionSet.has(normalizeInvoice(row["Invoice #"]))
+      ? "bg-[#FFCB96] text-slate-800 dark:!bg-[#4A2F12] dark:!text-[#FED7AA]"
+      : "text-slate-800 dark:!text-slate-100"
+  }`}
 
 >
                       <td className="p-3">
