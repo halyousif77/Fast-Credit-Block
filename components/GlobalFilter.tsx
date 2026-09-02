@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/lib/i18n";
 import { apiFetch as fetch } from "@/lib/apiCache";
 
 import { supabase } from "@/lib/supabase";
@@ -7,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { storage as localStorage } from "@/utils/storage";
 
 export default function GlobalFilter() {
+  const { t } = useI18n();
   const pathname = usePathname();
   const isMobile = pathname.startsWith("/m");
 
