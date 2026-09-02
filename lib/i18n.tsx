@@ -297,7 +297,7 @@ const dict = {
   creditBlockStatusByVan: { ar: "حالة حظر الائتمان حسب الفان", en: "Credit block status by van", hi: "वैन के अनुसार क्रेडिट ब्लॉक स्थिति" },
   allCollectedVans: { ar: "فانات تم تحصيلها بالكامل", en: "All Collected Vans", hi: "पूरी तरह एकत्रित वैन" },
   exAndAllCollected: { ar: "استثناء وتم التحصيل بالكامل", en: "Ex & All Collected", hi: "अपवाद और पूरी तरह एकत्रित" },
-  remainingEx: { ar: "متبقي، استثناء", en: "Remaining, Ex", hi: "शेष, अपवाद" },
+  remainingEx: { ar: "متبقي، استثناء", en: "Remaining, EX", hi: "शेष, अपवाद" },
   reportsDisappearedInvoices: { ar: "الفواتير المختفية", en: "Disappeared Invoices", hi: "गायब चालान" },
   firstSeen: { ar: "شوهدت أول مرة", en: "First Seen", hi: "पहली बार देखा गया" },
   missingFrom: { ar: "مفقود منذ", en: "Missing From", hi: "से गायब" },
