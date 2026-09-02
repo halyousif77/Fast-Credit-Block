@@ -10,8 +10,10 @@ import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { storage as localStorage } from "@/utils/storage";
+import { useI18n } from "@/lib/i18n";
 
 export default function MobileSummaryPage() {
+  const { t } = useI18n();
   const pathname = usePathname();  
   const [whatsAppVan, setWhatsAppVan] =
   useState("");
