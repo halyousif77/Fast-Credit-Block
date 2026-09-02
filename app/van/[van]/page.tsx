@@ -7,8 +7,10 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { storage as localStorage } from "@/utils/storage";
+import { useI18n } from "@/lib/i18n";
 
 export default function VanReportPage() {
+  const { t } = useI18n();
   const [isSubscribed,setIsSubscribed] =
   useState(false);
   const [hideSubscribeButton,
