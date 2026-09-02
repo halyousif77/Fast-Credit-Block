@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { addLog } from "@/lib/activityLog";
+import { canWriteData } from "@/lib/permissions";
 
 const webpush = require("web-push");
 
@@ -149,6 +150,14 @@ export async function POST(
   const body =
     await request.json();
 
+  const createdBy = String(body?.created_by || "").trim();
+  if (!(await canWriteData(createdBy))) {
+    return NextResponse.json(
+      { success: false, error: "You are not allowed to add exceptions" },
+      { status: 403 }
+    );
+  }
+
   const { error } =
     await supabase
       .from("exceptions")
@@ -173,6 +182,13 @@ export async function PATCH(
       .toUpperCase();
     const tillDate = String(body.till_date || "").trim();
     const updatedBy = String(body.updatedBy || "").trim();
+
+    if (!(await canWriteData(updatedBy))) {
+      return NextResponse.json(
+        { success: false, error: "You are not allowed to edit exceptions" },
+        { status: 403 }
+      );
+    }
 
     if (!id || !invoice || !updatedBy) {
       return NextResponse.json(

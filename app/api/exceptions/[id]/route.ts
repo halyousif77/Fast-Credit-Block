@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { canWriteData } from "@/lib/permissions";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
 export async function DELETE(
@@ -44,6 +45,13 @@ export async function DELETE(
       success: false,
       error: "Exception not found",
     });
+  }
+
+  if (!(await canWriteData(requestedBy))) {
+    return NextResponse.json(
+      { success: false, error: "You are not allowed to delete exceptions" },
+      { status: 403 }
+    );
   }
 
   if (!requestedBy || existing.created_by !== requestedBy) {

@@ -20,6 +20,7 @@ export default function MobileExceptionsPage() {
   const [editingException, setEditingException] = useState<any | null>(null);
   const [savingEdit, setSavingEdit] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
+  const canModify = !!currentUser && currentUser.trim().toLowerCase() !== "yasser";
 
   const [form, setForm] = useState({
     invoice: "",
@@ -87,6 +88,10 @@ export default function MobileExceptionsPage() {
   }, [form.invoice, rows]);
 
   const handleAdd = async () => {
+    if (!canModify) {
+      toast.error(t("signInToAccess"));
+      return;
+    }
     if (!form.invoice) {
       toast.error(t("noData"));
       return;
@@ -123,6 +128,10 @@ export default function MobileExceptionsPage() {
   };
 
   const openEdit = (e: any) => {
+    if (!canModify) {
+      toast.error(t("signInToAccess"));
+      return;
+    }
     if (e.created_by !== currentUser) {
       toast.error(t("onlyDeleteOwn"));
       return;
@@ -136,7 +145,7 @@ export default function MobileExceptionsPage() {
   };
 
   const handleEdit = async () => {
-    if (!editingException || editingException.created_by !== currentUser) return;
+    if (!canModify || !editingException || editingException.created_by !== currentUser) return;
     if (!form.invoice.trim()) {
       toast.error(t("noData"));
       return;
@@ -172,6 +181,10 @@ export default function MobileExceptionsPage() {
   };
 
   const handleDelete = async (e: any) => {
+    if (!canModify) {
+      toast.error(t("signInToAccess"));
+      return;
+    }
     if (e.created_by !== currentUser) {
       toast.error(t("onlyDeleteOwn"));
       return;
@@ -210,9 +223,10 @@ export default function MobileExceptionsPage() {
         </div>
 
         <button
-          onClick={() => setShowAdd(true)}
+          disabled={!canModify}
+          onClick={() => canModify && setShowAdd(true)}
           className="h-10 w-10 shrink-0 rounded-xl text-white flex items-center justify-center"
-          style={{ background: "#071d5c" }}
+          style={{ background: canModify ? "#071d5c" : "#94a3b8" }}
         >
           <Plus size={20} />
         </button>
@@ -269,7 +283,7 @@ export default function MobileExceptionsPage() {
                 </p>
               </div>
 
-              {e.created_by === currentUser && (
+              {canModify && e.created_by === currentUser && (
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     onClick={() => openEdit(e)}
@@ -360,7 +374,7 @@ export default function MobileExceptionsPage() {
               <button
                 onClick={handleAdd}
                 className="w-full text-white py-3 rounded-xl font-medium"
-                style={{ background: "#071d5c" }}
+                style={{ background: canModify ? "#071d5c" : "#94a3b8" }}
               >
                 {t("save")}
               </button>

@@ -30,16 +30,20 @@ export default function MobileVanDetailPage() {
   const copyInvoices = async () => {
     if (!filtered.length) return;
 
-    const header = "Customer No | Customer Name | Invoice Number | Amount";
     const lines = filtered.map((r) => {
       const amount = Number(r.amount || 0).toLocaleString(undefined, {
         maximumFractionDigits: 0,
       });
-      return `${r.customerCode || ""} | ${r.customerName || ""} | ${r.invoice || ""} | ${amount} SAR`;
+      return [
+        `Customer: ${r.customerCode || ""}`,
+        `Name: ${r.customerName || ""}`,
+        `Invoice: ${r.invoice || ""}`,
+        `Amount: ${amount} SAR`,
+      ].join("\n");
     });
 
     try {
-      await navigator.clipboard.writeText([header, ...lines].join("\n"));
+      await navigator.clipboard.writeText(lines.join("\n\n━━━━━━━━━━━━━━\n\n"));
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1800);
     } catch {

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { canWriteData } from "@/lib/permissions";
 
 const webpush = require("web-push");
 
@@ -39,6 +40,13 @@ const users = body.users;
 
 const uploadedBy =
   body.uploadedBy || "Unknown";
+
+    if (!(await canWriteData(String(uploadedBy)))) {
+      return NextResponse.json(
+        { success: false, error: "You are not allowed to import users" },
+        { status: 403 }
+      );
+    }
 
     const deleteResult =
       await supabase

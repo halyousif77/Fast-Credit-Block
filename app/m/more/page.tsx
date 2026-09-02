@@ -33,6 +33,8 @@ export default function MobileMorePage() {
       ? localStorage.getItem("currentUser") || ""
       : "";
 
+  const canImport = !!currentUser && currentUser.trim().toLowerCase() !== "yasser";
+
   const getFullName = async () => {
     if (!currentUser) return "";
     const { data: user } = await supabase
@@ -46,6 +48,10 @@ export default function MobileMorePage() {
   const handleImport = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    if (!canImport) {
+      toast.error(t("signInToAccess"));
+      return;
+    }
     if (isImportingUsers) return;
     const file = event.target.files?.[0];
     event.target.value = "";
@@ -106,6 +112,10 @@ export default function MobileMorePage() {
   const handleCreditImport = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    if (!canImport) {
+      toast.error(t("signInToAccess"));
+      return;
+    }
     if (isUploadingCredit) return;
     const file = event.target.files?.[0];
     event.target.value = "";
@@ -143,7 +153,11 @@ export default function MobileMorePage() {
       const fullName = await getFullName();
       await addLog(currentUser, fullName, "IMPORT_CREDIT", file.name);
 
-      await fetch("/api/collection-reset", { method: "POST" });
+      await fetch("/api/collection-reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ requestedBy: currentUser }),
+      });
       localStorage.removeItem("vanPermissions");
       localStorage.removeItem("lastUpdatedVans");
       localStorage.removeItem("collectedInvoices");
@@ -163,6 +177,10 @@ export default function MobileMorePage() {
   const handleCollectionImport = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    if (!canImport) {
+      toast.error(t("signInToAccess"));
+      return;
+    }
     if (isUploadingCollection) return;
     const file = event.target.files?.[0];
     event.target.value = "";
@@ -250,7 +268,7 @@ export default function MobileMorePage() {
 
       <button
         onClick={() => setShowImportModal(true)}
-        className="w-full flex items-center justify-between bg-white rounded-2xl shadow-sm border border-slate-100 p-4 active:scale-[0.98] transition-transform text-left"
+        className={`w-full flex items-center justify-between bg-white rounded-2xl shadow-sm border border-slate-100 p-4 transition-transform text-left ${canImport ? "active:scale-[0.98]" : "opacity-60 cursor-not-allowed"}`}
       >
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-xl flex items-center justify-center text-white" style={{ background: "#071d5c" }}>
@@ -290,7 +308,7 @@ export default function MobileMorePage() {
                   <div className="font-bold">{isUploadingCollection ? t("uploadingCollection") : t("importCollection")}</div>
                   <div className="text-xs text-green-100 mt-1">{t("collectedInvoicesFile")}</div>
                 </div>
-                <input type="file" accept=".xlsx,.xls" className="hidden" onChange={handleCollectionImport} disabled={isBusy} />
+                <input type="file" accept=".xlsx,.xls" className="hidden" onChange={handleCollectionImport} disabled={isBusy || !canImport} />
               </label>
 
               <label className={`block rounded-2xl ${isImportingUsers ? "bg-slate-300" : "bg-purple-600 active:scale-[0.98]"}`}>
@@ -298,7 +316,7 @@ export default function MobileMorePage() {
                   <div className="font-bold">{isImportingUsers ? t("importingUsers") : t("importUsers")}</div>
                   <div className="text-xs text-purple-100 mt-1">{t("usersVanMappingFile")}</div>
                 </div>
-                <input type="file" accept=".xlsx,.xls" className="hidden" onChange={handleImport} disabled={isBusy} />
+                <input type="file" accept=".xlsx,.xls" className="hidden" onChange={handleImport} disabled={isBusy || !canImport} />
               </label>
 
               <label className={`block rounded-2xl ${isUploadingCredit ? "bg-slate-300" : "bg-blue-600 active:scale-[0.98]"}`}>
@@ -306,7 +324,7 @@ export default function MobileMorePage() {
                   <div className="font-bold">{isUploadingCredit ? t("uploadingCredit") : t("importCredit")}</div>
                   <div className="text-xs text-blue-100 mt-1">{t("creditBlockFile")}</div>
                 </div>
-                <input type="file" accept=".xlsx,.xls" className="hidden" onChange={handleCreditImport} disabled={isBusy} />
+                <input type="file" accept=".xlsx,.xls" className="hidden" onChange={handleCreditImport} disabled={isBusy || !canImport} />
               </label>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import * as XLSX from "xlsx";
 import { createClient } from "@supabase/supabase-js";
+import { canWriteData } from "@/lib/permissions";
 
 const webpush = require("web-push");
 
@@ -22,6 +23,10 @@ export async function POST(req: Request) {
 const path = String(body.path || "");
 
 const uploadedBy = String(body.uploadedBy || "");
+
+    if (!(await canWriteData(uploadedBy))) {
+      return NextResponse.json({ success: false, error: "You are not allowed to import collection data" }, { status: 403 });
+    }
 
 const originalName = String(body.originalName || "");
 

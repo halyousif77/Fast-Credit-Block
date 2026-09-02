@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import * as XLSX from "xlsx";
 import { createClient } from "@supabase/supabase-js";
+import { canWriteData } from "@/lib/permissions";
 import crypto from "crypto";
 
 const supabase = createClient(
@@ -24,6 +25,10 @@ export async function POST(req: Request) {
 
     const file = formData.get("file") as File;
     const uploadedBy = String(formData.get("uploadedBy") || "");
+
+    if (!(await canWriteData(uploadedBy))) {
+      return NextResponse.json({ success: false, error: "You are not allowed to import credit data" }, { status: 403 });
+    }
 
     if (!file) {
       return NextResponse.json({
