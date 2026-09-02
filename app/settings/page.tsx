@@ -842,7 +842,7 @@ useEffect(() => {
                   : "hover:bg-gray-100"
               }`}
             >
-              🎨 Site Appearance
+              🎨 {t("siteAppearance")}
             </button>
 
             <button

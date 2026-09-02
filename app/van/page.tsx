@@ -478,15 +478,15 @@ const filteredVans = !isLoggedIn
 const getStatus=(r:number,e:number)=>{
 
 if(r>0 && e>0)
-return `${r} Remaining , Ex`;
+return `${r} ${t("remainingEx")}`;
 
 if(r>0)
-return `${r} Remaining`;
+return `${r} ${t("remaining")}`;
 
 if(e>0)
-return "Ex & All Collected";
+return t("exAndAllCollected");
 
-return "All Collected";
+return t("allCollected");
 
 };
 
