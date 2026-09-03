@@ -1152,11 +1152,18 @@ const saveResponse =
   );
 
 if (!saveResponse.ok) {
+  let errorMessage = "Failed To Save Exception";
 
-  alert(
-    "Failed To Save Exception"
-  );
+  try {
+    const errorResult = await saveResponse.json();
+    if (errorResult?.error) {
+      errorMessage = errorResult.error;
+    }
+  } catch {
+    // Keep the generic message if the server did not return JSON.
+  }
 
+  alert(errorMessage);
   return;
 }
 

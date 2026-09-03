@@ -146,27 +146,68 @@ await supabase
 export async function POST(
   request: Request
 ) {
+  try {
+    const body = await request.json();
 
-  const body =
-    await request.json();
+    // Desktop sends multiple exceptions as an array, while mobile sends
+    // one exception as an object. Normalize both formats before checking
+    // permissions.
+    const rows = Array.isArray(body) ? body : [body];
 
-  const createdBy = String(body?.created_by || "").trim();
-  if (!(await canWriteData(createdBy))) {
+    if (!rows.length || rows.some((row) => !row || typeof row !== "object")) {
+      return NextResponse.json(
+        { success: false, error: "Invalid exception data" },
+        { status: 400 }
+      );
+    }
+
+    const createdBy = String(rows[0]?.created_by || "").trim();
+
+    // Guests and Yasser are blocked here on the server as well, so this
+    // rule cannot be bypassed by calling the API directly.
+    if (!(await canWriteData(createdBy))) {
+      return NextResponse.json(
+        { success: false, error: "You are not allowed to add exceptions" },
+        { status: 403 }
+      );
+    }
+
+    // Do not allow a mixed-user payload. Every exception in one request
+    // must belong to the same authorized user.
+    const mixedUser = rows.some(
+      (row) => String(row.created_by || "").trim() !== createdBy
+    );
+
+    if (mixedUser) {
+      return NextResponse.json(
+        { success: false, error: "Invalid exception creator" },
+        { status: 400 }
+      );
+    }
+
+    const { error } = await supabase
+      .from("exceptions")
+      .insert(rows);
+
+    if (error) {
+      console.error("EXCEPTION INSERT ERROR", error);
+      return NextResponse.json(
+        { success: false, error: error.message || "Failed to save exception" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("EXCEPTION POST ERROR", error);
     return NextResponse.json(
-      { success: false, error: "You are not allowed to add exceptions" },
-      { status: 403 }
+      {
+        success: false,
+        error: error?.message || "Failed to save exception",
+      },
+      { status: 500 }
     );
   }
-
-  const { error } =
-    await supabase
-      .from("exceptions")
-      .insert(body);
-
-  return NextResponse.json({
-    success: !error,
-    error: error?.message,
-  });
 }
 
 export async function PATCH(
